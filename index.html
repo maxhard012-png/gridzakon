@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Алексей Гридасов, юрист в Москве и области. Договоры, суды, консультации простым языком. Запись на консультацию онлайн.">
+<meta name="theme-color" content="#0c0d0f">
+<meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Алексей Гридасов: юрист для своих">
+<meta property="og:description" content="Договоры, суды и консультации простым языком. Москва и область, онлайн по всей России.">
+<meta property="og:image" content="https://yt3.googleusercontent.com/mHXT8O_ajFBDo1neekCjMk3qGFWXwHt-mvhtItqFxsIjic0IKDGZ6FtNh2Fu4Yx-lbcp_p3TXg=s900-c-k-c0x00ffffff-no-rj">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='16' fill='%23e3262d'/%3E%3Ctext x='16' y='21' font-family='Arial' font-weight='700' font-size='14' fill='%23ffffff' text-anchor='middle'%3EАГ%3C/text%3E%3C/svg%3E">
+<title>Алексей Гридасов, юрист | GridZakon</title>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LegalService","name":"Алексей Гридасов, юрист | GridZakon","description":"Договоры, суды и консультации простым языком. Москва и область, онлайн по всей России.","areaServed":["Москва","Московская область","Россия"],"founder":{"@type":"Person","name":"Алексей Гридасов","jobTitle":"Юрист"},"sameAs":["https://t.me/gridzakon","https://instagram.com/gridzakon","https://www.tiktok.com/@gridzakon","https://www.youtube.com/@gridzakon","https://vk.com/gridzakon"]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://i.ytimg.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@700;800;900&family=Sofia+Sans+Extra+Condensed:wght@800;900&family=Golos+Text:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: 7 блоков с разной формой. Тёмный первый экран (аватар + лента видео), полоса СМИ, светлый блок «Обо мне» с большим фото, сетка услуг, кейсы, договоры, вопросы и финальный призыв */
+:root{
+  --bg:#0c0d0f;       /* графитовый чёрный */
+  --surface:#15171a;  /* карточки */
+  --raise:#1c1f23;    /* наведение */
+  --line:#25282c;     /* линии */
+  --fg:#f1f1ee;       /* текст */
+  --mute:#8a8f96;     /* второстепенный */
+  --red:#e3262d;      /* красный акцент, как на обложках @gridzakon */
+  --red-hi:#ff5a5f;   /* мелкий красный текст на тёмном */
+  --red-ink:#c4161d;  /* красный на светлом блоке */
+  --paper:#ecebe6;    /* светлый блок */
+  --paper-line:#d3d2cc;
+  --paper-mute:#5f6266;
+  --f-disp:"Sofia Sans Condensed","Arial Narrow",Arial,sans-serif;   /* заголовки: сжатый плакатный, родня обложкам */
+  --f-cover:"Sofia Sans Extra Condensed","Sofia Sans Condensed","Arial Narrow",sans-serif; /* обложки и стикеры */
+  --f-head:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif; /* кнопки и мелкие подписи */
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0;padding-inline:16px;padding-block:0 0;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1160px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-disp);font-weight:800;letter-spacing:-.005em;line-height:.94;text-transform:uppercase;text-wrap:balance;margin:0}
+h2{font-size:clamp(40px,5.6vw,68px)}
+.hl{color:var(--red)}
+::selection{background:var(--red);color:#fff}
+.label{font-size:13px;font-weight:500;color:var(--mute);letter-spacing:.02em;margin:0}
+.muted{color:var(--mute)}
+.ex{font-size:12px;color:var(--mute)}
+:focus-visible{outline:2px solid var(--red-hi);outline-offset:3px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:14px;border:0;cursor:pointer;font:600 15px/1 var(--f-head);letter-spacing:-.01em;padding:7px 7px 7px 22px;border-radius:999px;background:var(--fg);color:var(--bg);text-decoration:none;transition:background .2s}
+.btn .ar{flex:none;width:40px;height:40px;border-radius:50%;background:var(--bg);color:var(--fg);display:grid;place-items:center;transition:transform .25s}
+.btn:hover .ar{transform:rotate(-45deg)}
+.btn:hover{background:#fff}
+.btn.dark{background:var(--bg);color:var(--fg)}
+.btn.dark .ar{background:var(--fg);color:var(--bg)}
+.btn.dark:hover{background:#000}
+.link{background:none;border:0;padding:0 0 3px;cursor:pointer;font:500 15px var(--f-head);color:inherit;text-decoration:none;background-image:linear-gradient(currentColor,currentColor);background-size:100% 1px;background-position:0 100%;background-repeat:no-repeat;transition:background-size .3s}
+.link:hover{background-size:0 1px;background-position:100% 100%}
+
+/* nav */
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);margin-inline:-16px;padding:14px 16px}
+nav.top .wrap{position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font:800 24px/1 var(--f-disp);letter-spacing:.01em;text-transform:uppercase;text-decoration:none}
+.logo span{color:var(--red)}
+.navlinks{display:flex;gap:28px;font-size:14px}
+.navlinks a{text-decoration:none;color:var(--mute);transition:color .2s}
+.navlinks a:hover,.navlinks a.on{color:var(--fg)}
+.menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--fg);font:500 14px var(--f-head);border-radius:999px;padding:8px 16px;cursor:pointer}
+@media (max-width:900px){
+  .navlinks{display:none}
+  .menu-btn{display:inline-block}
+  .mmenu{display:grid;position:absolute;left:-16px;right:-16px;top:calc(100% + 14px);background:var(--bg);border-bottom:1px solid var(--line);padding:4px 16px 20px}
+  .mmenu a{padding:14px 0;border-top:1px solid var(--line);text-decoration:none;font:800 30px/1 var(--f-disp);text-transform:uppercase}
+}
+
+/* sections */
+section{padding-block:96px}
+@media (max-width:700px){section{padding-block:64px}#media{padding-block:20px;margin-bottom:40px}.logos{justify-content:flex-start}.logos>*{font-size:17px}}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px 40px;flex-wrap:wrap;margin-bottom:40px}
+.head p{margin:0;color:var(--mute);max-width:42ch}
+.bleed{margin-inline:-16px;padding-inline:16px}
+
+/* ========== 1. HERO ========== */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 420px;grid-template-areas:"main side" "facts side";column-gap:64px;align-items:end;padding-block:36px 72px}
+.hero .main{grid-area:main}
+.hero .side{grid-area:side;align-self:center;display:grid;gap:14px;position:relative;isolation:isolate}
+.hero .side::before{content:"";position:absolute;inset:6% -16px -4% -30%;background:radial-gradient(closest-side,rgba(227,38,45,.2),transparent);z-index:-1;pointer-events:none} /* красный отсвет, как свет на его обложках */
+.who{display:flex;align-items:center;gap:18px;margin-bottom:34px}
+.ava{position:relative;flex:none;width:112px;height:112px;border-radius:50%;padding:3px;background:conic-gradient(from 200deg,var(--red),#4a0d10,var(--red))}
+.ava .in{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 35%,#8f1218,#35080a 75%);display:grid;place-items:center;font:800 40px var(--f-disp);color:#fff;border:3px solid var(--bg);overflow:hidden}
+.ava .ok{position:absolute;right:4px;bottom:6px;width:26px;height:26px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:13px;font-weight:700;border:3px solid var(--bg)}
+.who b{display:block;font:600 18px var(--f-head);letter-spacing:-.02em}
+.who small{color:var(--mute);font-size:14px}
+.hero h1{font-size:clamp(60px,9vw,124px);line-height:.88}
+.hero h1 .hl{display:block;white-space:nowrap}
+.hero h1 em{display:block;font-style:normal;font-size:.36em;line-height:1;letter-spacing:.01em;color:var(--mute);margin-top:.5em}
+.hero .lead{font-size:18px;color:var(--mute);max-width:44ch;margin:24px 0 36px}
+.hero .lead b{color:var(--fg);font-weight:500}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:28px}
+.facts{grid-area:facts;display:flex;flex-wrap:wrap;gap:40px;margin-top:56px;padding-top:26px;border-top:1px solid var(--line)}
+.facts b{display:block;font:800 44px/1 var(--f-disp);text-transform:uppercase;margin-bottom:4px}
+.facts span{font-size:13px;color:var(--mute)}
+.side-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.side-head b{font:600 15px var(--f-head);letter-spacing:-.01em}
+.side-head small{display:block;font-size:13px;color:var(--mute)}
+.soc-row{display:flex;gap:6px}
+.soc-row a{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--mute);transition:color .2s,border-color .2s}
+.soc-row a:hover{color:var(--fg);border-color:var(--fg)}
+.soc-row svg{width:17px;height:17px}
+
+/* лента роликов: настоящие обложки, а если картинки нет, текстовая обложка в стиле @gridzakon */
+.feed{position:relative;height:600px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:10px;-webkit-mask-image:linear-gradient(transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(transparent,#000 10%,#000 90%,transparent)}
+.col{display:flex;flex-direction:column;gap:10px;animation:up 50s linear infinite}
+.col.b{animation-direction:reverse;animation-duration:58s}
+.feed:hover .col,.feed:has(.reel:focus-visible) .col{animation-play-state:paused}
+@keyframes up{to{transform:translateY(calc(-50% - 5px))}}
+.reel{position:relative;flex:none;aspect-ratio:9/16;max-width:100%;width:100%;border-radius:18px;overflow:hidden;background:radial-gradient(120% 55% at 50% 108%,rgba(227,38,45,.42),transparent 62%),#131417;border:1px solid var(--line);display:flex;flex-direction:column;padding:12px;cursor:pointer;font:inherit;color:var(--fg);text-align:left;transition:transform .25s,border-color .25s}
+.reel:hover{border-color:var(--mute);transform:scale(1.02)}
+.reel>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s}
+.reel>img.ok{opacity:1}
+/* рядом с заголовком обложки приглушены, чтобы на экране кричал только он; под курсором обложка оживает */
+@media (min-width:901px){.feed .reel>img{filter:brightness(.62) saturate(.8);transition:opacity .5s,filter .3s}.feed .reel:hover>img,.feed .reel:focus-visible>img{filter:none}}
+.reel::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.7));pointer-events:none}
+.reel .pf{position:relative;z-index:1;display:flex}
+.reel .at{font:800 14px/1 var(--f-cover);letter-spacing:.05em;text-transform:uppercase;color:#fff;border-bottom:2px solid var(--red);padding-bottom:3px}
+.reel .cover{position:relative;z-index:1;margin-top:16%;font:900 clamp(24px,2.3vw,30px)/.92 var(--f-cover);letter-spacing:.005em;text-transform:uppercase;text-wrap:balance}
+.reel .cover mark{background:var(--red);color:#fff;padding:0 .14em;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.reel.has-img .pf,.reel.has-img .cover{display:none}
+.reel .meta{position:relative;z-index:1;margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px;font:600 12px var(--f-head);color:#fff}
+.reel .meta i{font-style:normal;display:flex;align-items:center;gap:5px}
+.reel .meta i svg{width:13px;height:13px}
+.reel .pl{flex:none;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);display:grid;place-items:center;transition:background .2s}
+.reel .pl svg{width:11px;height:11px;margin-left:1px}
+.reel:hover .pl{background:var(--red)}
+@media (max-width:900px){
+  .hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "side" "facts";padding-top:20px}
+  .hero .side{margin-top:40px}
+  .who{margin-bottom:24px}
+  .ava.big{width:76px;height:76px}.ava.big .in{font-size:24px}.ava.big .ok{width:22px;height:22px;font-size:11px;right:0;bottom:2px}
+  .hero h1{font-size:clamp(54px,15.5vw,84px)}
+  .hero .lead{font-size:17px;margin:18px 0 28px}
+  .cta{gap:18px}
+  .cta .btn{width:100%;justify-content:space-between}
+  .facts{margin-top:36px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .facts b{font-size:34px}
+  .facts span{font-size:12px;line-height:1.35;display:block}
+  .feed{height:auto;display:flex;overflow-x:auto;-webkit-mask-image:none;mask-image:none;margin-inline:-16px;padding-inline:16px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .col{display:contents;animation:none}
+  .col .dup,.col.b .dup{display:none}
+  .feed .reel{flex:0 0 160px;width:160px;scroll-snap-align:start}
+  .reel .cover{font-size:24px}
+}
+
+/* ========== 2. MEDIA ========== */
+#media{padding-block:24px;margin-bottom:72px;border-block:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:center;gap:12px 44px}
+.logos{flex:1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 30px}
+.logos>*{font:800 20px/1 var(--f-disp);text-transform:uppercase;letter-spacing:.01em;color:var(--mute);text-decoration:none;white-space:nowrap;transition:color .2s}
+.logos a:hover{color:var(--fg)}
+.logos .ex{font:400 12px var(--f-body);text-transform:none}
+
+/* ========== 3. ABOUT (light) ========== */
+#about{background:var(--paper);color:var(--bg);border-radius:32px;padding:16px;margin-inline:-8px}
+.about{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:stretch}
+.photo{position:relative;border-radius:22px;overflow:hidden;min-height:620px;background:
+  radial-gradient(60% 45% at 50% 32%,#3a3f46,transparent 70%),
+  linear-gradient(180deg,#22252a,#0f1013);display:flex;align-items:flex-end;padding:22px;color:var(--fg)}
+.photo .sil{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:78%;max-width:360px}
+.photo .ph{position:absolute;top:18px;left:18px;font-size:12px;color:var(--mute);border:1px dashed #3a3e44;border-radius:8px;padding:5px 9px}
+.photo .tag{position:relative;display:flex;flex-direction:column;gap:2px;background:rgba(12,13,15,.7);backdrop-filter:blur(8px);border-radius:14px;padding:14px 16px}
+.photo .tag b{font:600 17px var(--f-head);letter-spacing:-.02em}
+.photo .tag span{font-size:13px;color:var(--mute)}
+.about .txt{padding:40px 24px 24px 0;display:flex;flex-direction:column;gap:28px}
+.about .label{color:var(--paper-mute)}
+.about h2{font-size:clamp(40px,4.8vw,62px)}
+#about .hl{color:var(--red-ink)}
+.about .story{font-size:18px;line-height:1.55;margin:0;max-width:52ch;color:#2a2d31}
+.reasons{display:grid;grid-template-columns:1fr 1fr;gap:24px 32px}
+.reasons div{border-top:1px solid var(--bg);padding-top:14px;display:grid;gap:6px;align-content:start}
+.reasons b{font:600 18px var(--f-head);letter-spacing:-.02em}
+.reasons span{font-size:15px;color:var(--paper-mute)}
+.dipl{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
+.dipl button{flex:1 1 140px;display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--paper-line);border-radius:14px;padding:12px 14px;cursor:pointer;font:500 14px var(--f-head);color:var(--bg);text-align:left;transition:border-color .2s}
+.dipl button:hover{border-color:var(--bg)}
+.dipl .doc{flex:none;width:30px;height:38px;border:1.5px solid var(--bg);border-radius:3px 9px 3px 3px;background:linear-gradient(var(--bg),var(--bg)) 6px 12px/14px 1.5px no-repeat,linear-gradient(var(--bg),var(--bg)) 6px 18px/14px 1.5px no-repeat,linear-gradient(var(--bg),var(--bg)) 6px 24px/9px 1.5px no-repeat}
+.dipl small{display:block;font-size:12px;color:var(--paper-mute)}
+@media (max-width:900px){#about{border-radius:24px;margin-inline:0;padding:12px}.about{grid-template-columns:1fr;gap:8px}.photo{min-height:440px}.about .txt{padding:24px 8px 12px}.reasons{grid-template-columns:1fr}}
+
+.photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo.has-img .sil,.photo.has-img .ph{display:none}
+.ava .in img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.logos img{display:block;max-height:26px;filter:grayscale(1) brightness(1.6);opacity:.7}
+a.mcard{text-decoration:none;transition:background .2s}a.mcard:hover{background:var(--raise)}
+.vframe video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;background:#000}
+.dscan img{max-width:100%;max-height:100%;object-fit:contain}
+
+/* ========== 4. SERVICES ========== */
+.svcs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.svc{background:var(--surface);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:14px;transition:background .2s}
+.svc:hover{background:var(--raise)}
+.svc:hover .price{border-color:var(--mute)}
+.svc .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.svc h3{font-size:clamp(32px,3.4vw,44px)}
+.svc .price{font:600 17px var(--f-head);letter-spacing:-.02em;white-space:nowrap;padding:8px 14px;border:1px solid var(--line);border-radius:999px}
+.svc p{margin:0;color:var(--mute);max-width:44ch}
+.svc details{border-top:1px solid var(--line);margin-top:auto}
+.svc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding-top:16px;font:500 15px var(--f-head)}
+.svc summary::-webkit-details-marker{display:none}
+.svc summary i{font-style:normal;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:transform .3s}
+.svc details[open] summary i{transform:rotate(45deg)}
+.svc ul{margin:14px 0 0;padding-left:18px;color:var(--mute)}
+.svc li{margin-bottom:6px}
+.svc .go{margin-top:14px}
+@media (max-width:800px){.svcs{grid-template-columns:minmax(0,1fr)}.svc{padding:22px}}
+.flow{margin-top:12px;display:grid;grid-template-columns:auto repeat(5,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.flow .ttl{padding:22px 26px;display:flex;align-items:center;font:800 26px/1 var(--f-disp);text-transform:uppercase;border-right:1px solid var(--line)}
+.flow .s{padding:20px 18px;border-right:1px solid var(--line);display:grid;gap:4px;align-content:start}
+.flow .s:last-child{border-right:0}
+.flow .s em{font-style:normal;font:600 12px var(--f-head);color:var(--red-hi)}
+.flow .s b{font:600 15px var(--f-head);letter-spacing:-.01em}
+.flow .s span{font-size:13px;color:var(--mute);line-height:1.45}
+@media (max-width:900px){.flow{grid-template-columns:1fr}.flow .ttl{border-right:0;border-bottom:1px solid var(--line)}.flow .s{border-right:0;border-bottom:1px solid var(--line);grid-template-columns:28px 1fr;column-gap:8px}.flow .s span{grid-column:2}.flow .s:last-child{border-bottom:0}}
+
+/* ========== 5. CASES ========== */
+#cases{border-top:1px solid var(--line)}
+.cases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}
+details.case{background:var(--surface);border-radius:22px;padding:26px;transition:background .2s}
+details.case:hover{background:var(--raise)}
+details.case summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:14px}
+details.case summary::-webkit-details-marker{display:none}
+.case .res{font:800 60px/.9 var(--f-disp);text-transform:uppercase}
+.case p{margin:0;color:var(--mute)}
+.case .law{align-self:flex-start;font:800 16px/1 var(--f-cover);letter-spacing:.05em;text-transform:uppercase;background:var(--fg);color:var(--bg);padding:4px 8px 3px;border-radius:4px}
+.case .more{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--line);font:500 14px var(--f-head)}
+.case .more i{font-style:normal;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:transform .3s}
+details.case[open] .more i{transform:rotate(45deg)}
+.cbody{display:grid;gap:12px;margin-top:16px}
+.cbody div{display:grid;gap:2px}
+.cbody b{font:600 12px var(--f-head);color:var(--red-hi);letter-spacing:.04em;text-transform:uppercase}
+.cbody span{font-size:15px}
+@media (max-width:900px){.cases{grid-template-columns:1fr}}
+.revhead{display:flex;justify-content:space-between;align-items:center;margin:48px 0 14px;gap:12px}
+.arrows{display:flex;gap:8px}
+.circ{width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--fg);display:grid;place-items:center;cursor:pointer;font-size:16px}
+.circ:hover{border-color:var(--fg)}
+.revs{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 50px)/6);gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.revs::-webkit-scrollbar,.feed::-webkit-scrollbar{display:none}
+.revs .reel{scroll-snap-align:start}
+@media (max-width:900px){.revs{grid-auto-columns:160px;margin-inline:-16px;padding-inline:16px}}
+
+/* ========== 6. DOCS ========== */
+#docs{border-top:1px solid var(--line)}
+.docs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px}
+.doc{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:18px;align-items:center;padding:20px 0;border-top:1px solid var(--line)}
+.doc b{font:500 17px var(--f-head);letter-spacing:-.01em}
+.doc small{display:block;color:var(--mute);font-size:13px}
+.doc .p{font-variant-numeric:tabular-nums;color:var(--mute);font-size:15px;white-space:nowrap}
+.doc button{font:500 14px var(--f-head);background:none;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer;transition:background .2s,color .2s}
+.doc button:hover{background:var(--fg);color:var(--bg)}
+@media (max-width:800px){.docs{grid-template-columns:1fr}}
+.gift{margin-top:32px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:28px;align-items:center;padding:28px 32px;border-radius:24px;background:var(--surface)}
+.gift .stack{position:relative;width:86px;height:96px}
+.gift .stack i{position:absolute;width:62px;height:80px;border:1.5px solid var(--mute);border-radius:4px 14px 4px 4px;background:var(--raise)}
+.gift .stack i:nth-child(1){left:0;top:12px;transform:rotate(-8deg)}
+.gift .stack i:nth-child(2){left:12px;top:6px;transform:rotate(-2deg)}
+.gift .stack i:nth-child(3){left:24px;top:0;transform:rotate(5deg);display:grid;place-items:center;font:700 12px var(--f-head)}
+.gift h3{font-size:clamp(30px,3.6vw,42px)}
+.gift p{margin:6px 0 0;color:var(--mute)}
+@media (max-width:760px){.gift{grid-template-columns:1fr;padding:24px}.gift .stack{display:none}.gift .btn{justify-self:start}}
+
+/* ========== 7. FAQ + FINAL ========== */
+#faq{border-top:1px solid var(--line)}
+.faqgrid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:56px}
+.faqgrid .head{display:grid;gap:16px;align-content:start;margin:0}
+.qa{border-top:1px solid var(--line)}
+.qa:last-child{border-bottom:1px solid var(--line)}
+.qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;align-items:center;padding:20px 0;font:500 19px/1.3 var(--f-head);letter-spacing:-.02em}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary:hover{color:var(--red-hi)}
+.qa summary i{flex:none;font-style:normal;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:transform .3s,background .3s,color .3s}
+.qa[open] summary i{transform:rotate(45deg);background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.qa p{margin:0;padding:0 0 22px;color:var(--mute);max-width:64ch}
+@media (max-width:900px){.faqgrid{grid-template-columns:1fr;gap:24px}.qa summary{font-size:17px}}
+
+#contacts{padding-block:24px 40px}
+.final{background:var(--surface);border-radius:32px;padding:56px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:end}
+.final h2{font-size:clamp(48px,7vw,96px)}
+.final p{color:var(--mute);margin:18px 0 32px;max-width:40ch}
+.ways{display:grid;gap:8px}
+.ways a{display:flex;align-items:center;gap:14px;padding:16px 18px;border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:border-color .2s,background .2s}
+.ways a:hover{border-color:var(--fg);background:var(--bg)}
+.ways svg{width:20px;height:20px;flex:none}
+.ways b{font:500 16px var(--f-head);flex:1}
+.ways span{font-size:14px;color:var(--mute)}
+.copyrow{display:flex;gap:10px;align-items:center;color:var(--mute);margin-top:8px;font-size:15px}
+.copyrow button{font:500 13px var(--f-head);background:none;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
+@media (max-width:900px){.final{grid-template-columns:1fr;padding:28px 22px;border-radius:24px;gap:32px}}
+footer{padding-block:28px 120px;font-size:13px;color:var(--mute);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* floating CTA */
+.float{position:fixed;z-index:30;right:24px;bottom:calc(24px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:10px;transition:transform .35s cubic-bezier(.2,.7,.2,1),opacity .35s}
+.float.off{transform:translateY(140%);opacity:0;pointer-events:none}
+.float .tg{width:54px;height:54px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;color:var(--fg);transition:border-color .2s}
+.float .tg:hover{border-color:var(--fg)}
+.float .tg svg{width:22px;height:22px}
+.float .btn{box-shadow:0 18px 40px -12px rgba(0,0,0,.8)}
+@media (max-width:600px){
+  .float{left:16px;right:16px;bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+  .float .btn{flex:1;justify-content:space-between;white-space:nowrap}
+  .float .lg{display:none}
+}
+
+/* modals */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:grid;place-items:center;padding:16px}
+.sheet{width:100%;max-width:460px;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px;display:grid;gap:20px;max-height:calc(100dvh - 32px);overflow:auto}
+.sheet .top{display:flex;justify-content:space-between;align-items:center}
+.x{background:none;border:1px solid var(--line);color:var(--fg);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px}
+.bar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.bar i{height:2px;background:var(--line)}
+.bar i.on{background:var(--fg)}
+.sheet h3{font-size:32px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:14px;cursor:pointer;font-weight:500}
+.opt:has(input:checked){border-color:var(--fg)}
+.opt input{accent-color:var(--fg)}
+label.f{display:grid;gap:6px;font-size:14px;color:var(--mute)}
+label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{cursor:pointer}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips span{display:inline-block;padding:10px 16px;border:1px solid var(--line);border-radius:999px;font:500 14px var(--f-head);color:var(--mute)}
+.chips input:checked+span{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chips input:focus-visible+span{outline:2px solid var(--red-hi);outline-offset:2px}
+.chk{display:flex;gap:10px;align-items:center;font-size:15px;cursor:pointer}.chk input{accent-color:var(--fg);width:18px;height:18px}
+.sheet .nav{display:flex;gap:10px;justify-content:space-between;align-items:center}
+.consent a{color:inherit}
+.err{color:var(--red-hi);font-size:14px;min-height:1em;margin:0}
+.done{text-align:center;display:grid;gap:12px;justify-items:center}
+.done .okc{width:60px;height:60px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:26px}
+.vsheet{width:100%;max-width:400px;display:grid;gap:14px}
+.vframe{position:relative;aspect-ratio:9/16;max-height:70dvh;max-width:100%;margin:0 auto;border-radius:24px;overflow:hidden;background:radial-gradient(120% 55% at 50% 108%,rgba(227,38,45,.42),transparent 62%),#131417;border:1px solid var(--line);display:flex;flex-direction:column;padding:22px}
+.vframe>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vframe.has-img .cover,.vframe.has-img .pf{visibility:hidden}
+.vframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2}
+.vframe .cover{font:900 44px/.92 var(--f-cover);letter-spacing:.005em;text-transform:uppercase;margin-top:16%;position:relative;z-index:1}
+.vframe .cover mark{background:var(--red);color:#fff;padding:0 .14em;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.vframe .big{position:absolute;top:58%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;z-index:1}
+.vframe .big svg{width:26px;height:26px;margin-left:4px}
+.vframe .pf{position:relative;font-size:12px;z-index:1}
+.vframe small{position:relative;margin-top:auto;color:var(--mute);font-size:12px}
+.vctl,.vfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.vctl .nav2{display:flex;gap:8px}
+#vmodal .vctl{flex-wrap:nowrap;align-items:flex-end}
+.vhead{flex:1;min-width:0}
+.vtitle{display:block;font:800 22px/1 var(--f-disp);text-transform:uppercase;margin-top:6px;text-wrap:balance}
+.dsheet{width:100%;max-width:560px;display:grid;gap:14px}
+.dscan{aspect-ratio:1.414/1;max-width:100%;background:var(--paper);color:var(--bg);border-radius:12px;display:grid;place-items:center;text-align:center;padding:24px;font:500 15px var(--f-head)}
+.dscan b{display:block;font:800 34px/1 var(--f-disp);text-transform:uppercase;margin-bottom:6px}
+
+@keyframes rise{from{transform:translateY(16px)}to{transform:none}}
+/* блоки мягко появляются при прокрутке (класс ставит скрипт) */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.hero .main>*{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+.hero .main>*:nth-child(2){animation-delay:.06s}
+.hero .main>*:nth-child(3){animation-delay:.12s}
+.hero .main>*:nth-child(4){animation-delay:.18s}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-tg" viewBox="0 0 24 24"><path fill="currentColor" d="M21.9 4.3 18.8 19c-.2 1-.9 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-7.9c.4-.3-.1-.5-.6-.2L6.7 12.9l-4.6-1.4c-1-.3-1-1 .2-1.5l18-6.9c.8-.3 1.6.2 1.6 1.2z"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.8 14.1c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.8-2.2 1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.6 2.1 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M7 2.5h10A4.5 4.5 0 0 1 21.5 7v10a4.5 4.5 0 0 1-4.5 4.5H7A4.5 4.5 0 0 1 2.5 17V7A4.5 4.5 0 0 1 7 2.5zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-tt" viewBox="0 0 24 24"><path fill="currentColor" d="M16.6 2h-3.4v13.4a2.9 2.9 0 1 1-2-2.8V9.2a6.3 6.3 0 1 0 5.4 6.2V8.6a7.9 7.9 0 0 0 4.4 1.4V6.6a4.4 4.4 0 0 1-4.4-4.6z"/></symbol>
+  <symbol id="i-yt" viewBox="0 0 24 24"><path fill="currentColor" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15V9l5.8 3-5.8 3z"/></symbol>
+  <symbol id="i-vk" viewBox="0 0 24 24"><path fill="currentColor" d="M13 18.2c-6.3 0-9.9-4.3-10-11.5h3.2c.1 5.3 2.4 7.5 4.3 8V6.7h3V11c1.8-.2 3.8-2.3 4.4-4.3h3a8.9 8.9 0 0 1-4 5.8 9.2 9.2 0 0 1 4.8 5.7h-3.3a5.8 5.8 0 0 0-4.9-4.2v4.2H13z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15l13-7.5z"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-arr" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="logo" href="#top">Grid<span>Zakon</span></a>
+    <div class="navlinks">
+      <a href="#about">Обо мне</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#docs">Договоры</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a>
+    </div>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mmenu">Меню</button>
+    <div class="mmenu" id="mmenu" hidden>
+      <a href="#about">Обо мне</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#docs">Договоры</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+
+  <!-- 1. Первый экран -->
+  <header class="hero">
+    <div class="main">
+      <div class="who">
+        <div class="ava big" role="img" aria-label="Фото Алексея (заглушка)"><div class="in">АГ</div><span class="ok">✓</span></div>
+        <div><b>Алексей Гридасов</b><small>Юрист · Москва и область</small></div>
+      </div>
+      <h1>Юрист <span class="hl">для своих.</span> <em>Право простым языком.</em></h1>
+      <p class="lead"><b>Договоры, суды, консультации.</b> Решаю вопрос под ключ, онлайн по всей России.</p>
+      <div class="cta" id="heroCta">
+        <button class="btn" data-open>Записаться на консультацию<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+        <a class="link" href="https://t.me/gridzakon" target="_blank" rel="noopener">Написать в Telegram</a>
+      </div>
+    </div>
+    <div class="side">
+      <div class="side-head">
+        <div><b>@gridzakon</b><small>закон и правовые лайфхаки</small></div>
+        <div class="soc-row">
+          <a href="https://t.me/gridzakon" target="_blank" rel="noopener" aria-label="Telegram"><svg><use href="#i-tg"/></svg></a>
+          <a href="https://instagram.com/gridzakon" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a>
+          <a href="https://www.tiktok.com/@gridzakon" target="_blank" rel="noopener" aria-label="TikTok"><svg><use href="#i-tt"/></svg></a>
+          <a href="https://www.youtube.com/@gridzakon" target="_blank" rel="noopener" aria-label="YouTube"><svg><use href="#i-yt"/></svg></a>
+          <a href="https://vk.com/gridzakon" target="_blank" rel="noopener" aria-label="ВКонтакте"><svg><use href="#i-vk"/></svg></a>
+        </div>
+      </div>
+      <div class="feed" aria-label="Видео из соцсетей"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div>
+    </div>
+    <div class="facts" id="facts">
+      <div><b>190K</b><span>подписчиков в Instagram</span></div>
+      <div><b>4 млн</b><span>просмотров у одного ролика</span></div>
+      <div><b>428</b><span>роликов о праве на YouTube</span></div>
+    </div>
+  </header>
+
+  <!-- 2. СМИ -->
+  <section id="media" aria-label="СМИ, где выступал Алексей">
+    <p class="label">Комментирую законы в СМИ</p>
+    <div class="logos" id="logos"></div>
+  </section>
+
+  <!-- 3. Обо мне -->
+  <section id="about">
+    <div class="about">
+      <div class="photo" id="portrait" role="img" aria-label="Место для фото Алексея в полный рост">
+        <svg class="sil" viewBox="0 0 200 260" aria-hidden="true"><path fill="#2a2e34" d="M100 18c22 0 38 17 38 40 0 25-16 46-38 46S62 83 62 58c0-23 16-40 38-40zM26 260c0-62 22-110 74-118 52 8 74 56 74 118z"/></svg>
+        <span class="ph">здесь будет фото с фотосессии</span>
+        <div class="tag"><b>Алексей Гридасов</b><span>юрист, автор блога @gridzakon</span></div>
+      </div>
+      <div class="txt">
+        <p class="label">Обо мне</p>
+        <h2>Юрист, которому можно <span class="hl">просто написать</span></h2>
+        <p class="story">Объясняю, что происходит, какие шансы и что делать. Беру дело целиком и веду до результата.</p>
+        <div class="reasons">
+          <div><b>Депутатские запросы</b><span>Когда ведомство молчит, запрос от депутата заставляет ответить.</span></div>
+          <div><b>Под ключ</b><span>От претензии до исполнения решения.</span></div>
+          <div><b>Простым языком</b><span>Так объясняю право 190K подписчиков каждый день.</span></div>
+          <div><b>На связи лично</b><span>Отвечаю сам, без секретарей.</span></div>
+        </div>
+        <div class="dipl">
+          <button type="button" data-dipl="Диплом юриста|название вуза, год"><span class="doc" aria-hidden="true"></span><span>Диплом юриста<small>открыть скан</small></span></button>
+          <button type="button" data-dipl="Повышение квалификации|программа, год"><span class="doc" aria-hidden="true"></span><span>Квалификация<small>открыть скан</small></span></button>
+          <button type="button" data-dipl="Удостоверение|организация, год"><span class="doc" aria-hidden="true"></span><span>Удостоверение<small>открыть скан</small></span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Услуги + порядок работы -->
+  <section id="services">
+    <div class="head"><h2>Чем я могу помочь</h2><p>Цену фиксируем в договоре до начала работы.</p></div>
+    <div class="svcs">
+      <article class="svc"><div class="top"><h3>Консультация</h3><span class="price">от 3 000 ₽</span></div><p>За час: шансы, риски и план действий.</p>
+        <details><summary>Что входит<i>+</i></summary><ul><li>Разбор документов и переписки до встречи</li><li>Оценка шансов и рисков простыми словами</li><li>План действий на ближайший месяц</li></ul><button class="link go" data-open data-pick="Консультация">Записаться</button></details></article>
+      <article class="svc"><div class="top"><h3>Договоры</h3><span class="price">от 5 000 ₽</span></div><p>Составлю свой или проверю чужой.</p>
+        <details><summary>Что входит<i>+</i></summary><ul><li>Составление под вашу ситуацию</li><li>Проверка договора контрагента</li><li>Протокол разногласий</li></ul><button class="link go" data-open data-pick="Договор">Заказать договор</button></details></article>
+      <article class="svc"><div class="top"><h3>Суды</h3><span class="price">от 30 000 ₽</span></div><p>Долги, права потребителей, споры с бизнесом.</p>
+        <details><summary>Что входит<i>+</i></summary><ul><li>Претензия и переговоры до суда</li><li>Иск, доказательства, участие в заседаниях</li><li>Апелляция и исполнение решения</li></ul><button class="link go" data-open data-pick="Суд">Обсудить дело</button></details></article>
+      <article class="svc"><div class="top"><h3>Для бизнеса</h3><span class="price">от 20 000 ₽/мес</span></div><p>Абонентское обслуживание для ИП и компаний.</p>
+        <details><summary>Что входит<i>+</i></summary><ul><li>Вопросы в мессенджере без ограничений</li><li>Проверка договоров и счетов</li><li>Претензионная работа</li></ul><button class="link go" data-open data-pick="Абонентское обслуживание">Подключить</button></details></article>
+    </div>
+    <div class="flow" aria-label="Порядок работы">
+      <div class="ttl">Как работаем</div>
+      <div class="s"><em>01</em><b>Заявка</b><span>на сайте или в Telegram</span></div>
+      <div class="s"><em>02</em><b>Разбор</b><span>изучаю документы, называю шансы</span></div>
+      <div class="s"><em>03</em><b>Договор</b><span>фиксируем объём и цену</span></div>
+      <div class="s"><em>04</em><b>Работа</b><span>вы в курсе каждого шага</span></div>
+      <div class="s"><em>05</em><b>Результат</b><span>деньги, решение или договор</span></div>
+    </div>
+  </section>
+
+  <!-- 5. Кейсы и отзывы -->
+  <section id="cases">
+    <div class="head"><h2>Кейсы и отзывы</h2><p>Откройте карточку, чтобы увидеть, как решили дело.</p></div>
+    <div class="cases" id="caseList"></div>
+    <div class="revhead"><p class="label">Отзывы клиентов</p><div class="arrows"><button class="circ" type="button" id="rprev" aria-label="Назад">←</button><button class="circ" type="button" id="rnext" aria-label="Вперёд">→</button></div></div>
+    <div class="revs" id="revs"></div>
+  </section>
+
+  <!-- 6. Договоры -->
+  <section id="docs">
+    <div class="head"><h2>Готовые договоры</h2><p>Шаблоны в Word. Подскажу, как заполнить.</p></div>
+    <div class="docs">
+      <div class="doc"><div><b>Договор ГПХ</b><small>для работы с исполнителями</small></div><span class="p">2 500 ₽</span><button type="button" data-order="Договор ГПХ">Заказать</button></div>
+      <div class="doc"><div><b>Договор займа</b><small>с распиской и процентами</small></div><span class="p">2 000 ₽</span><button type="button" data-order="Договор займа">Заказать</button></div>
+      <div class="doc"><div><b>Партнёрский договор</b><small>доли и выход партнёра</small></div><span class="p">4 000 ₽</span><button type="button" data-order="Партнёрский договор">Заказать</button></div>
+      <div class="doc"><div><b>Договор аренды</b><small>квартира или офис</small></div><span class="p">2 500 ₽</span><button type="button" data-order="Договор аренды">Заказать</button></div>
+      <div class="doc"><div><b>Купля-продажа авто</b><small>защищает обе стороны</small></div><span class="p">1 500 ₽</span><button type="button" data-order="Купля-продажа авто">Заказать</button></div>
+      <div class="doc"><div><b>Оказание услуг</b><small>для самозанятых и ИП</small></div><span class="p">2 500 ₽</span><button type="button" data-order="Договор оказания услуг">Заказать</button></div>
+    </div>
+    <div class="gift">
+      <div class="stack" aria-hidden="true"><i></i><i></i><i>.docx</i></div>
+      <div><h3>3 шаблона <span class="hl">бесплатно</span></h3><p>Претензия должнику, расписка и акт выполненных работ. Пришлю в Telegram.</p></div>
+      <button class="btn" data-gift>Забрать<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+    </div>
+  </section>
+
+  <!-- 7. Вопросы -->
+  <section id="faq">
+    <div class="faqgrid">
+      <div class="head"><h2>Частые вопросы</h2><p>Не нашли свой? Напишите в Telegram, отвечу лично.</p></div>
+      <div id="qaList"></div>
+    </div>
+  </section>
+
+  <section id="contacts">
+    <div class="final">
+      <div>
+        <h2>Разберёмся с <span class="hl">вашим вопросом</span></h2>
+        <p>Опишите ситуацию. Отвечу в течение дня.</p>
+        <button class="btn" data-open>Записаться на консультацию<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+      </div>
+      <div>
+        <div class="ways">
+          <a href="https://t.me/gridzakon" target="_blank" rel="noopener"><svg><use href="#i-tg"/></svg><b>Telegram</b><span>@gridzakon</span></a>
+          <a href="https://wa.me/79000000000" target="_blank" rel="noopener" data-wa><svg><use href="#i-wa"/></svg><b>WhatsApp</b><span>написать</span></a>
+          <a href="https://instagram.com/gridzakon" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg><b>Instagram</b><span>gridzakon</span></a>
+          <a href="https://vk.com/gridzakon" target="_blank" rel="noopener"><svg><use href="#i-vk"/></svg><b>ВКонтакте</b><span>gridzakon</span></a>
+        </div>
+        <div class="copyrow"><span id="phone">+7 (900) 000-00-00</span><button id="copy" type="button">Копировать</button></div>
+      </div>
+    </div>
+  </section>
+
+  <footer><span>© 2026 Алексей Гридасов · GridZakon</span><span id="legal" hidden></span><span>Информация на сайте не является публичной офертой.</span><span class="ex" id="demoNote">Часть цифр, цены, кейсы, отзывы, СМИ и телефон пока примерные.</span></footer>
+</main>
+
+<div class="float off" id="float">
+  <a class="tg" href="https://t.me/gridzakon" target="_blank" rel="noopener" aria-label="Написать в Telegram"><svg><use href="#i-tg"/></svg></a>
+  <button class="btn" data-open><span>Записаться<span class="lg"> на консультацию</span></span><span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+</div>
+
+<!-- запись -->
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mtitle">
+  <form class="sheet" id="form" novalidate>
+    <div class="top"><span class="label" id="mstep">Шаг 1 из 3</span><button class="x" type="button" data-close aria-label="Закрыть">×</button></div>
+    <div class="bar"><i class="on"></i><i></i><i></i></div>
+    <div data-step="1">
+      <h3 id="mtitle" style="margin-bottom:16px">С чем нужна помощь?</h3>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="topic" id="t1" value="Консультация">Консультация</label>
+        <label class="opt"><input type="radio" name="topic" id="t2" value="Суд">Суд или претензия</label>
+        <label class="opt"><input type="radio" name="topic" id="t3" value="Договор">Договор</label>
+        <label class="opt"><input type="radio" name="topic" id="t4" value="Абонентское обслуживание">Юрист для бизнеса</label>
+        <label class="opt"><input type="radio" name="topic" id="t5" value="Обратный звонок">Просто перезвоните мне</label>
+      </div>
+    </div>
+    <div data-step="2" hidden>
+      <h3 style="margin-bottom:16px">Коротко о ситуации</h3>
+      <div style="display:grid;gap:12px">
+        <label class="f">Что случилось?<textarea id="desc" rows="4" placeholder="Например: заказчик не оплатил работу, сумма 120 000 ₽"></textarea></label>
+        <label class="f">Насколько срочно?<select id="urg"><option>В течение недели</option><option>Срочно, сегодня-завтра</option><option>Не горит</option></select></label>
+      </div>
+    </div>
+    <div data-step="3" hidden>
+      <h3 style="margin-bottom:16px">Как с вами связаться?</h3>
+      <div style="display:grid;gap:12px">
+        <label class="f">Имя<input id="name" autocomplete="name"></label>
+        <label class="f">Телефон или Telegram<input id="contact" placeholder="+7… или @username"></label>
+        <div class="label">Как удобнее</div>
+        <div class="chips" role="radiogroup" aria-label="Способ связи">
+          <label><input type="radio" name="way" id="w1" value="Telegram" checked><span>Telegram</span></label>
+          <label><input type="radio" name="way" id="w2" value="WhatsApp"><span>WhatsApp</span></label>
+          <label><input type="radio" name="way" id="w3" value="Звонок"><span>Звонок</span></label>
+        </div>
+      </div>
+    </div>
+    <div data-step="4" hidden class="done">
+      <div class="okc">✓</div>
+      <h3>Заявка принята</h3>
+      <p class="muted" style="margin:0">Алексей ответит в течение дня в удобном мессенджере.</p>
+      <p class="ex preview-note" style="margin:0">В превью заявка никуда не отправляется. На сайте подключим отправку в Telegram.</p>
+    </div>
+    <p class="err" id="err"></p>
+    <div data-consent hidden><p class="ex consent" style="margin:0">Отправляя форму, вы соглашаетесь на <a href="#" data-policy>обработку персональных данных</a>.</p></div>
+    <div class="nav">
+      <button class="link" type="button" id="back">Назад</button>
+      <button class="btn" type="submit"><span id="nextl">Далее</span><span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+    </div>
+  </form>
+</div>
+
+<!-- просмотр видео -->
+<div class="modal" id="vmodal" hidden role="dialog" aria-modal="true" aria-label="Просмотр видео">
+  <div class="vsheet">
+    <div class="vctl"><div class="vhead"><span class="label" id="vcount">1 / 10</span><b class="vtitle" id="vtitle"></b></div><div class="nav2"><button class="circ" type="button" id="vprev" aria-label="Предыдущее видео">←</button><button class="circ" type="button" id="vnext" aria-label="Следующее видео">→</button><button class="circ" type="button" data-close aria-label="Закрыть">×</button></div></div>
+    <div class="vframe" id="vframe"><img id="vimg" alt="" hidden><span class="pf" id="vpf"></span><div class="cover" id="vcover"></div><a class="big" id="vplay" target="_blank" rel="noopener" aria-label="Смотреть видео"><svg><use href="#i-play"/></svg></a><small id="vnote">Здесь будет само видео</small></div>
+    <div class="vfoot"><a class="link" id="vlink" href="#" target="_blank" rel="noopener">Смотреть в соцсети</a><button class="btn" type="button" id="vcta">Похожая ситуация?<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button></div>
+  </div>
+</div>
+
+<!-- диплом -->
+<div class="modal" id="dmodal" hidden role="dialog" aria-modal="true" aria-label="Документ">
+  <div class="dsheet">
+    <div class="vctl"><span class="label">Документы</span><button class="circ" type="button" data-close aria-label="Закрыть">×</button></div>
+    <div class="dscan" id="dscan"><div><b id="dtitle"></b><span id="dsub"></span><br><span class="ex" id="dnote">здесь будет скан документа</span></div></div>
+  </div>
+</div>
+
+<!-- заказ договора -->
+<div class="modal" id="omodal" hidden role="dialog" aria-modal="true" aria-labelledby="otitle">
+  <form class="sheet" id="oform" novalidate>
+    <div class="top"><span class="label">Готовый договор</span><button class="x" type="button" data-close aria-label="Закрыть">×</button></div>
+    <div id="oask" style="display:grid;gap:14px">
+      <h3 id="otitle">Договор</h3>
+      <p class="muted" style="margin:0"><span id="oprice"></span>. Пришлю шаблон в Word и подскажу, как заполнить.</p>
+      <label class="f">Telegram или телефон<input id="ocontact" placeholder="@username или +7…"></label>
+      <label class="chk"><input type="checkbox" id="ocustom"> Нужно доработать под мою ситуацию</label>
+      <p class="err" id="oerr"></p>
+      <p class="ex consent" style="margin:0">Отправляя форму, вы соглашаетесь на <a href="#" data-policy>обработку персональных данных</a>.</p>
+      <button class="btn" type="submit" style="justify-self:start">Заказать<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+    </div>
+    <div id="odone" class="done" hidden>
+      <div class="okc">✓</div><h3>Заказ принят</h3>
+      <p class="muted" style="margin:0">Алексей пришлёт договор и ссылку на оплату в течение дня.</p>
+      <p class="ex preview-note" style="margin:0">В превью ничего не отправляется.</p>
+    </div>
+  </form>
+</div>
+
+<!-- подарок -->
+<div class="modal" id="gmodal" hidden role="dialog" aria-modal="true" aria-labelledby="gtitle">
+  <form class="sheet" id="gform" novalidate>
+    <div class="top"><span class="label">Подарок</span><button class="x" type="button" data-close aria-label="Закрыть">×</button></div>
+    <div id="gask" style="display:grid;gap:14px">
+      <h3 id="gtitle">Куда прислать шаблоны?</h3>
+      <p class="muted" style="margin:0">Претензия должнику, расписка и акт выполненных работ в Word.</p>
+      <label class="f">Telegram или телефон<input id="gcontact" placeholder="@username или +7…"></label>
+      <p class="err" id="gerr"></p>
+      <p class="ex consent" style="margin:0">Отправляя форму, вы соглашаетесь на <a href="#" data-policy>обработку персональных данных</a>.</p>
+      <button class="btn" type="submit" style="justify-self:start">Получить бесплатно<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+    </div>
+    <div id="gdone" class="done" hidden>
+      <div class="okc">✓</div><h3>Шаблоны в пути</h3>
+      <p class="muted" style="margin:0">Если остались вопросы, запишитесь на консультацию.</p>
+      <button class="btn" type="button" id="g2c">Записаться<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+      <p class="ex preview-note" style="margin:0">В превью ничего не отправляется.</p>
+    </div>
+  </form>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  function esc(t){return t.replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function cover(t){return esc(t).replace(/\*(.+?)\*/g,'<mark>$1</mark>')}
+
+  /* =====================================================================
+     НАСТРОЙКИ САЙТА. Всё, что меняется, редактируется только здесь.
+     Фото и видео: положите файл рядом с index.html и впишите имя файла,
+     например portrait: 'img/portrait.jpg'. Пустая строка = заглушка.
+     ===================================================================== */
+  var SITE={
+    demo:true,                       // false = убрать пометки «пример»
+    leadsEndpoint:'',                // адрес Cloudflare Worker для заявок (см. launch.md)
+    phone:'+7 (900) 000-00-00',
+    legal:'',                        // реквизиты для подвала, например: 'ИП Гридасов А. …, ИНН …'. Пусто = не показывать
+    policyUrl:'',                    // ссылка на политику обработки персональных данных
+    whatsapp:'79000000000',          // номер без + и пробелов
+    // avatar пока вырезан из обложки ролика; лучше заменить своим файлом, например 'img/avatar.jpg', и очистить avatarCrop
+    photos:{avatar:'https://i.ytimg.com/vi/Q5F6u25Oc_0/oardefault.jpg',portrait:''},
+    avatarCrop:'50% 22%',            // какая точка картинки в центре кружка; пусто = обычная обрезка
+    avatarZoom:2.1,                   // увеличение, чтобы лицо заняло кружок
+    facts:[['190K','подписчиков в Instagram'],['4 млн','просмотров у одного ролика'],['428','роликов о праве на YouTube']],
+    // СМИ: [название или путь к логотипу (svg/png), ссылка на выступление]. Пустой список = полоса скрыта
+    media:[['ТВ-канал',''],['Радио',''],['Деловое издание',''],['Новостной портал',''],['Подкаст','']],
+    // Ролики: [название (*слово* = красная плашка), площадка, просмотры, ID ролика на YouTube, своя ссылка, свой mp4, своя обложка]
+    // По ID с YouTube обложка, ссылка и плеер подставляются сами. Просмотры можно оставить пустыми.
+    reels:[
+      ['Кто может тебя *задержать?*','YouTube','','63Q1zDtFPio','','',''],
+      ['Полиция *применила силу*','YouTube','','pAhH50akF5g','','',''],
+      ['Изъяли. Можно *вернуть?*','YouTube','','hJlMTZwqKlM','','',''],
+      ['Главное правило *задержанного*','YouTube','','hW0ePoqhFmM','','',''],
+      ['Без приговора. *В перечень*','YouTube','','Q5F6u25Oc_0','','',''],
+      ['Претензий нет, *дело осталось*','YouTube','','taupVDBGR-o','','',''],
+      ['Можно ли *снимать полицию?*','YouTube','','fknixzhKwUE','','',''],
+      ['Забирают *без формы*','YouTube','','8AA8o9g-JjQ','','',''],
+      ['Один дома, второй *в СИЗО*','YouTube','','xepeAnNpryU','','',''],
+      ['Бесплатный ужин. *Уголовка?*','YouTube','','t9Ffag2preQ','','','']
+    ],
+    // Отзывы: [подпись (*слово* = красная плашка), видеофайл mp4 (если есть), картинка: скриншот отзыва или обложка видео]
+    reviews:[
+      ['«Вернули *840 тысяч* за 2 месяца»','',''],
+      ['«Договор с партнёром *спас бизнес*»','',''],
+      ['«Застройщик *выплатил* неустойку»','',''],
+      ['«Юрист, которому можно *написать вечером*»','',''],
+      ['«Налоговая *без штрафа*»','',''],
+      ['«Вернули деньги *за машину*»','',''],
+      ['«Объяснил всё *за 20 минут*»','','']
+    ],
+    // Кейсы: [итог крупно, коротко, статья, ситуация, что сделали, итог]
+    cases:[
+      ['+840 000 ₽','Взыскали с заказчика долг фрилансера вместе с процентами за просрочку.','ст. 309, 395 ГК РФ','Заказчик принял сайт и 4 месяца не платил, перестал отвечать.','Собрали переписку как доказательство договора, отправили претензию, подали иск и взыскали проценты.','Деньги на счёте клиента через 2 месяца.'],
+      ['Возврат ×2','Автосалон вернул деньги за машину с дефектом и заплатил штраф 50%.','Закон о защите прав потребителей','Через неделю после покупки обнаружился скрытый дефект коробки, салон отказал в возврате.','Назначили независимую экспертизу, подали иск о расторжении, неустойке и штрафе.','Полный возврат стоимости, неустойка и штраф 50%.'],
+      ['0 ₽ потерь','Нашли в партнёрском договоре пункт, по которому клиент терял долю в бизнесе.','ст. 432 ГК РФ','Клиент собирался подписать договор, присланный второй стороной.','Нашли условие о переходе доли при «любом нарушении сроков», подготовили протокол разногласий.','Пункт убрали, доля клиента защищена.']
+    ],
+    // Дипломы: путь к скану по названию кнопки
+    diplomas:{'Диплом юриста':'','Повышение квалификации':'','Удостоверение':''},
+    faq:[
+      ['Сколько стоит консультация?','От 3 000 ₽. Стоимость дела называю после разбора документов и фиксирую в договоре.'],
+      ['Можно решить вопрос онлайн?','Да, по всей России. В суды Москвы и области выезжаю лично.'],
+      ['У меня только переписка. Есть смысл обращаться?','Да. Переписка в мессенджерах часто работает как доказательство.'],
+      ['Как быстро вы ответите?','В течение дня. Срочный вопрос отметьте в заявке.'],
+      ['Это конфиденциально?','Да. При необходимости подпишем соглашение о неразглашении.']
+    ]
+  };
+  /* ==================== конец настроек ==================== */
+
+  var WHERE={YouTube:'на YouTube',Instagram:'в Instagram',TikTok:'в TikTok'};
+  var URL={Instagram:'https://instagram.com/gridzakon',TikTok:'https://www.tiktok.com/@gridzakon',YouTube:'https://www.youtube.com/@gridzakon'};
+  var R=SITE.reels,V=SITE.reviews,C=SITE.cases,Q=SITE.faq,DEMO=SITE.demo;
+  var tagEx=DEMO?'пример':'';
+  function isImg(x){return /\.(svg|png|jpe?g|webp|avif)$/i.test(x)}
+
+  // ---------- рендер ----------
+  function plain(t){return t.replace(/\*/g,'')}
+  function rImg(r){return r[6]||(r[3]?'https://i.ytimg.com/vi/'+r[3]+'/oardefault.jpg':'')}
+  function rLink(r){return r[4]||(r[3]?'https://www.youtube.com/shorts/'+r[3]:URL[r[1]])}
+  function tile(cls,attr,img,tag,text,meta,play){return '<button type="button" class="reel'+(img?' has-img':'')+cls+'" '+attr+'>'+(img?'<img src="'+esc(img)+'" alt="" decoding="async">':'')+'<span class="pf"><span class="at">'+tag+'</span></span><span class="cover">'+cover(text)+'</span><span class="meta"><i>'+meta+'</i>'+(play===false?'':'<span class="pl"><svg><use href="#i-play"/></svg></span>')+'</span></button>'}
+  function reel(r,i,dup){return tile(dup?' dup':'','data-v="'+i+'"'+(dup?' aria-hidden="true" tabindex="-1"':' aria-label="'+esc(plain(r[0]))+(r[2]?', '+esc(r[2])+' просмотров':'')+'"'),rImg(r),'@gridzakon',r[0],r[2]?'<svg><use href="#i-eye"/></svg>'+esc(r[2]):'')}
+  function col(a,b){var h='',d='';for(var i=a;i<b;i++){h+=reel(R[i],i);d+=reel(R[i],i,1)}return h+d}
+  var half=Math.ceil(R.length/2);
+  $('colA').innerHTML=col(0,half);$('colB').innerHTML=col(half,R.length);
+  $('revs').innerHTML=V.map(function(v,i){return tile('','data-r="'+i+'"',v[2],v[1]?'Видео-отзыв':'Отзыв',v[0],tagEx,!!v[1])}).join('');
+  // обложка не загрузилась: показываем текстовую
+  document.querySelectorAll('.reel img').forEach(function(im){im.addEventListener('error',function(){im.parentNode.classList.remove('has-img');im.remove()});
+    function ok(){im.classList.add('ok')}
+    if(im.complete&&im.naturalWidth)ok();else im.addEventListener('load',ok)});
+  // факты, СМИ, контакты, фото
+  $('facts').innerHTML=SITE.facts.map(function(f){return '<div><b>'+esc(f[0])+'</b><span>'+esc(f[1])+'</span></div>'}).join('');
+  if(SITE.media.length)$('logos').innerHTML=SITE.media.map(function(m){var t=isImg(m[0])?'<img src="'+esc(m[0])+'" alt="">':esc(m[0]);
+    return m[1]?'<a href="'+esc(m[1])+'" target="_blank" rel="noopener">'+t+'</a>':'<span>'+t+'</span>'}).join('')+(DEMO?'<span class="ex">пример</span>':'');
+  else $('media').hidden=true;
+  $('phone').textContent=SITE.phone;
+  if(SITE.legal){$('legal').textContent=SITE.legal;$('legal').hidden=false}
+  document.querySelectorAll('[data-wa]').forEach(function(a){a.href='https://wa.me/'+SITE.whatsapp});
+  if(SITE.photos.avatar)document.querySelectorAll('.ava .in').forEach(function(el){el.innerHTML='<img src="'+esc(SITE.photos.avatar)+'" alt="Алексей Гридасов"'+(SITE.avatarCrop?' style="object-position:'+SITE.avatarCrop+';transform:scale('+(SITE.avatarZoom||1)+')"':'')+'>'});
+  if(SITE.photos.portrait){var pt=$('portrait');pt.classList.add('has-img');pt.insertAdjacentHTML('afterbegin','<img src="'+esc(SITE.photos.portrait)+'" alt="Алексей Гридасов">')}
+  if(!DEMO){$('demoNote').hidden=true;document.querySelectorAll('.logos .ex').forEach(function(x){x.remove()})}
+  document.querySelectorAll('[data-policy]').forEach(function(a){if(SITE.policyUrl){a.href=SITE.policyUrl;a.target='_blank'}else{a.removeAttribute('href')}});
+  if(SITE.leadsEndpoint)document.querySelectorAll('.preview-note').forEach(function(n){n.hidden=true});
+  $('caseList').innerHTML=C.map(function(c){return '<details class="case"><summary><div class="res">'+c[0]+'</div><p>'+c[1]+'</p><span class="law">'+c[2]+'</span><span class="more">Как решили<i>+</i></span></summary><div class="cbody"><div><b>Ситуация</b><span>'+c[3]+'</span></div><div><b>Что сделали</b><span>'+c[4]+'</span></div><div><b>Итог</b><span>'+c[5]+'</span></div></div></details>'}).join('');
+  $('qaList').innerHTML=Q.map(function(q,i){return '<details class="qa"'+(i===0?' open':'')+'><summary>'+q[0]+'<i>+</i></summary><p>'+q[1]+'</p></details>'}).join('');
+
+  // ---------- отправка заявок ----------
+  function send(kind,data){
+    if(!SITE.leadsEndpoint)return;
+    data.kind=kind;data.page=location.href;
+    try{fetch(SITE.leadsEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(function(){})}catch(e){}
+  }
+
+  // ---------- модалки ----------
+  var openM=null,lastF=null;
+  function show(m){if(openM)openM.hidden=true;else lastF=document.activeElement;m.hidden=false;openM=m;document.body.style.overflow='hidden';
+    var c=m.querySelector('[data-close]');if(c)c.focus({preventScroll:true})}
+  function hide(){if(openM){var v=openM.querySelector('video');if(v)v.pause();var f=openM.querySelector('iframe');if(f)f.remove();openM.hidden=true;openM=null}document.body.style.overflow='';
+    if(lastF&&lastF.focus)lastF.focus({preventScroll:true});lastF=null}
+  document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)hide()})});
+  document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=hide});
+
+  // запись
+  var form=$('form'),step=1,steps=form.querySelectorAll('[data-step]'),bars=form.querySelectorAll('.bar i');
+  function cb(){return form.querySelector('input[value="Обратный звонок"]').checked}
+  function go(n){step=n;$('err').textContent='';
+    steps.forEach(function(s){s.hidden=+s.dataset.step!==n});
+    bars.forEach(function(b,i){b.classList.toggle('on',i<n)});
+    $('mstep').textContent=n<4?'Шаг '+n+' из 3':'Готово';
+    $('back').style.visibility=n>1&&n<4?'visible':'hidden';
+    $('nextl').textContent=n===3?'Отправить':n===4?'Закрыть':'Далее';
+    form.querySelector('[data-consent]').hidden=n!==3}
+  function book(topic,pick){form.reset();go(1);
+    if(topic){form.querySelector('input[value="Договор"]').checked=true;$('desc').value='Нужен: '+topic}
+    if(pick){var r=form.querySelector('input[value="'+pick+'"]');if(r){r.checked=true;go(2)}}
+    show($('modal'))}
+  document.querySelectorAll('[data-open]').forEach(function(b){b.addEventListener('click',function(){book(b.dataset.topic,b.dataset.pick)})});
+  $('back').onclick=function(){go(step===3&&cb()?1:step-1)};
+  form.addEventListener('submit',function(e){e.preventDefault();
+    if(step===1&&!form.querySelector('input[name=topic]:checked')){$('err').textContent='Выберите один из вариантов.';return}
+    if(step===3&&(!$('name').value.trim()||!$('contact').value.trim())){$('err').textContent='Укажите имя и телефон или Telegram, чтобы Алексей мог ответить.';return}
+    if(step===4){hide();return}
+    if(step===3){var t=form.querySelector('input[name=topic]:checked'),w=form.querySelector('input[name=way]:checked');
+      send('Заявка на консультацию',{topic:t?t.value:'',desc:$('desc').value,urgency:$('urg').value,name:$('name').value,contact:$('contact').value,way:w?w.value:''})}
+    if(step===1&&cb()){go(3);return}
+    go(step+1)});
+
+  // видео
+  var vi=0,vlist='reels',WEB=/^https?:$/.test(location.protocol);
+  // свой mp4 играет сразу; ролик с YouTube встраивается плеером (на опубликованном сайте), иначе кнопка ведёт на YouTube
+  function setVideo(src,yt){var f=$('vframe');f.querySelectorAll('video,iframe').forEach(function(x){x.remove()});
+    if(src)f.insertAdjacentHTML('beforeend','<video src="'+esc(src)+'" controls playsinline autoplay></video>');
+    else if(yt&&WEB)f.insertAdjacentHTML('beforeend','<iframe src="https://www.youtube-nocookie.com/embed/'+esc(yt)+'?autoplay=1&playsinline=1&rel=0" title="Видео" allow="autoplay; encrypted-media; picture-in-picture; fullscreen"></iframe>');
+    $('vnote').hidden=!!(src||yt)}
+  function vshow(i){var rl=vlist==='reels',L=rl?R:V;vi=(i+L.length)%L.length;var r=L[vi],im=rl?rImg(r):r[2],link=rl?rLink(r):'';
+    $('vcover').innerHTML=cover(r[0]);
+    $('vimg').hidden=!im;if(im)$('vimg').src=im;$('vframe').classList.toggle('has-img',!!im);
+    $('vpf').textContent=rl?r[1]:(r[1]?'Видео-отзыв':'Отзыв');
+    $('vlink').hidden=!rl;
+    if(rl){$('vlink').href=link;$('vlink').textContent='Смотреть '+(WHERE[r[1]]||'в соцсети')}
+    $('vtitle').textContent=rl?plain(r[0]):'';
+    if(link)$('vplay').href=link;else $('vplay').removeAttribute('href');
+    setVideo(rl?r[5]:r[1],rl?r[3]:'');
+    // отзыв-скриншот: без кнопки «играть», просто картинка
+    $('vplay').hidden=!rl&&!r[1];$('vnote').textContent=rl?'Здесь будет само видео':'Здесь будет отзыв клиента';
+    if(!rl)$('vnote').hidden=!!(r[1]||im);
+    $('vcount').textContent=(vi+1)+' / '+L.length}
+  $('vimg').addEventListener('error',function(){this.hidden=true;$('vframe').classList.remove('has-img')});
+  document.querySelectorAll('.feed .reel').forEach(function(b){b.addEventListener('click',function(){vlist='reels';vshow(+b.dataset.v);show($('vmodal'))})});
+  document.querySelectorAll('#revs .reel').forEach(function(b){b.addEventListener('click',function(){vlist='reviews';vshow(+b.dataset.r);show($('vmodal'))})});
+  $('vprev').onclick=function(){vshow(vi-1)};$('vnext').onclick=function(){vshow(vi+1)};
+  $('vcta').onclick=function(){book()};
+
+  // дипломы
+  var dInner=$('dscan').innerHTML;
+  document.querySelectorAll('[data-dipl]').forEach(function(b){b.onclick=function(){var p=b.dataset.dipl.split('|'),src=SITE.diplomas[p[0]];
+    $('dscan').innerHTML=src?'<img src="'+esc(src)+'" alt="'+esc(p[0])+'">':dInner;
+    if(!src){$('dtitle').textContent=p[0];$('dsub').textContent=p[1]}
+    show($('dmodal'))}});
+
+  // заказ договора
+  document.querySelectorAll('[data-order]').forEach(function(b){b.addEventListener('click',function(){
+    $('oform').reset();$('otitle').textContent=b.dataset.order;$('oprice').textContent=b.parentNode.querySelector('.p').textContent;
+    $('oask').hidden=false;$('odone').hidden=true;$('oerr').textContent='';show($('omodal'))})});
+  $('oform').addEventListener('submit',function(e){e.preventDefault();if(!$('ocontact').value.trim()){$('oerr').textContent='Укажите Telegram или телефон.';return}send('Заказ договора',{doc:$('otitle').textContent,price:$('oprice').textContent,contact:$('ocontact').value,custom:$('ocustom').checked?'да':'нет'});$('oask').hidden=true;$('odone').hidden=false});
+
+  // подарок
+  document.querySelectorAll('[data-gift]').forEach(function(b){b.addEventListener('click',function(){$('gform').reset();$('gask').hidden=false;$('gdone').hidden=true;$('gerr').textContent='';show($('gmodal'))})});
+  $('gform').addEventListener('submit',function(e){e.preventDefault();if(!$('gcontact').value.trim()){$('gerr').textContent='Укажите Telegram или телефон.';return}send('Подарок: 3 шаблона',{contact:$('gcontact').value});$('gask').hidden=true;$('gdone').hidden=false});
+  $('g2c').onclick=function(){book()};
+
+  document.addEventListener('keydown',function(e){if(!openM)return;if(e.key==='Escape')hide();
+    // Tab ходит по кругу внутри открытого окна
+    if(openM&&e.key==='Tab'){var q=[].filter.call(openM.querySelectorAll('a[href],button,input,select,textarea'),function(x){return x.offsetParent!==null});
+      if(q.length){var a=q[0],z=q[q.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}}
+    if(openM&&openM.id==='vmodal'){if(e.key==='ArrowRight')vshow(vi+1);if(e.key==='ArrowLeft')vshow(vi-1)}});
+
+  // отзывы стрелками
+  function rs(d){var r=$('revs');r.scrollBy({left:d*r.clientWidth*.8,behavior:'smooth'})}
+  $('rprev').onclick=function(){rs(-1)};$('rnext').onclick=function(){rs(1)};
+
+  // меню
+  var mb=$('menuBtn'),mm=$('mmenu');
+  function menu(o){mm.hidden=!o;mb.setAttribute('aria-expanded',o);mb.textContent=o?'Закрыть':'Меню'}
+  mb.onclick=function(){menu(mm.hidden)};
+  mm.querySelectorAll('a').forEach(function(a){a.onclick=function(){menu(false)}});
+
+  if('IntersectionObserver' in window){
+    // активный пункт
+    var nl={};document.querySelectorAll('.navlinks a').forEach(function(a){nl[a.getAttribute('href').slice(1)]=a});
+    var so=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){for(var k in nl)nl[k].classList.remove('on');if(nl[e.target.id])nl[e.target.id].classList.add('on')}})},{rootMargin:'-45% 0px -50% 0px'});
+    document.querySelectorAll('main > section, main > header').forEach(function(el){so.observe(el)});
+    // плавающая кнопка
+    var fl=$('float'),vis={};
+    var fo=new IntersectionObserver(function(es){es.forEach(function(e){vis[e.target.id]=e.isIntersecting});fl.classList.toggle('off',!!(vis.heroCta||vis.contacts))});
+    fo.observe($('heroCta'));fo.observe($('contacts'));
+  }else{$('float').classList.remove('off')}
+
+  // телефон
+  $('copy').addEventListener('click',function(){var el=$('phone'),btn=this;
+    function sel(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r)}
+    try{navigator.clipboard.writeText(el.textContent).then(function(){btn.textContent='Скопировано'},sel)}catch(e){sel()}});
+
+  // появление блоков при прокрутке
+  if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    var rvs=[].slice.call(document.querySelectorAll('section .head,#media,#about,.svcs,.flow,.cases,.revhead,.revs,.docs,.gift,#qaList,.final'));
+    rvs.forEach(function(el){el.classList.add('rv')});
+    // всё, что уже на экране или выше него, показываем сразу: блок не может остаться невидимым
+    var rchk=function(){var h=innerHeight*.94;rvs=rvs.filter(function(el){if(el.getBoundingClientRect().top<h){el.classList.add('in');return false}return true});
+      if(!rvs.length){removeEventListener('scroll',rchk);removeEventListener('resize',rchk)}};
+    addEventListener('scroll',rchk,{passive:true});addEventListener('resize',rchk);rchk();
+  }
+
+  // типограф: короткие слова, цифры и тире не остаются висеть в конце строки
+  (function(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null),n,a=[];
+    while(n=w.nextNode()){if(!/^(SCRIPT|STYLE|TEXTAREA|OPTION)$/.test(n.parentNode.nodeName))a.push(n)}
+    function sh(t){return t.replace(/(^|[\s(«])([A-Za-zА-Яа-яЁё]{1,2}) (?=\S)/g,'$1$2\u00a0')}
+    a.forEach(function(n){var t=n.nodeValue,r=sh(sh(t)).replace(/(\d) (?=\d{3}(\D|$)|₽|%|лет|млн|тыс|месяц|минут)/g,'$1\u00a0').replace(/ (—|–) /g,'\u00a0$1 ');
+      if(r!==t)n.nodeValue=r})})();
+})();
+</script>
+
+</body>
+</html>
