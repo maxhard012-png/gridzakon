@@ -127,7 +127,7 @@ section{padding-block:96px}
 .reel>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s}
 .reel>img.ok{opacity:1}
 /* рядом с заголовком обложки приглушены, чтобы на экране кричал только он; под курсором обложка оживает */
-@media (min-width:901px){.feed .reel>img{filter:brightness(.62) saturate(.8);transition:opacity .5s,filter .3s}.feed .reel:hover>img,.feed .reel:focus-visible>img{filter:none}}
+@media (min-width:901px){.feed .reel>img{filter:brightness(.86);transition:opacity .5s,filter .3s}.feed .reel:hover>img,.feed .reel:focus-visible>img{filter:none}}
 .reel::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.7));pointer-events:none}
 .reel .pf{position:relative;z-index:1;display:flex}
 .reel .at{font:800 14px/1 var(--f-cover);letter-spacing:.05em;text-transform:uppercase;color:#fff;border-bottom:2px solid var(--red);padding-bottom:3px}
@@ -686,27 +686,27 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     policyUrl:'',                    // ссылка на политику обработки персональных данных
     whatsapp:'79000000000',          // номер без + и пробелов
     // avatar пока вырезан из обложки ролика; лучше заменить своим файлом, например 'img/avatar.jpg', и очистить avatarCrop
-    photos:{avatar:'https://i.ytimg.com/vi/Q5F6u25Oc_0/oardefault.jpg',portrait:'https://i.ytimg.com/vi/hJlMTZwqKlM/oardefault.jpg'},
+    photos:{avatar:'https://i.ytimg.com/vi/PFgiHKkNJ90/oardefault.jpg',portrait:'https://i.ytimg.com/vi/hJlMTZwqKlM/oardefault.jpg'},
     // portrait пока тоже вырезан из обложки ролика (заголовок обложки спрятан обрезкой). Со своим фото очистите portraitCrop
     portraitCrop:['50% 82%','50% 62%',1.22],  // точка кадра на компьютере, на телефоне, увеличение
-    avatarCrop:'50% 22%',            // какая точка картинки в центре кружка; пусто = обычная обрезка
-    avatarZoom:2.1,                   // увеличение, чтобы лицо заняло кружок
+    avatarCrop:'50% 0%',            // какая точка картинки в центре кружка; пусто = обычная обрезка
+    avatarZoom:1.75,                   // увеличение, чтобы лицо заняло кружок
     facts:[['190K','подписчиков в Instagram'],['4 млн','просмотров у одного ролика'],['428','роликов о праве на YouTube']],
     // СМИ: [название или путь к логотипу (svg/png), ссылка на выступление]. Пустой список = полоса скрыта
     media:[['ТВ-канал',''],['Радио',''],['Деловое издание',''],['Новостной портал',''],['Подкаст','']],
     // Ролики: [название (*слово* = красная плашка), площадка, просмотры, ID ролика на YouTube, своя ссылка, свой mp4, своя обложка]
     // По ID с YouTube обложка, ссылка и плеер подставляются сами. Просмотры можно оставить пустыми.
     reels:[
-      ['Кто может тебя *задержать?*','YouTube','','63Q1zDtFPio','','',''],
-      ['Полиция *применила силу*','YouTube','','pAhH50akF5g','','',''],
-      ['Изъяли. Можно *вернуть?*','YouTube','','hJlMTZwqKlM','','',''],
-      ['Главное правило *задержанного*','YouTube','','hW0ePoqhFmM','','',''],
-      ['Без приговора. *В перечень*','YouTube','','Q5F6u25Oc_0','','',''],
-      ['Претензий нет, *дело осталось*','YouTube','','taupVDBGR-o','','',''],
-      ['Можно ли *снимать полицию?*','YouTube','','fknixzhKwUE','','',''],
-      ['Забирают *без формы*','YouTube','','8AA8o9g-JjQ','','',''],
-      ['Один дома, второй *в СИЗО*','YouTube','','xepeAnNpryU','','',''],
-      ['Бесплатный ужин. *Уголовка?*','YouTube','','t9Ffag2preQ','','','']
+      ['Уголовка *за камеру*','YouTube','','PFgiHKkNJ90','','',''],
+      ['Твой *iPhone*','YouTube','','vntlyKwV1NY','','',''],
+      ['Избили *в отделе*','YouTube','','d92Byr6g1PY','','',''],
+      ['Срок *за паспорт*','YouTube','','A8XRWjILu1s','','',''],
+      ['Поведение *на допросе*','YouTube','','872HqZXt6OE','','',''],
+      ['Родственники и *задержание*','YouTube','','8TkgK_hbr4E','','',''],
+      ['2 года *за бензин*','YouTube','','OajHLkB8WGU','','',''],
+      ['5 лет *за шутку*','YouTube','','vGarLQR_2Y8','','',''],
+      ['Что такое *вымогательство?*','YouTube','','M6vhUNKw5oE','','',''],
+      ['Face ID *или пароль?*','YouTube','','4gd6Ei5H5rE','','','']
     ],
     // Отзывы: [подпись (*слово* = красная плашка), видеофайл mp4 (если есть), картинка: скриншот отзыва или обложка видео]
     reviews:[
