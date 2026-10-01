@@ -89,7 +89,7 @@ section{padding-block:96px}
 .bleed{margin-inline:-16px;padding-inline:16px}
 
 /* ========== 1. HERO ========== */
-.hero{display:grid;grid-template-columns:minmax(0,1fr) 420px;grid-template-areas:"main side" "facts side";column-gap:64px;align-items:end;padding-block:36px 72px}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 420px;grid-template-areas:"main side";column-gap:64px;align-items:center;padding-block:36px 72px}
 .hero .main{grid-area:main}
 .hero .side{grid-area:side;align-self:center;display:grid;gap:14px;position:relative;isolation:isolate}
 .hero .side::before{content:"";position:absolute;inset:6% -16px -4% -30%;background:radial-gradient(closest-side,rgba(227,38,45,.2),transparent);z-index:-1;pointer-events:none} /* красный отсвет, как свет на его обложках */
@@ -105,9 +105,6 @@ section{padding-block:96px}
 .hero .lead{font-size:18px;color:var(--mute);max-width:44ch;margin:24px 0 36px}
 .hero .lead b{color:var(--fg);font-weight:500}
 .cta{display:flex;flex-wrap:wrap;align-items:center;gap:28px}
-.facts{grid-area:facts;display:flex;flex-wrap:wrap;gap:40px;margin-top:56px;padding-top:26px;border-top:1px solid var(--line)}
-.facts b{display:block;font:800 44px/1 var(--f-disp);text-transform:uppercase;margin-bottom:4px}
-.facts span{font-size:13px;color:var(--mute)}
 .side-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .side-head b{font:600 15px var(--f-head);letter-spacing:-.01em}
 .side-head small{display:block;font-size:13px;color:var(--mute)}
@@ -141,7 +138,7 @@ section{padding-block:96px}
 .reel .pl svg{width:11px;height:11px;margin-left:1px}
 .reel:hover .pl{background:var(--red)}
 @media (max-width:900px){
-  .hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "side" "facts";padding-top:20px}
+  .hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "side";padding-top:20px}
   .hero .side{margin-top:40px}
   .who{margin-bottom:24px}
   .ava.big{width:76px;height:76px}.ava.big .in{font-size:24px}.ava.big .ok{width:22px;height:22px;font-size:11px;right:0;bottom:2px}
@@ -149,14 +146,27 @@ section{padding-block:96px}
   .hero .lead{font-size:17px;margin:18px 0 28px}
   .cta{gap:18px}
   .cta .btn{width:100%;justify-content:space-between}
-  .facts{margin-top:36px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-  .facts b{font-size:34px}
-  .facts span{font-size:12px;line-height:1.35;display:block}
   .feed{height:auto;display:flex;overflow-x:auto;-webkit-mask-image:none;mask-image:none;margin-inline:-16px;padding-inline:16px;scroll-snap-type:x mandatory;scrollbar-width:none}
   .col{display:contents;animation:none}
   .col .dup,.col.b .dup{display:none}
   .feed .reel{flex:0 0 160px;width:160px;scroll-snap-align:start}
   .reel .cover{font-size:24px}
+}
+
+/* ========== ЦИФРЫ ========== */
+#stats{padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line)}
+#stats div{padding:36px 0 34px 36px;border-left:1px solid var(--line)}
+#stats div:first-child{padding-left:0;border-left:0}
+#stats b{display:block;font:800 clamp(72px,9.2vw,132px)/.82 var(--f-disp);letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap}
+#stats b i{font-style:normal;font-size:.42em;letter-spacing:.01em;color:var(--red);margin-left:.14em}
+#stats span{display:flex;align-items:center;gap:9px;margin-top:20px;font-size:14px;color:var(--mute)}
+#stats svg{flex:none;width:16px;height:16px;color:var(--fg)}
+@media (max-width:700px){
+  #stats{grid-template-columns:1fr}
+  #stats div{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:18px 0 16px;border-left:0;border-top:1px solid var(--line)}
+  #stats div:first-child{border-top:0}
+  #stats b{font-size:64px}
+  #stats span{margin:0 0 4px;max-width:150px;font-size:13px;line-height:1.35;text-align:right;flex-direction:row-reverse}
 }
 
 /* ========== 2. MEDIA ========== */
@@ -195,7 +205,7 @@ section{padding-block:96px}
 @media (min-width:641px) and (max-width:900px){.about{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:20px}.photo{min-height:0;aspect-ratio:.69;align-self:start}}
 
 .photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 50%);transform-origin:var(--pos,50% 50%);transform:scale(var(--zoom,1))}
-@media (max-width:640px){.photo>img{object-position:var(--posm,var(--pos,50% 50%));transform-origin:var(--posm,var(--pos,50% 50%))}}
+@media (max-width:640px){.photo .tag{display:none}.photo>img{object-position:var(--posm,var(--pos,50% 50%));transform-origin:var(--posm,var(--pos,50% 50%))}}
 .photo.has-img .sil,.photo.has-img .ph{display:none}
 .ava .in img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .logos img{display:block;max-height:26px;filter:grayscale(1) brightness(1.6);opacity:.7}
@@ -434,12 +444,10 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
       </div>
       <div class="feed" aria-label="Видео из соцсетей"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div>
     </div>
-    <div class="facts" id="facts">
-      <div><b>190K</b><span>подписчиков в Instagram</span></div>
-      <div><b>4 млн</b><span>просмотров у одного ролика</span></div>
-      <div><b>428</b><span>роликов о праве на YouTube</span></div>
-    </div>
   </header>
+
+  <!-- Цифры -->
+  <section id="stats" aria-label="Алексей в цифрах"></section>
 
   <!-- 2. СМИ -->
   <section id="media" aria-label="СМИ, где выступал Алексей">
@@ -686,12 +694,13 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     policyUrl:'',                    // ссылка на политику обработки персональных данных
     whatsapp:'79000000000',          // номер без + и пробелов
     // avatar пока вырезан из обложки ролика; лучше заменить своим файлом, например 'img/avatar.jpg', и очистить avatarCrop
-    photos:{avatar:'https://i.ytimg.com/vi/PFgiHKkNJ90/oardefault.jpg',portrait:'https://i.ytimg.com/vi/hJlMTZwqKlM/oardefault.jpg'},
+    photos:{avatar:'https://i.ytimg.com/vi/vntlyKwV1NY/oardefault.jpg',portrait:'https://i.ytimg.com/vi/PFgiHKkNJ90/oardefault.jpg'},
     // portrait пока тоже вырезан из обложки ролика (заголовок обложки спрятан обрезкой). Со своим фото очистите portraitCrop
-    portraitCrop:['50% 82%','50% 62%',1.22],  // точка кадра на компьютере, на телефоне, увеличение
-    avatarCrop:'50% 0%',            // какая точка картинки в центре кружка; пусто = обычная обрезка
+    portraitCrop:['50% 16%','50% 16%',1.85],  // точка кадра на компьютере, на телефоне, увеличение
+    avatarCrop:'50% 12%',            // какая точка картинки в центре кружка; пусто = обычная обрезка
     avatarZoom:1.75,                   // увеличение, чтобы лицо заняло кружок
-    facts:[['190K','подписчиков в Instagram'],['4 млн','просмотров у одного ролика'],['428','роликов о праве на YouTube']],
+    // Цифры: [число, единица (красным), подпись, значок площадки: ig, yt, tt, tg, vk или пусто]
+    facts:[['190','K','подписчиков в Instagram','ig'],['4','млн','просмотров у одного ролика','yt'],['428','','роликов о праве на YouTube','yt']],
     // СМИ: [название или путь к логотипу (svg/png), ссылка на выступление]. Пустой список = полоса скрыта
     media:[['ТВ-канал',''],['Радио',''],['Деловое издание',''],['Новостной портал',''],['Подкаст','']],
     // Ролики: [название (*слово* = красная плашка), площадка, просмотры, ID ролика на YouTube, своя ссылка, свой mp4, своя обложка]
@@ -757,7 +766,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     function ok(){im.classList.add('ok')}
     if(im.complete&&im.naturalWidth)ok();else im.addEventListener('load',ok)});
   // факты, СМИ, контакты, фото
-  $('facts').innerHTML=SITE.facts.map(function(f){return '<div><b>'+esc(f[0])+'</b><span>'+esc(f[1])+'</span></div>'}).join('');
+  $('stats').innerHTML=SITE.facts.map(function(f){return '<div><b>'+esc(f[0])+(f[1]?'<i>'+esc(f[1])+'</i>':'')+'</b><span>'+(f[3]?'<svg><use href="#i-'+f[3]+'"/></svg>':'')+esc(f[2])+'</span></div>'}).join('');
   if(SITE.media.length)$('logos').innerHTML=SITE.media.map(function(m){var t=isImg(m[0])?'<img src="'+esc(m[0])+'" alt="">':esc(m[0]);
     return m[1]?'<a href="'+esc(m[1])+'" target="_blank" rel="noopener">'+t+'</a>':'<span>'+t+'</span>'}).join('')+(DEMO?'<span class="ex">пример</span>':'');
   else $('media').hidden=true;
@@ -891,7 +900,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 
   // появление блоков при прокрутке
   if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
-    var rvs=[].slice.call(document.querySelectorAll('section .head,#media,#about,.svcs,.flow,.cases,.revhead,.revs,.docs,.gift,#qaList,.final'));
+    var rvs=[].slice.call(document.querySelectorAll('section .head,#stats,#media,#about,.svcs,.flow,.cases,.revhead,.revs,.docs,.gift,#qaList,.final'));
     rvs.forEach(function(el){el.classList.add('rv')});
     // всё, что уже на экране или выше него, показываем сразу: блок не может остаться невидимым
     var rchk=function(){var h=innerHeight*.94;rvs=rvs.filter(function(el){if(el.getBoundingClientRect().top<h){el.classList.add('in');return false}return true});
