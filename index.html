@@ -41,8 +41,8 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html{scroll-behavior:smooth;overflow-x:clip}
-body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0;padding-inline:16px;padding-block:0 0;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0;padding-inline:16px;padding-block:0 0;overflow-x:clip;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .wrap{max-width:1160px;margin:0 auto}
 h1,h2,h3{font-family:var(--f-disp);font-weight:800;letter-spacing:-.005em;line-height:.94;text-transform:uppercase;text-wrap:balance;margin:0}
@@ -765,7 +765,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   function soloBtn(i){var r=R[i],im=rImg(r);
     return '<button type="button" class="reel'+(im?' has-img':'')+'" data-v="'+i+'" aria-label="Смотреть ролик: '+esc(plain(r[0]))+'">'+(im?'<img class="ok" src="'+esc(im)+'" alt="">':'')+'<span class="pf"><span class="at">@gridzakon</span></span><span class="cover">'+cover(r[0])+'</span><span class="nums">'+(r[2]?'<span><b>'+esc(r[2])+'</b>просмотров</span>':'')+(r[7]?'<span><b>'+esc(r[7])+'</b>лайков</span>':'')+'</span></button>'}
   function setRail(id){var i=SITE.rail[id];
-    if(i==null||!R[i]){railEl.classList.remove('is-solo');railCur=-1;return}
+    if(i==null||!R[i]){clearTimeout(railT);soloEl.classList.remove('swap');railEl.classList.remove('is-solo');railCur=-1;return}
     if(i===railCur)return;
     var was=railEl.classList.contains('is-solo');railCur=i;clearTimeout(railT);soloEl.classList.add('swap');
     railT=setTimeout(function(){soloEl.innerHTML=soloHTML(i);railEl.classList.add('is-solo');soloEl.classList.remove('swap')},was?240:0)}
