@@ -192,8 +192,10 @@ section{padding-block:96px}
 .dipl .doc{flex:none;width:30px;height:38px;border:1.5px solid var(--bg);border-radius:3px 9px 3px 3px;background:linear-gradient(var(--bg),var(--bg)) 6px 12px/14px 1.5px no-repeat,linear-gradient(var(--bg),var(--bg)) 6px 18px/14px 1.5px no-repeat,linear-gradient(var(--bg),var(--bg)) 6px 24px/9px 1.5px no-repeat}
 .dipl small{display:block;font-size:12px;color:var(--paper-mute)}
 @media (max-width:900px){#about{border-radius:24px;margin-inline:0;padding:12px}.about{grid-template-columns:1fr;gap:8px}.photo{min-height:440px}.about .txt{padding:24px 8px 12px}.reasons{grid-template-columns:1fr}}
+@media (min-width:641px) and (max-width:900px){.about{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:20px}.photo{min-height:0;aspect-ratio:.69;align-self:start}}
 
-.photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 50%);transform-origin:var(--pos,50% 50%);transform:scale(var(--zoom,1))}
+@media (max-width:640px){.photo>img{object-position:var(--posm,var(--pos,50% 50%));transform-origin:var(--posm,var(--pos,50% 50%))}}
 .photo.has-img .sil,.photo.has-img .ph{display:none}
 .ava .in img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .logos img{display:block;max-height:26px;filter:grayscale(1) brightness(1.6);opacity:.7}
@@ -684,7 +686,9 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     policyUrl:'',                    // ссылка на политику обработки персональных данных
     whatsapp:'79000000000',          // номер без + и пробелов
     // avatar пока вырезан из обложки ролика; лучше заменить своим файлом, например 'img/avatar.jpg', и очистить avatarCrop
-    photos:{avatar:'https://i.ytimg.com/vi/Q5F6u25Oc_0/oardefault.jpg',portrait:''},
+    photos:{avatar:'https://i.ytimg.com/vi/Q5F6u25Oc_0/oardefault.jpg',portrait:'https://i.ytimg.com/vi/hJlMTZwqKlM/oardefault.jpg'},
+    // portrait пока тоже вырезан из обложки ролика (заголовок обложки спрятан обрезкой). Со своим фото очистите portraitCrop
+    portraitCrop:['50% 82%','50% 62%',1.22],  // точка кадра на компьютере, на телефоне, увеличение
     avatarCrop:'50% 22%',            // какая точка картинки в центре кружка; пусто = обычная обрезка
     avatarZoom:2.1,                   // увеличение, чтобы лицо заняло кружок
     facts:[['190K','подписчиков в Instagram'],['4 млн','просмотров у одного ролика'],['428','роликов о праве на YouTube']],
@@ -761,7 +765,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   if(SITE.legal){$('legal').textContent=SITE.legal;$('legal').hidden=false}
   document.querySelectorAll('[data-wa]').forEach(function(a){a.href='https://wa.me/'+SITE.whatsapp});
   if(SITE.photos.avatar)document.querySelectorAll('.ava .in').forEach(function(el){el.innerHTML='<img src="'+esc(SITE.photos.avatar)+'" alt="Алексей Гридасов"'+(SITE.avatarCrop?' style="object-position:'+SITE.avatarCrop+';transform:scale('+(SITE.avatarZoom||1)+')"':'')+'>'});
-  if(SITE.photos.portrait){var pt=$('portrait');pt.classList.add('has-img');pt.insertAdjacentHTML('afterbegin','<img src="'+esc(SITE.photos.portrait)+'" alt="Алексей Гридасов">')}
+  if(SITE.photos.portrait){var pt=$('portrait');pt.classList.add('has-img');var pc=SITE.portraitCrop||[];pt.insertAdjacentHTML('afterbegin','<img src="'+esc(SITE.photos.portrait)+'" alt="Алексей Гридасов"'+(pc.length?' style="--pos:'+pc[0]+';--posm:'+pc[1]+';--zoom:'+pc[2]+'"':'')+'>')}
   if(!DEMO){$('demoNote').hidden=true;document.querySelectorAll('.logos .ex').forEach(function(x){x.remove()})}
   document.querySelectorAll('[data-policy]').forEach(function(a){if(SITE.policyUrl){a.href=SITE.policyUrl;a.target='_blank'}else{a.removeAttribute('href')}});
   if(SITE.leadsEndpoint)document.querySelectorAll('.preview-note').forEach(function(n){n.hidden=true});
