@@ -44,7 +44,7 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0;padding-inline:16px;padding-block:0 0;overflow-x:clip;-webkit-font-smoothing:antialiased}
 a{color:inherit}
-.wrap{max-width:1160px;margin:0 auto}
+.wrap{max-width:1280px;margin:0 auto}
 h1,h2,h3{font-family:var(--f-disp);font-weight:800;letter-spacing:-.005em;line-height:.94;text-transform:uppercase;text-wrap:balance;margin:0}
 h2{font-size:clamp(40px,5.6vw,68px)}
 .hl{color:var(--red)}
@@ -89,7 +89,7 @@ section{padding-block:96px}
 .bleed{margin-inline:-16px;padding-inline:16px}
 
 /* ========== КАРКАС: слева текст с воздухом, справа всегда видео ========== */
-.page{display:grid;grid-template-columns:minmax(0,1fr) 372px;column-gap:clamp(48px,8vw,128px);align-items:start}
+.page{display:grid;grid-template-columns:minmax(0,1fr) minmax(400px,43%);column-gap:clamp(64px,7vw,104px);align-items:start}
 .flowcol{min-width:0}
 section{padding-block:0;margin-top:clamp(120px,14vw,176px)}
 h2{font-size:clamp(40px,5vw,64px)}
@@ -108,7 +108,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 .ava .ok{position:absolute;right:0;bottom:2px;width:24px;height:24px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:12px;font-weight:700;border:3px solid var(--bg)}
 .who b{display:inline-block;margin-bottom:7px;padding:7px 12px 6px;border-radius:6px;background:var(--red);color:#fff;font:800 17px/1 var(--f-cover);letter-spacing:.2em;text-transform:uppercase}
 .who small{display:block;color:var(--mute);font-size:14px}
-.hero h1{font-size:clamp(60px,8.6vw,120px);line-height:.88}
+.hero h1{font-size:clamp(60px,7.6vw,108px);line-height:.88}
 .hero h1 .hl{display:block;white-space:nowrap}
 .hero h1 em{display:block;font-style:normal;font-size:.36em;line-height:1;letter-spacing:.01em;color:var(--mute);margin-top:.5em}
 .hero .lead{font-size:18px;color:var(--mute);max-width:40ch;margin:28px 0 40px}
@@ -119,7 +119,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 #stats{margin-top:0;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);column-gap:44px;align-items:end}
 #stats div{padding:20px 0 18px;border-top:1px solid var(--line)}
 #stats div:first-child{grid-row:1/3;padding:0;border:0}
-#stats div:first-child b{font-size:clamp(116px,15vw,204px);color:var(--red)}
+#stats div:first-child b{font-size:clamp(110px,12.5vw,172px);color:var(--red)}
 #stats div:first-child b i{color:var(--fg)}
 #stats b{display:block;font:800 clamp(48px,5vw,68px)/.82 var(--f-disp);letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap}
 #stats b var{font-style:normal}
@@ -133,9 +133,9 @@ h2{font-size:clamp(40px,5vw,64px)}
 .logos img{display:block;max-height:24px;filter:grayscale(1) brightness(1.6);opacity:.7}
 
 /* ========== ПРАВАЯ КОЛОНКА: ролики и их цифры ========== */
-.rail{position:sticky;top:68px;height:calc(100dvh - 68px);padding:18px 0 96px;display:flex;flex-direction:column;gap:16px;isolation:isolate}
+.rail{position:sticky;top:68px;height:calc(100dvh - 68px);padding:18px 0 0;overflow-x:visible;overflow-y:clip;display:flex;flex-direction:column;gap:16px;isolation:isolate}
 /* ролик лежит на красном круге и выходит за него; в просвете между колонками вертикальное слово */
-.rail::before{content:"";position:absolute;right:-168px;top:50%;width:500px;height:500px;border-radius:50%;background:var(--red);transform:translateY(-54%);z-index:-1;pointer-events:none}
+.rail::before{content:"";position:absolute;right:-230px;top:50%;width:680px;height:680px;border-radius:50%;background:var(--red);transform:translateY(-54%);z-index:-1;pointer-events:none}
 .rail::after{content:"GRIDZAKON";position:absolute;right:calc(100% + 14px);top:50%;transform:translateY(-52%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 76px/1 var(--f-cover);letter-spacing:.03em;white-space:nowrap;color:transparent;-webkit-text-stroke:1px rgba(241,241,238,.14);pointer-events:none}
 .side-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .side-head b{font:600 15px var(--f-head);letter-spacing:-.01em}
@@ -145,7 +145,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 .soc-row a:hover{color:var(--fg);border-color:var(--fg)}
 .soc-row svg{width:16px;height:16px}
 .rail-body{position:relative;flex:1;min-height:0}
-.feed{position:absolute;inset:0;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:10px;-webkit-mask-image:linear-gradient(transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(transparent,#000 9%,#000 91%,transparent);transition:opacity .35s}
+.feed{position:absolute;inset:0 0 -40px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:10px;-webkit-mask-image:linear-gradient(transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(transparent,#000 9%,#000 91%,transparent);transition:opacity .35s}
 .col{display:flex;flex-direction:column;gap:10px;animation:up 56s linear infinite}
 .col.b{animation-direction:reverse;animation-duration:64s}
 .feed:hover .col,.feed:has(.reel:focus-visible) .col{animation-play-state:paused}
@@ -167,14 +167,33 @@ h2{font-size:clamp(40px,5vw,64px)}
 .reel .pl svg{width:11px;height:11px;margin-left:1px}
 .reel:hover .pl{background:var(--red)}
 /* ролики справа: стопка, которая листается вместе с прокруткой страницы, без рывков */
-.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity}
+.slide{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center;will-change:transform,opacity}
 .slide+.slide{visibility:hidden}
-.slide .card{position:relative;width:min(92%,calc((100dvh - 262px)*.5625));transform:rotate(-3.5deg);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.slide .card{position:relative;width:min(100%,500px);margin-top:8px;transform-origin:50% 0;transform:rotate(-3deg);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 .slide .card:hover{transform:rotate(0)}
 .slide .reel{width:100%;border-radius:24px;padding:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
 .slide .reel:hover{transform:none}
+/* цифры ролика на плашках, которые выступают за край карточки и «живут»: просмотры подрастают, лайки ставятся */
+.plate{position:absolute;z-index:2;display:grid;gap:4px;padding:13px 18px 12px;border-radius:16px;pointer-events:none;box-shadow:0 18px 40px -14px rgba(0,0,0,.75);animation:bob 7s ease-in-out infinite alternate}
+.plate small{display:flex;align-items:center;gap:6px;font:500 12px var(--f-head);opacity:.72}
+.plate small svg{width:13px;height:13px}
+.plate b{display:block;font:800 44px/.9 var(--f-disp);letter-spacing:-.005em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.plate.views{left:-44px;top:330px;background:var(--fg);color:var(--bg);transform:rotate(5deg)}
+.plate.likes{left:-20px;top:440px;background:var(--red);color:#fff;transform:rotate(1deg);animation-duration:9s;grid-template-columns:auto auto;align-items:center;column-gap:12px}
+.plate.likes b{font-size:36px}
+.plate.likes small{grid-column:1/3}
+.hrt{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#fff;color:var(--red)}
+.hrt svg{width:17px;height:17px}
+.plus{position:absolute;right:14px;top:-4px;font:800 20px var(--f-disp);font-style:normal;opacity:0}
+@keyframes bob{to{translate:0 -9px}}
+.cv.tick{animation:tick .5s cubic-bezier(.2,.7,.1,1)}
+@keyframes tick{from{transform:translateY(.22em);opacity:.35}}
+.pop .hrt{animation:beat .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes beat{30%{transform:scale(1.45)}}
+.pop .plus{animation:plus 1.3s ease-out}
+@keyframes plus{0%{opacity:0;transform:translateY(6px)}25%{opacity:1}100%{opacity:0;transform:translateY(-30px)}}
 /* круглый бейдж с текстом по кругу, сидит на краю карточки */
-.badge{position:absolute;right:-34px;top:54%;width:104px;height:104px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;pointer-events:none;box-shadow:0 12px 30px -8px rgba(0,0,0,.6)}
+.badge{position:absolute;right:-12px;top:150px;width:104px;height:104px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;pointer-events:none;box-shadow:0 12px 30px -8px rgba(0,0,0,.6)}
 .badge .ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 16s linear infinite}
 .badge .ring text{font:700 11.5px var(--f-head);letter-spacing:.06em;fill:currentColor}
 .badge .tri{width:22px;height:22px;margin-left:3px}
@@ -182,7 +201,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 .slide .nums{position:relative;z-index:1;margin-top:auto;display:flex;gap:22px}
 .slide .nums span{font-size:12px;color:#d0d3d7}
 .slide .nums b{display:block;font:800 34px/1 var(--f-disp);text-transform:uppercase;color:#fff;white-space:nowrap;margin-bottom:3px}
-@media (min-width:1001px){.float{right:max(16px,calc((100vw - 1160px)/2))}.feed{transform:rotate(4deg) scale(1.05)}}
+@media (min-width:1001px){.float{right:max(16px,calc((100vw - 1280px)/2))}.feed{transform:rotate(4deg) scale(1.05)}}
 
 /* ========== 2. ОБО МНЕ ========== */
 .story{font-size:19px;line-height:1.55;color:#c9ccd0;max-width:46ch;margin:26px 0 0}
@@ -714,19 +733,19 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     facts:[['190','K','подписчиков в Instagram','ig'],['4,1','млн','просмотров у одного ролика','yt'],['428','','роликов о праве на YouTube','yt']],
     // СМИ: [название или путь к логотипу (svg/png), ссылка на выступление]. Пустой список = полоса скрыта
     media:[],
-    // Ролики: [название (*слово* = красная плашка), площадка, просмотры, ID на YouTube, своя ссылка, свой mp4, своя обложка, лайки]
+    // Ролики: [название (*слово* = красная плашка), площадка, просмотры, ID на YouTube, своя ссылка, свой mp4, своя обложка, лайки, точное число просмотров, точное число лайков (для живых счётчиков)]
     // По ID с YouTube обложка, ссылка и плеер подставляются сами. Цифры сняты с YouTube 2 октября 2026.
     reels:[
-      ['Опасные *фразы*','YouTube','4,1 млн','6BAATHihmHg','','','','100 тыс.'],
-      ['Носи *паспорт*','YouTube','2,2 млн','-7mFIKnAt74','','','','74,8 тыс.'],
-      ['Что в *карманах?*','YouTube','2 млн','KtgiC6N-OdA','','','','34,9 тыс.'],
-      ['Полиция просит *телефон*','YouTube','806 тыс.','Qn4AaSbcUZw','','','','25,2 тыс.'],
-      ['Грязные *бабки*','YouTube','634 тыс.','wp5ojuQ_5dw','','','','9,8 тыс.'],
-      ['Зовут *просто поговорить*','YouTube','551 тыс.','VZcNqgvh6QU','','','','13,9 тыс.'],
-      ['Носишь с собой *нож?*','YouTube','450 тыс.','KwJEAxMRHeg','','','','8 тыс.'],
-      ['Мифы о *признании*','YouTube','413 тыс.','ziGff-U4wEk','','','','8,9 тыс.'],
-      ['Нашли *пакетик*','YouTube','281 тыс.','TtElTGsUIRg','','','','8,4 тыс.'],
-      ['Спецслужбы *тебя видят*','YouTube','269 тыс.','UeD3XVgRgBA','','','','3,4 тыс.']
+      ['Опасные *фразы*','YouTube','4,1 млн','6BAATHihmHg','','','','100 тыс.',4077121,100714],
+      ['Носи *паспорт*','YouTube','2,2 млн','-7mFIKnAt74','','','','74,8 тыс.',2229020,74807],
+      ['Что в *карманах?*','YouTube','2 млн','KtgiC6N-OdA','','','','34,9 тыс.',2048913,34911],
+      ['Полиция просит *телефон*','YouTube','806 тыс.','Qn4AaSbcUZw','','','','25,2 тыс.',805890,25192],
+      ['Грязные *бабки*','YouTube','634 тыс.','wp5ojuQ_5dw','','','','9,8 тыс.',634061,9794],
+      ['Зовут *просто поговорить*','YouTube','551 тыс.','VZcNqgvh6QU','','','','13,9 тыс.',551128,13852],
+      ['Носишь с собой *нож?*','YouTube','450 тыс.','KwJEAxMRHeg','','','','8 тыс.',449693,8000],
+      ['Мифы о *признании*','YouTube','413 тыс.','ziGff-U4wEk','','','','8,9 тыс.',412553,8877],
+      ['Нашли *пакетик*','YouTube','281 тыс.','TtElTGsUIRg','','','','8,4 тыс.',281280,8362],
+      ['Спецслужбы *тебя видят*','YouTube','269 тыс.','UeD3XVgRgBA','','','','3,4 тыс.',268510,3370]
     ],
     // Какой ролик (номер в списке выше, с нуля) стоит справа у каждого раздела. Раздела нет в списке = лента
     rail:{about:0,services:1,cases:2,docs:3,faq:6,contacts:5},
@@ -783,9 +802,10 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     if(im.complete&&im.naturalWidth)ok();else im.addEventListener('load',ok)});
   // правая колонка: на первом экране лента, дальше один ролик крупно под каждый раздел
   var railEl=$('rail'),railBody=$('railBody');
-  function soloHTML(i){return '<div class="card">'+soloBtn(i)+'<span class="badge" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"><text><textPath href="#circ" textLength="232">СМОТРЕТЬ РОЛИК • СМОТРЕТЬ РОЛИК • </textPath></text></svg><svg class="tri"><use href="#i-play"/></svg></span></div>'}
+  function fmt(n){return String(n).replace(/\B(?=(\d{3})+$)/g,'\u00a0')}
+  function soloHTML(i){var r=R[i];return '<div class="card">'+soloBtn(i)+(r[2]?'<span class="plate views"><small>'+EYE+'просмотров</small><b class="cv">'+(r[8]?fmt(r[8]):esc(r[2]))+'</b></span>':'')+(r[7]?'<span class="plate likes"><small>лайков</small><span class="hrt">'+HEART+'</span><b class="cl">'+(r[9]?fmt(r[9]):esc(r[7]))+'</b><i class="plus">+1</i></span>':'')+'<span class="badge" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"><text><textPath href="#circ" textLength="232">СМОТРЕТЬ РОЛИК • СМОТРЕТЬ РОЛИК • </textPath></text></svg><svg class="tri"><use href="#i-play"/></svg></span></div>'}
   function soloBtn(i){var r=R[i],im=rImg(r);
-    return '<button type="button" class="reel'+(im?' has-img':'')+'" data-v="'+i+'" aria-label="Смотреть ролик: '+esc(plain(r[0]))+'">'+(im?'<img class="ok" src="'+esc(im)+'" alt="" loading="lazy">':'')+'<span class="pf"><span class="at">@gridzakon</span></span><span class="cover">'+cover(r[0])+'</span><span class="nums">'+(r[2]?'<span><b>'+esc(r[2])+'</b>просмотров</span>':'')+(r[7]?'<span><b>'+esc(r[7])+'</b>лайков</span>':'')+'</span></button>'}
+    return '<button type="button" class="reel'+(im?' has-img':'')+'" data-v="'+i+'" aria-label="Смотреть ролик: '+esc(plain(r[0]))+'">'+(im?'<img class="ok" src="'+esc(im)+'" alt="" loading="lazy">':'')+'<span class="pf"><span class="at">@gridzakon</span></span><span class="cover">'+cover(r[0])+'</span></button>'}
   // Стопка роликов привязана к прокрутке: ролик стоит на месте, пока читаешь раздел,
   // и плавно сменяется следующим, пока подъезжает следующий раздел. Никаких рывков по таймеру.
   var railSecs=[];
@@ -807,6 +827,12 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     railTo=p;if(!railRaf)railRaf=requestAnimationFrame(railStep)}
   addEventListener('scroll',railAim,{passive:true});addEventListener('resize',railAim);railAim();
   function setRail(){}
+  // просмотры понемногу растут, время от времени ставится лайк (декоративная имитация, стартует от настоящих чисел)
+  var live=slides.map(function(sl,i){if(!i)return null;var r=R[SITE.rail[railSecs[i-1].id]];return r[8]?{v:r[8],l:r[9],cv:sl.querySelector('.cv'),cl:sl.querySelector('.cl'),pl:sl.querySelector('.plate.likes')}:null});
+  function replay(el,c){el.classList.remove(c);void el.offsetWidth;el.classList.add(c)}
+  if(!calm)setInterval(function(){if(!wide.matches||document.hidden||openM)return;var o=live[Math.round(railP)];if(!o)return;
+    if(o.cv&&Math.random()<.7){o.v+=1+Math.floor(Math.random()*3);o.cv.textContent=fmt(o.v);replay(o.cv,'tick')}
+    if(o.cl&&o.l&&Math.random()<.2){o.l+=1;o.cl.textContent=fmt(o.l);replay(o.pl,'pop')}},1200);
   railEl.addEventListener('click',function(e){var b=e.target.closest('.reel[data-v]');if(b){vlist='reels';vshow(+b.dataset.v);show($('vmodal'))}});
   // факты, СМИ, контакты, фото
   $('stats').innerHTML=SITE.facts.map(function(f){return '<div><b><var class="n">'+esc(f[0])+'</var>'+(f[1]?'<i>'+esc(f[1])+'</i>':'')+'</b><span>'+(f[3]?'<svg><use href="#i-'+f[3]+'"/></svg>':'')+esc(f[2])+'</span></div>'}).join('');
