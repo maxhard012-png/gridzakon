@@ -166,26 +166,22 @@ h2{font-size:clamp(40px,5vw,64px)}
 .reel .pl{flex:none;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);display:grid;place-items:center;transition:background .2s}
 .reel .pl svg{width:11px;height:11px;margin-left:1px}
 .reel:hover .pl{background:var(--red)}
-/* один ролик крупно: его цифры — главный текст карточки */
-.solo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
-.rail.is-solo .feed{opacity:0;pointer-events:none}
-.rail.is-solo .solo{opacity:1;pointer-events:auto}
-.solo .card{position:relative;width:min(92%,calc((100dvh - 262px)*.5625));transform:rotate(-3.5deg);transition:transform .4s cubic-bezier(.2,.7,.2,1),opacity .22s;animation:deal .7s cubic-bezier(.2,.8,.2,1) backwards}
-@keyframes deal{from{opacity:0;transform:translate(46%,6%) rotate(15deg)}}
-.solo.swap .card{opacity:0;transform:translate(-30%,4%) rotate(-13deg);transition:transform .24s ease-in,opacity .22s}
-.badge{animation:riseIn .5s .35s backwards}
-.solo .card:hover{transform:rotate(0)}
-.solo .reel{width:100%;border-radius:24px;padding:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
-.solo .reel:hover{transform:none}
+/* ролики справа: стопка, которая листается вместе с прокруткой страницы, без рывков */
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity}
+.slide+.slide{visibility:hidden}
+.slide .card{position:relative;width:min(92%,calc((100dvh - 262px)*.5625));transform:rotate(-3.5deg);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.slide .card:hover{transform:rotate(0)}
+.slide .reel{width:100%;border-radius:24px;padding:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
+.slide .reel:hover{transform:none}
 /* круглый бейдж с текстом по кругу, сидит на краю карточки */
 .badge{position:absolute;right:-34px;top:54%;width:104px;height:104px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;pointer-events:none;box-shadow:0 12px 30px -8px rgba(0,0,0,.6)}
 .badge .ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 16s linear infinite}
 .badge .ring text{font:700 11.5px var(--f-head);letter-spacing:.06em;fill:currentColor}
 .badge .tri{width:22px;height:22px;margin-left:3px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.solo .nums{position:relative;z-index:1;margin-top:auto;display:flex;gap:22px}
-.solo .nums span{font-size:12px;color:#d0d3d7}
-.solo .nums b{display:block;font:800 34px/1 var(--f-disp);text-transform:uppercase;color:#fff;white-space:nowrap;margin-bottom:3px}
+.slide .nums{position:relative;z-index:1;margin-top:auto;display:flex;gap:22px}
+.slide .nums span{font-size:12px;color:#d0d3d7}
+.slide .nums b{display:block;font:800 34px/1 var(--f-disp);text-transform:uppercase;color:#fff;white-space:nowrap;margin-bottom:3px}
 @media (min-width:1001px){.float{right:max(16px,calc((100vw - 1160px)/2))}.feed{transform:rotate(4deg) scale(1.05)}}
 
 /* ========== 2. ОБО МНЕ ========== */
@@ -286,7 +282,8 @@ footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line
   .flowcol{display:contents}
   .hero{order:1;min-height:0;padding-block:20px 0}
   .rail{order:2;position:static;height:auto;padding:36px 0 0}
-  .rail::before,.rail::after,.solo{display:none}
+  .rail::before,.rail::after,.slide+.slide{display:none}
+  .slide{position:static;display:block;transform:none!important;opacity:1!important;visibility:visible!important}
   [data-ghost]::before{display:block;max-width:calc(100vw - 16px);overflow:hidden}
   .rail-body{flex:none}
   .feed,.rail.is-solo .feed{position:static;opacity:1;pointer-events:auto;display:flex;overflow-x:auto;-webkit-mask-image:none;mask-image:none;margin-inline:-16px;padding-inline:16px;scroll-snap-type:x mandatory;scrollbar-width:none}
@@ -388,7 +385,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
    1) заголовки выезжают из-за маски, 2) строки списков поднимаются по очереди,
    3) контурные слова въезжают сбоку и чуть плывут при прокрутке, 4) ролик справа «сдаётся» как карта */
 .ln{display:block;overflow:hidden;padding-top:.14em;margin-top:-.14em}
-.ln>span{display:block;animation:lineUp 1s cubic-bezier(.2,.7,.1,1) both}
+.ln>span{display:block;animation:lineUp 1.3s cubic-bezier(.2,.7,.1,1) both}
 .ln:nth-child(2)>span{animation-delay:.09s}
 .ln:nth-child(3)>span{animation-delay:.2s}
 @keyframes lineUp{from{transform:translateY(112%)}}
@@ -399,17 +396,16 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 @keyframes riseIn{from{opacity:0;transform:translateY(16px)}}
 .rail::before{animation:pop 1.1s cubic-bezier(.2,.8,.2,1) .25s backwards;transition:transform .9s cubic-bezier(.2,.7,.1,1)}
 @keyframes pop{from{transform:translateY(-54%) scale(0)}}
-.rail.is-solo::before{transform:translateY(-50%) scale(1.07)}
 .feed{animation:riseIn 1s cubic-bezier(.2,.7,.1,1) .5s backwards}
 
-.rv h2{transition:clip-path 1s cubic-bezier(.2,.7,.1,1),transform 1s cubic-bezier(.2,.7,.1,1)}
-.rv:not(.in) h2{clip-path:inset(0 0 100% 0);transform:translateY(.4em)}
+.rv h2{transition:clip-path 1.4s cubic-bezier(.2,.7,.1,1),transform 1.4s cubic-bezier(.2,.7,.1,1)}
+.rv:not(.in) h2{clip-path:inset(0 0 100% 0);transform:translateY(.18em)}
 .rv.in h2{clip-path:inset(-20% 0 -20% 0)}
-.rv[data-ghost]::before{transition:opacity 1.1s,transform .7s ease-out}
-.rv[data-ghost]:not(.in)::before{opacity:0;transform:translateX(-7%)}
-.rv .st{transition:opacity .65s,transform .65s cubic-bezier(.2,.7,.1,1);transition-delay:calc(var(--i,0)*65ms + .18s)}
-.rv:not(.in) .st{opacity:0;transform:translateY(20px)}
-.rv .final{transition:clip-path 1.1s cubic-bezier(.2,.7,.1,1)}
+.rv[data-ghost]::before{transition:opacity 1.8s,transform 1.2s ease-out}
+.rv[data-ghost]:not(.in)::before{opacity:0;transform:translateX(-2.5%)}
+.rv .st{transition:opacity 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.1,1);transition-delay:calc(var(--i,0)*90ms + .2s)}
+.rv:not(.in) .st{opacity:0;transform:translateY(10px)}
+.rv .final{transition:clip-path 1.6s cubic-bezier(.2,.7,.1,1)}
 .rv:not(.in) .final{clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%)}
 .hero .main>*{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
 .hero .main>*:nth-child(2){animation-delay:.06s}
@@ -572,9 +568,8 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
        <a href="https://vk.com/gridzakon" target="_blank" rel="noopener" aria-label="ВКонтакте"><svg><use href="#i-vk"/></svg></a>
      </div>
    </div>
-   <div class="rail-body">
-     <div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div>
-     <div class="solo" id="solo"></div>
+   <div class="rail-body" id="railBody">
+     <div class="slide"><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
    </div>
  </aside>
 </main>
@@ -787,16 +782,31 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     function ok(){im.classList.add('ok')}
     if(im.complete&&im.naturalWidth)ok();else im.addEventListener('load',ok)});
   // правая колонка: на первом экране лента, дальше один ролик крупно под каждый раздел
-  var railEl=$('rail'),soloEl=$('solo'),railCur=-1,railT;
-  function soloHTML(i){var r=R[i],im=rImg(r);
-    return '<div class="card">'+soloBtn(i)+'<span class="badge" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"><text><textPath href="#circ" textLength="232">СМОТРЕТЬ РОЛИК • СМОТРЕТЬ РОЛИК • </textPath></text></svg><svg class="tri"><use href="#i-play"/></svg></span></div>'}
+  var railEl=$('rail'),railBody=$('railBody');
+  function soloHTML(i){return '<div class="card">'+soloBtn(i)+'<span class="badge" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"><text><textPath href="#circ" textLength="232">СМОТРЕТЬ РОЛИК • СМОТРЕТЬ РОЛИК • </textPath></text></svg><svg class="tri"><use href="#i-play"/></svg></span></div>'}
   function soloBtn(i){var r=R[i],im=rImg(r);
-    return '<button type="button" class="reel'+(im?' has-img':'')+'" data-v="'+i+'" aria-label="Смотреть ролик: '+esc(plain(r[0]))+'">'+(im?'<img class="ok" src="'+esc(im)+'" alt="">':'')+'<span class="pf"><span class="at">@gridzakon</span></span><span class="cover">'+cover(r[0])+'</span><span class="nums">'+(r[2]?'<span><b>'+esc(r[2])+'</b>просмотров</span>':'')+(r[7]?'<span><b>'+esc(r[7])+'</b>лайков</span>':'')+'</span></button>'}
-  function setRail(id){var i=SITE.rail[id];
-    if(i==null||!R[i]){clearTimeout(railT);soloEl.classList.remove('swap');railEl.classList.remove('is-solo');railCur=-1;return}
-    if(i===railCur)return;
-    var was=railEl.classList.contains('is-solo');railCur=i;clearTimeout(railT);soloEl.classList.add('swap');
-    railT=setTimeout(function(){soloEl.innerHTML=soloHTML(i);railEl.classList.add('is-solo');soloEl.classList.remove('swap')},was?240:0)}
+    return '<button type="button" class="reel'+(im?' has-img':'')+'" data-v="'+i+'" aria-label="Смотреть ролик: '+esc(plain(r[0]))+'">'+(im?'<img class="ok" src="'+esc(im)+'" alt="" loading="lazy">':'')+'<span class="pf"><span class="at">@gridzakon</span></span><span class="cover">'+cover(r[0])+'</span><span class="nums">'+(r[2]?'<span><b>'+esc(r[2])+'</b>просмотров</span>':'')+(r[7]?'<span><b>'+esc(r[7])+'</b>лайков</span>':'')+'</span></button>'}
+  // Стопка роликов привязана к прокрутке: ролик стоит на месте, пока читаешь раздел,
+  // и плавно сменяется следующим, пока подъезжает следующий раздел. Никаких рывков по таймеру.
+  var railSecs=[];
+  for(var rk in SITE.rail){var rs0=$(rk);if(rs0&&R[SITE.rail[rk]]){railSecs.push(rs0);railBody.insertAdjacentHTML('beforeend','<div class="slide">'+soloHTML(SITE.rail[rk])+'</div>')}}
+  var slides=[].slice.call(railBody.querySelectorAll('.slide')),railP=0,railTo=0,railRaf=0,wide=matchMedia('(min-width:1001px)'),calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  // следующий ролик въезжает снизу поверх текущего; текущий стоит на месте и гаснет, пока его накрывают
+  function railDraw(){slides.forEach(function(sl,i){var d=i-railP;
+    if(d>1.05||d<-1.05){sl.style.visibility='hidden';return}
+    sl.style.visibility='visible';
+    if(d>=0){sl.style.opacity=1;sl.style.transform='translateY('+(d*118).toFixed(2)+'%)'}
+    else{sl.style.opacity=Math.max(0,1+d*1.5).toFixed(3);sl.style.transform='translateY('+(d*5).toFixed(2)+'%) scale('+(1+d*.07).toFixed(3)+')'}
+    sl.style.pointerEvents=Math.abs(d)<.5?'auto':'none'})}
+  function railStep(){railRaf=0;var diff=railTo-railP;
+    if(calm||Math.abs(diff)<.002)railP=railTo;else{railP+=diff*.085;railRaf=requestAnimationFrame(railStep)}
+    railDraw()}
+  function railAim(){if(!wide.matches){slides.forEach(function(sl){sl.removeAttribute('style')});return}
+    var vh=innerHeight,m=vh*.5,w=vh*.6,p=0;
+    railSecs.forEach(function(el){var t=(m-el.getBoundingClientRect().top+w)/w;t=t<0?0:t>1?1:t;p+=t*t*(3-2*t)});
+    railTo=p;if(!railRaf)railRaf=requestAnimationFrame(railStep)}
+  addEventListener('scroll',railAim,{passive:true});addEventListener('resize',railAim);railAim();
+  function setRail(){}
   railEl.addEventListener('click',function(e){var b=e.target.closest('.reel[data-v]');if(b){vlist='reels';vshow(+b.dataset.v);show($('vmodal'))}});
   // факты, СМИ, контакты, фото
   $('stats').innerHTML=SITE.facts.map(function(f){return '<div><b><var class="n">'+esc(f[0])+'</var>'+(f[1]?'<i>'+esc(f[1])+'</i>':'')+'</b><span>'+(f[3]?'<svg><use href="#i-'+f[3]+'"/></svg>':'')+esc(f[2])+'</span></div>'}).join('');
@@ -938,11 +948,11 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     // цифры досчитываются до своего значения
     var countUp=function(){[].forEach.call(document.querySelectorAll('#stats .n'),function(n){var raw=n.textContent,to=parseFloat(raw.replace(',','.')),dec=(raw.split(',')[1]||'').length,t0=0;
       if(isNaN(to))return;
-      (function tick(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1100),v=to*(1-Math.pow(1-p,3));n.textContent=v.toFixed(dec).replace('.',',');if(p<1)requestAnimationFrame(tick);else n.textContent=raw})(performance.now())})};
+      (function tick(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1800),v=to*(1-Math.pow(1-p,3));n.textContent=v.toFixed(dec).replace('.',',');if(p<1)requestAnimationFrame(tick);else n.textContent=raw})(performance.now())})};
     // контурные слова чуть плывут вбок при прокрутке
     var ghosts=[].slice.call(document.querySelectorAll('[data-ghost]')),gt=0;
     var drift=function(){gt=0;var vh=innerHeight;ghosts.forEach(function(g){var r=g.getBoundingClientRect();if(r.bottom<-200||r.top>vh+200)return;
-      g.style.setProperty('--gx',((r.top-vh*.3)/vh*-5).toFixed(2))})};
+      g.style.setProperty('--gx',((r.top-vh*.3)/vh*-3).toFixed(2))})};
     addEventListener('scroll',function(){if(!gt)gt=requestAnimationFrame(drift)},{passive:true});
     // всё, что уже на экране или выше него, показываем сразу: блок не может остаться невидимым
     var rchk=function(){var h=innerHeight*.86;rvs=rvs.filter(function(el){if(el.getBoundingClientRect().top<h){el.classList.add('in');if(el.id==='stats')countUp();return false}return true});
