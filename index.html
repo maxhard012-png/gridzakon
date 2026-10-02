@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://i.ytimg.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@700;800;900&family=Dela+Gothic+One&family=Golos+Text:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400&family=Montserrat:wght@500&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@600&family=Golos+Text:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: 7 блоков с разной формой. Тёмный первый экран (аватар + лента видео), полоса СМИ, светлый блок «Обо мне» с большим фото, сетка услуг, кейсы, договоры, вопросы и финальный призыв */
 :root{
@@ -33,14 +33,24 @@
   --paper:#ecebe6;    /* светлый блок */
   --paper-line:#d3d2cc;
   --paper-mute:#5f6266;
-  --f-disp:"Fira Sans Extra Condensed","Arial Narrow",Arial,sans-serif;   /* заголовки: плотный узкий гротеск с родной кириллицей */
-  --f-cover:"Fira Sans Extra Condensed","Arial Narrow",sans-serif;        /* стикеры и мелкий капс */
-  --f-wide:"Dela Gothic One","Arial Black",Arial,sans-serif;              /* акцентные слова: широкий тяжёлый, ближе всего к шрифту его обложек */
+  /* ЧЕТЫРЕ ШРИФТА, У КАЖДОГО СВОЯ РОЛЬ
+     Oswald — голос: заголовки и крупные цифры (обычный и сверхтонкий в одной строке)
+     Montserrat — акцент: главное слово заголовка, широко и с разрядкой
+     JetBrains Mono — «документ»: номера разделов, статьи закона, подписи к цифрам, цены «от»
+     Caveat — рука: пометки на полях и подпись, как правка юриста на бумаге */
+  --f-disp:"Oswald","Arial Narrow",Arial,sans-serif;
+  --f-cover:"Oswald","Arial Narrow",sans-serif;
+  --f-wide:"Montserrat",Arial,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --f-hand:"Caveat","Segoe Script",cursive;
+  --h1k:1;--hlk:.4em;--hl2:.56em;--lsw:.03em;
   --f-head:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif; /* кнопки и мелкие подписи */
   --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
+/* у Oswald загружены только лёгкие начертания; искусственное утолщение отключено, чтобы заголовки не жирнели */
+body{font-synthesis:none}
 /* плёночное зерно: настоящий фрактальный шум, связывает тёмную и светящуюся части в одну картинку */
 body::after{content:"";position:fixed;inset:0;z-index:35;pointer-events:none;opacity:.1;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 [hidden]{display:none!important}
@@ -51,8 +61,16 @@ a{color:inherit}
 h1,h2,h3{font-family:var(--f-disp);font-weight:900;letter-spacing:-.005em;line-height:.94;text-transform:uppercase;text-wrap:balance;margin:0}
 h2{font-size:clamp(40px,5.6vw,68px)}
 .hl{color:var(--red)}
+/* сверхтонкий Oswald рядом с обычным: служебные слова заголовка уходят на второй план */
+.thin{font-weight:200}
+/* номер раздела, как нумерация пунктов в документе */
+.idx{display:flex;align-items:center;gap:12px;margin:0 0 20px;font:500 12px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.idx b{font-weight:500;color:var(--red-hi)}
+.idx::after{content:"";flex:0 0 56px;height:1px;background:var(--line)}
+/* пометки от руки */
+.hand{font:600 30px/1 var(--f-hand);font-style:normal;letter-spacing:0;text-transform:none;color:var(--fg)}
 /* плакатная связка: узкое высокое слово сверху, широкое низкое под ним, обе строки одной ширины */
-h1 .hl,h2 .hl,h3 .hl{display:block;font-family:var(--f-wide);font-weight:400;font-size:.56em;line-height:1.1;letter-spacing:-.02em;margin-top:.2em}
+h1 .hl,h2 .hl,h3 .hl{display:block;font-family:var(--f-wide);font-weight:500;font-size:var(--hl2,.56em);line-height:1.15;letter-spacing:var(--lsw,-.02em);margin-top:.26em}
 ::selection{background:var(--red);color:#fff}
 .label{font-size:13px;font-weight:500;color:var(--mute);letter-spacing:.02em;margin:0}
 .muted{color:var(--mute)}
@@ -115,9 +133,19 @@ h2{font-size:clamp(40px,5vw,64px)}
 .ava .ok{position:absolute;right:0;bottom:2px;width:24px;height:24px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:12px;font-weight:700;border:3px solid var(--bg)}
 .who b{display:inline-block;margin-bottom:7px;padding:7px 12px 6px;border-radius:6px;background:var(--red);color:#fff;font:800 17px/1 var(--f-cover);letter-spacing:.2em;text-transform:uppercase}
 .who small{display:block;color:var(--mute);font-size:14px}
-.hero h1{font-size:clamp(110px,min(15.4vw,27vh),212px);line-height:.84}
-.hero h1 .hl{white-space:nowrap;font-size:.355em;line-height:1.1;margin-top:.06em}
-.hero h1 em{display:block;font-style:normal;font-size:clamp(20px,2.2vw,30px);line-height:1;letter-spacing:.01em;color:var(--mute);margin-top:.9em}
+.hero h1{font-size:calc(clamp(110px,min(15.4vw,27vh),212px)*var(--h1k,1));line-height:.9}
+.hero h1 .hl{position:relative;overflow:visible;white-space:nowrap;font-size:var(--hlk,.355em);line-height:1.15;margin-top:.14em;padding-bottom:.34em;margin-bottom:-.2em}
+.hero h1 .hl>span{display:inline-block;position:relative}
+/* подчёркивание от руки дорисовывается после появления слова */
+.scr{position:absolute;left:-1%;bottom:-.24em;width:102%;height:.26em;overflow:visible}
+.scr path,.note path{fill:none;stroke:var(--fg);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.scr path{stroke-dasharray:320;stroke-dashoffset:320;animation:draw .9s cubic-bezier(.4,0,.2,1) 1.25s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.note{position:absolute;right:-18px;bottom:-1.62em;display:flex;align-items:flex-end;gap:6px;transform:rotate(-5deg);font-size:clamp(22px,2.3vw,32px);animation:riseIn .7s cubic-bezier(.2,.7,.1,1) 1.9s both}
+.note svg{order:-1;width:1.5em;height:.9em;margin-bottom:.5em;transform:scaleY(-1)}
+.note path{stroke-width:2}
+.hero h1 em{display:block;font:500 13px/1.4 var(--f-mono);font-style:normal;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-top:44px}
+.hero h1 em span::before{content:"§ ";color:var(--red-hi)}
 .hero .lead{font-size:18px;color:var(--mute);max-width:40ch;margin:20px 0 34px}
 .hero .lead b{color:var(--fg);font-weight:500}
 .cta{display:flex;flex-wrap:wrap;align-items:center;gap:28px}
@@ -144,20 +172,9 @@ h2{font-size:clamp(40px,5vw,64px)}
 /* ========== ПРАВАЯ КОЛОНКА: ролики и их цифры ========== */
 .rail{position:sticky;top:68px;height:calc(100dvh - 68px);padding:18px 0 0;overflow-x:visible;overflow-y:clip;display:flex;flex-direction:column;gap:16px;isolation:isolate}
 /* ролик лежит на красном круге и выходит за него; в просвете между колонками вертикальное слово */
-/* ФОН ПРАВОЙ ЧАСТИ: три варианта на выбор, переключаются атрибутом data-bg у .rail (временный переключатель внизу слева) */
+/* фон правой части: без световых эффектов, красное слово в просвете между колонками */
 .rail::before,.rail::after{content:"";position:absolute;pointer-events:none}
-/* A. Прожектор: один источник света сверху справа, луч падает на ролик, под роликом красный отсвет от пола */
-.rail[data-bg="a"]::before{inset:-68px -50vw 0 -200px;z-index:-3;background:radial-gradient(54% 24% at 50% 100%,rgba(227,38,45,.7),transparent 72%)}
-.rail[data-bg="a"] .ig::after{content:"";position:absolute;inset:0;mix-blend-mode:screen;background:conic-gradient(from 200deg at 104% -4%,transparent 0deg,rgba(255,236,226,.1) 8deg,rgba(255,236,226,.5) 20deg,rgba(255,236,226,.14) 33deg,transparent 48deg)}
-/* B. Плакат: без света вообще. Огромное красное слово стоит за роликом, ролик его перекрывает */
-.rail[data-bg="b"]::after{content:"GRIDZAKON";right:calc(100% + 2px);top:50%;transform:translateY(-46%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 min(104px,6.6vw)/.8 var(--f-cover);letter-spacing:.005em;white-space:nowrap;color:var(--red)}
-/* C. Свет от самого видео: за роликом его же кадр, сильно размытый. Фон принимает цвета текущего ролика и меняется вместе с ним */
-.amb{display:none;position:absolute;left:-24%;top:-6%;width:150%;height:122%;z-index:-1;object-fit:cover;filter:blur(60px) saturate(2.1) brightness(1.15);opacity:1;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 55%,transparent);mask-image:radial-gradient(closest-side,#000 55%,transparent)}
-.rail[data-bg="c"] .amb{display:block}
-.bgpick{position:fixed;left:16px;bottom:16px;z-index:45;display:flex;align-items:center;gap:6px;padding:8px 10px 8px 14px;border-radius:999px;background:rgba(21,23,26,.9);border:1px solid var(--line);font:500 13px var(--f-head);color:var(--mute)}
-.bgpick button{font:600 13px var(--f-head);width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--fg);cursor:pointer}
-.bgpick button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-@media (max-width:1000px){.bgpick{display:none}}
+.rail::after{content:"GRIDZAKON";right:calc(100% + 2px);top:50%;transform:translateY(-46%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 min(104px,6.6vw)/.8 var(--f-cover);letter-spacing:.005em;white-space:nowrap;color:var(--red)}
 .side-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .rail .side-head small{color:var(--mute)}
 .rail .soc-row a{border-color:rgba(255,255,255,.22);color:#fff}
@@ -271,6 +288,9 @@ h2{font-size:clamp(40px,5vw,64px)}
 .dipl button{font:500 14px var(--f-head);color:var(--fg);background:none;border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer;transition:border-color .2s}
 .dipl button:hover{border-color:var(--fg)}
 .dscan img{max-width:100%;max-height:100%;object-fit:contain}
+.sign{display:flex;align-items:flex-end;gap:18px;margin:52px 0 0}
+.sign .hand{font-size:52px;transform:rotate(-4deg);transform-origin:0 100%;padding-right:6px}
+.sign small{flex:1;max-width:200px;padding:0 0 6px;border-bottom:1px solid var(--line);font:500 11px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
 
 /* ========== 3. УСЛУГИ ========== */
 .svcs{margin-top:44px;border-bottom:1px solid var(--line)}
@@ -308,6 +328,14 @@ details.svc:hover::before,details.svc[open]::before{transform:scaleY(1)}
 .svc[open] summary i{background:var(--fg);border-color:var(--fg);color:var(--bg)}
 .svc .in{padding:0 0 32px 60px}
 
+/* роль «документ»: всё служебное набрано моноширинным */
+#stats span,#stats div:first-child span,.brand span{font:500 11.5px/1.45 var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
+#stats div:first-child span{font-size:13px;color:var(--fg)}
+.svc summary::before,.steps em,.svc .price small{font-family:var(--f-mono);font-weight:500;letter-spacing:.06em}
+.svc .price small{font-size:12px;text-transform:uppercase}
+.steps{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase}
+footer{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em}
+
 /* ========== 4. КЕЙСЫ ========== */
 .cases{margin-top:44px;border-bottom:1px solid var(--line)}
 details.case{border-top:1px solid var(--line);padding:30px 0}
@@ -315,7 +343,7 @@ details.case summary{list-style:none;cursor:pointer;display:grid;grid-template-c
 details.case summary::-webkit-details-marker{display:none}
 .case .res{grid-column:1;font:800 clamp(44px,5vw,60px)/.9 var(--f-disp);text-transform:uppercase}
 .case p{grid-column:1;margin:0;color:var(--mute);max-width:48ch}
-.case .law{grid-column:1;justify-self:start;font:800 15px/1 var(--f-cover);letter-spacing:.05em;text-transform:uppercase;background:var(--fg);color:var(--bg);padding:4px 8px 3px;border-radius:4px}
+.case .law{grid-column:1;justify-self:start;font:500 11.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);border:1px solid var(--line);padding:6px 9px;border-radius:4px}
 .case .more{grid-column:2;grid-row:1;font-size:0}
 .cbody{display:grid;gap:14px;margin-top:24px;max-width:52ch}
 .cbody div{display:grid;gap:2px}
@@ -376,7 +404,7 @@ details.case summary::-webkit-details-marker{display:none}
 .qa p{margin:0;padding:0 0 22px;color:var(--mute);max-width:56ch}
 .final{background:var(--red);color:#fff;border-radius:28px;padding:84px 44px 40px;clip-path:polygon(0 46px,100% 0,100% 100%,0 100%)}
 .final h2{font-size:clamp(48px,6.6vw,88px)}
-.final h2 .hl{color:var(--bg);font-size:.46em}
+.final h2 .hl{color:var(--bg);font-size:calc(var(--hl2,.56em)*.82)}
 .final>p{color:rgba(255,255,255,.88);margin:20px 0 34px;max-width:40ch;font-size:17px}
 .final .ways a{border-color:rgba(255,255,255,.4)}
 .final .ways a:hover{border-color:#fff;background:rgba(0,0,0,.14)}
@@ -399,7 +427,7 @@ footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line
   .flowcol{display:contents}
   .hero{order:1;min-height:0;padding-block:20px 0}
   .rail{order:2;position:static;height:auto;padding:36px 0 0}
-  .rail::before,.rail::after,.amb,.slide+.slide{display:none!important}
+  .rail::before,.rail::after,.slide+.slide{display:none!important}
   .brand{margin:18px 0 6px}
   .brand b i{color:var(--red)}
   .rail .soc-row a{border-color:var(--line);color:var(--mute)}
@@ -415,7 +443,9 @@ footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line
   #stats{margin-top:44px}
   section{margin-top:96px}
   .who{margin-bottom:24px}
-  .hero h1{font-size:clamp(110px,34vw,230px)}
+  .hero h1{font-size:calc(clamp(110px,34vw,230px)*var(--h1k,1))}
+  .note{right:-4px;bottom:-1.5em;font-size:22px}
+  .sign .hand{font-size:42px}
   .hero .lead{font-size:17px;margin:20px 0 28px}
 }
 @media (max-width:700px){
@@ -575,7 +605,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
       <div class="ava" role="img" aria-label="Алексей Гридасов"><div class="in">АГ</div><span class="ok">✓</span></div>
       <div><b>Алексей Гридасов</b><small>Юрист · Москва и область</small></div>
     </div>
-    <h1><span class="ln"><span>Юрист</span></span> <span class="ln hl"><span>для своих</span></span> <em class="ln"><span>Право простым языком</span></em></h1>
+    <h1><span class="ln"><span>Юрист</span></span> <span class="ln hl"><span>для своих<svg class="scr" viewBox="0 0 300 18" preserveAspectRatio="none" aria-hidden="true"><path d="M3 11C52 3 104 15 158 8s98-5 139 2"/></svg><i class="hand note">без канцелярита<svg viewBox="0 0 60 34" aria-hidden="true"><path d="M57 4C40 2 20 8 6 26M6 26l1-11M6 26l11-3"/></svg></i></span></span> <em class="ln"><span>Право простым языком</span></em></h1>
     <p class="lead"><b>Договоры, суды, консультации.</b> Решаю вопрос под ключ, онлайн по всей России.</p>
     <div class="cta" id="heroCta">
       <button class="btn" data-open>Записаться на консультацию<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
@@ -592,7 +622,8 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 
   <!-- 2. Обо мне -->
   <section id="about" data-ghost="Юрист">
-    <h2>Юрист, которому можно <span class="hl">просто написать</span></h2>
+    <p class="idx"><b>01</b>Обо мне</p>
+    <h2>Юрист, <span class="thin">которому можно</span> <span class="hl">просто написать</span></h2>
     <p class="story">Объясняю, что происходит, какие шансы и что делать. Беру дело целиком и веду до результата.</p>
     <div class="reasons">
       <div><b>Депутатские запросы</b><span>Когда ведомство молчит, запрос от депутата заставляет ответить.</span></div>
@@ -604,11 +635,13 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
       <button type="button" data-dipl="Повышение квалификации|программа, год">Квалификация</button>
       <button type="button" data-dipl="Удостоверение|организация, год">Удостоверение</button>
     </div>
+    <p class="sign"><span class="hand">Алексей Гридасов</span><small>отвечаю лично</small></p>
   </section>
 
   <!-- 3. Услуги -->
   <section id="services" data-ghost="Услуги">
-    <h2>Чем я могу помочь</h2>
+    <p class="idx"><b>02</b>Услуги</p>
+    <h2>Чем <span class="thin">я могу</span> помочь</h2>
     <p class="sub">Цену фиксируем в договоре до начала работы.</p>
     <div class="svcs">
       <details class="svc"><summary><h3>Консультация</h3><span class="d">За час: шансы, риски и план действий.</span><span class="price"><small>от</small>3 000 ₽</span><i>+</i></summary>
@@ -627,7 +660,8 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 
   <!-- 4. Кейсы -->
   <section id="cases" data-ghost="Кейсы">
-    <h2>Что получилось</h2>
+    <p class="idx"><b>03</b>Кейсы</p>
+    <h2>Что <span class="thin">получилось</span></h2>
     <div class="cases" id="caseList"></div>
     <div id="revwrap" hidden>
       <div class="revhead"><p class="label">Отзывы клиентов</p><div class="arrows"><button class="circ" type="button" id="rprev" aria-label="Назад">←</button><button class="circ" type="button" id="rnext" aria-label="Вперёд">→</button></div></div>
@@ -637,21 +671,23 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 
   <!-- 5. Шаблоны: на главной только вход в каталог -->
   <section id="docs" data-ghost="Шаблоны">
-    <h2>Готовые <span class="hl">шаблоны</span></h2>
+    <p class="idx"><b>04</b>Шаблоны</p>
+    <h2><span class="thin">Готовые</span> <span class="hl">шаблоны</span></h2>
     <p class="sub" id="docsSub"></p>
     <button class="btn" type="button" data-cat style="margin-top:34px">Открыть каталог<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
   </section>
 
   <!-- 6. Вопросы -->
   <section id="faq" data-ghost="Вопросы">
-    <h2>Коротко о главном</h2>
+    <p class="idx"><b>05</b>Вопросы</p>
+    <h2>Коротко <span class="thin">о главном</span></h2>
     <div id="qaList"></div>
   </section>
 
   <!-- 7. Контакты -->
   <section id="contacts">
     <div class="final">
-      <h2>Разберёмся с <span class="hl">вашим вопросом</span></h2>
+      <h2>Разберёмся <span class="thin">с</span> <span class="hl">вашим вопросом</span></h2>
       <p>Опишите ситуацию. Отвечу в течение дня.</p>
       <button class="btn" data-open>Записаться на консультацию<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
       <div class="ways">
@@ -668,7 +704,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
  </div>
 
  <!-- Правая колонка: всегда ролики -->
- <aside class="rail" id="rail" data-bg="a" aria-label="Ролики Алексея">
+ <aside class="rail" id="rail" aria-label="Ролики Алексея">
    <div class="side-head">
      <div><b>@gridzakon</b><small>закон и правовые лайфхаки</small></div>
      <div class="soc-row">
@@ -681,7 +717,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
    </div>
    <div class="brand" id="brand" aria-label="Алексей в соцсетях"></div>
    <div class="rail-body" id="railBody">
-     <div class="slide"><img class="amb" id="amb0" alt=""><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
+     <div class="slide"><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
    </div>
  </aside>
 </main>
@@ -930,7 +966,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   function fmt(n){return String(n).replace(/\B(?=(\d{3})+$)/g,'\u00a0')}
   var AVA=SITE.photos.avatar?'<img src="'+esc(SITE.photos.avatar)+'" alt=""'+(SITE.avatarCrop?' style="object-position:'+SITE.avatarCrop+';transform:scale('+(SITE.avatarZoom||1)+')"':'')+'>':'';
   function soloHTML(i,k,n){var r=R[i],bars='';for(var j=0;j<n;j++)bars+='<i'+(j<=k?' class="on"':'')+'></i>';
-    return (rImg(r)?'<img class="amb" src="'+esc(rImg(r))+'" alt="">':'')+'<div class="card">'+soloBtn(i)+'<div class="ig" aria-hidden="true"><div class="bars">'+bars+'</div><div class="ighead"><span class="igava"><span>'+AVA+'</span></span>gridzakon<small>Reels</small></div>'
+    return '<div class="card">'+soloBtn(i)+'<div class="ig" aria-hidden="true"><div class="bars">'+bars+'</div><div class="ighead"><span class="igava"><span>'+AVA+'</span></span>gridzakon<small>Reels</small></div>'
       +(r[2]?'<div class="igviews">'+EYE+'<b class="cv">'+(r[8]?fmt(r[8]):esc(r[2]))+'</b>просмотров</div>':'')
       +(r[7]?'<div class="igact"><span class="hrt">'+HEART+'</span><b class="cl">'+(r[9]?fmt(r[9]):esc(r[7]))+'</b><i class="plus">+1</i></div>':'')
       +'<span class="igplay"><svg><use href="#i-play"/></svg></span></div></div>'}
@@ -957,12 +993,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     railTo=p;if(!railRaf)railRaf=requestAnimationFrame(railStep)}
   addEventListener('scroll',railAim,{passive:true});addEventListener('resize',railAim);railAim();
   function setRail(){}
-  if(rImg(R[0]))$('amb0').src=rImg(R[0]);
-  // ВРЕМЕННО: переключатель трёх вариантов фона правой части. Удалить вместе с .bgpick, когда вариант выбран
-  document.body.insertAdjacentHTML('beforeend','<div class="bgpick">Фон справа<button data-b="a">A</button><button data-b="b">B</button><button data-b="c">C</button></div>');
-  function bgSet(v){railEl.dataset.bg=v;document.querySelectorAll('.bgpick button').forEach(function(x){x.classList.toggle('on',x.dataset.b===v)});try{localStorage.setItem('gz-bg',v)}catch(e){}}
-  document.querySelector('.bgpick').addEventListener('click',function(e){if(e.target.dataset.b)bgSet(e.target.dataset.b)});
-  var bg0='a';try{bg0=localStorage.getItem('gz-bg')||'a'}catch(e){}bgSet(/^[abc]$/.test(bg0)?bg0:'a');
+
   // просмотры понемногу растут, время от времени ставится лайк (декоративная имитация, стартует от настоящих чисел)
   var live=slides.map(function(sl,i){if(!i)return null;var r=R[SITE.rail[railSecs[i-1].id]];return r[8]?{v:r[8],l:r[9],cv:sl.querySelector('.cv'),cl:sl.querySelector('.cl'),pl:sl.querySelector('.igact')}:null});
   function replay(el,c){el.classList.remove(c);void el.offsetWidth;el.classList.add(c)}
@@ -1129,7 +1160,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     var rvs=[].slice.call(document.querySelectorAll('.flowcol>section'));
     rvs.forEach(function(el){el.classList.add('rv');
       // что поднимается по очереди внутри раздела
-      [].forEach.call(el.querySelectorAll('#stats>div,.story,.sub,.reasons>div,.dipl,details.svc,.steps,details.case,[data-cat],.qa'),function(x,i){x.classList.add('st');x.style.setProperty('--i',i)})});
+      [].forEach.call(el.querySelectorAll('#stats>div,.idx,.story,.sub,.reasons>div,.dipl,.sign,details.svc,.steps,details.case,[data-cat],.qa'),function(x,i){x.classList.add('st');x.style.setProperty('--i',i)})});
     // цифры досчитываются до своего значения
     var countUp=function(sel){[].forEach.call(document.querySelectorAll(sel),function(n){var raw=n.textContent,to=parseFloat(raw.replace(',','.')),dec=(raw.split(',')[1]||'').length,t0=0;
       if(isNaN(to))return;
