@@ -1108,14 +1108,16 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     try{fetch(SITE.leadsEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(function(){})}catch(e){}
   }
 
-  // Пока leadsEndpoint пуст, заявка с сайта никуда не уходит. Тогда вместо «Заявка принята»
-  // честно говорим об этом, копируем текст заявки и даём кнопку в Telegram.
+  // Пока leadsEndpoint пуст, заявка с сайта сама никуда не уходит. Тогда вместо «Заявка принята»
+  // собираем текст заявки и открываем чат с Алексеем в Telegram, где этот текст уже вставлен.
   var EP=!!SITE.leadsEndpoint;
   function noSend(done,text){var pre=done.querySelector('.copyme');if(!pre){done.querySelector('p').insertAdjacentHTML('afterend','<pre class="copyme"></pre>');pre=done.querySelector('.copyme')}
-    pre.textContent=text;var note=function(ok){done.querySelector('p').textContent='Отправка с сайта пока не подключена. '+(ok?'Текст заявки уже скопирован: вставьте':'Скопируйте текст заявки и вставьте')+' его в сообщение Алексею в Telegram.'};
-    note(false);try{navigator.clipboard.writeText(text).then(function(){note(true)},function(){})}catch(e){}
-    done.querySelector('.okc').textContent='→';done.querySelector('h3').textContent='Осталось отправить';
-    if(!done.querySelector('.tgo'))pre.insertAdjacentHTML('afterend','<a class="btn tgo" href="https://t.me/gridzakon" target="_blank" rel="noopener">Открыть Telegram<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></a>')}
+    pre.textContent=text;try{navigator.clipboard.writeText(text).then(function(){},function(){})}catch(e){}
+    done.querySelector('.okc').textContent='→';done.querySelector('h3').textContent='Отправьте в Telegram';
+    done.querySelector('p').textContent='Заявка готова. Нажмите кнопку: откроется чат с Алексеем, текст уже будет в поле сообщения. Останется отправить.';
+    if(!done.querySelector('.tgo'))pre.insertAdjacentHTML('afterend','<a class="btn tgo" target="_blank" rel="noopener">Отправить в Telegram<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></a>');
+    // @gridzakon — личный аккаунт, поэтому ссылка открывает чат с готовым текстом
+    done.querySelector('.tgo').href='https://t.me/gridzakon?text='+encodeURIComponent(text)}
 
   // ---------- модалки ----------
   var openM=null,lastF=null,lockY=0,locked=false;
