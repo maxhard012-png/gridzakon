@@ -116,8 +116,7 @@ section{padding-block:0;margin-top:clamp(120px,14vw,176px)}
 h2{font-size:clamp(40px,5vw,64px)}
 /* гигантское контурное слово за заголовком, уходит под колонку с роликом */
 .flowcol>section,.hero{position:relative}
-[data-ghost]::before{content:attr(data-ghost);position:absolute;left:-.04em;top:-.64em;z-index:-1;font:800 clamp(104px,17vw,236px)/1 var(--f-disp);letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;color:transparent;-webkit-text-stroke:1px rgba(241,241,238,.1);pointer-events:none;transform:translateX(calc(var(--gx,0)*1%))}
-.hero[data-ghost]::before{top:auto;bottom:-.3em;left:-.05em;font-size:clamp(120px,21vw,300px)}
+[data-ghost]::before{content:attr(data-ghost);display:block;max-width:100%;overflow:hidden;position:absolute;left:-.04em;top:-.8em;z-index:-1;font:800 clamp(104px,17vw,236px)/1 var(--f-disp);letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;color:transparent;-webkit-text-stroke:1px rgba(241,241,238,.1);pointer-events:none;transform:translateX(calc(var(--gx,0)*1%))}
 .sub{color:var(--mute);max-width:46ch;margin:18px 0 0;font-size:17px}
 
 /* ========== 1. ПЕРВЫЙ ЭКРАН ========== */
@@ -583,7 +582,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
  <div class="flowcol">
 
   <!-- 1. Первый экран -->
-  <header class="hero" id="hero" data-ghost="GridZakon">
+  <header class="hero" id="hero">
     <div class="who">
       <div class="ava" role="img" aria-label="Алексей Гридасов"><div class="in">АГ</div><span class="ok">✓</span></div>
       <div><b>Алексей Гридасов</b><small>Юрист · Москва и область</small></div>
