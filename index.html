@@ -148,7 +148,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 .rail::before,.rail::after{content:"";position:absolute;pointer-events:none}
 /* A. Прожектор: один источник света сверху справа, луч падает на ролик, под роликом красный отсвет от пола */
 .rail[data-bg="a"]::before{inset:-68px -50vw 0 -200px;z-index:-3;background:radial-gradient(54% 24% at 50% 100%,rgba(227,38,45,.7),transparent 72%)}
-.rail[data-bg="a"] .rail-body::after{content:"";position:absolute;inset:-170px -60px -40px -190px;z-index:5;pointer-events:none;mix-blend-mode:screen;filter:blur(8px);background:conic-gradient(from 198deg at 97% 0%,transparent 0deg,rgba(255,236,226,.12) 8deg,rgba(255,236,226,.62) 21deg,rgba(255,236,226,.18) 34deg,transparent 50deg)}
+.rail[data-bg="a"] .ig::after{content:"";position:absolute;inset:0;mix-blend-mode:screen;background:conic-gradient(from 200deg at 104% -4%,transparent 0deg,rgba(255,236,226,.1) 8deg,rgba(255,236,226,.5) 20deg,rgba(255,236,226,.14) 33deg,transparent 48deg)}
 /* B. Плакат: без света вообще. Огромное красное слово стоит за роликом, ролик его перекрывает */
 .rail[data-bg="b"]::after{content:"GRIDZAKON";right:calc(100% + 2px);top:50%;transform:translateY(-46%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 min(104px,6.6vw)/.8 var(--f-cover);letter-spacing:.005em;white-space:nowrap;color:var(--red)}
 /* C. Свет от самого видео: за роликом его же кадр, сильно размытый. Фон принимает цвета текущего ролика и меняется вместе с ним */
