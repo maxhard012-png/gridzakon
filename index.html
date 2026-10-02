@@ -659,7 +659,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   <!-- 1. Первый экран -->
   <header class="hero" id="hero">
     <div class="who">
-      <div class="ava" role="img" aria-label="Алексей Гридасов"><div class="in">АГ</div><span class="ok">✓</span></div>
+      <div class="ava" role="img" aria-label="Алексей Гридасов"><div class="in">АГ</div></div>
       <div><b>Алексей Гридасов</b><small>Юрист · Москва и область</small></div>
     </div>
     <h1><span class="ln"><span>Юрист</span></span> <span class="ln hl"><span>для своих</span></span> <em class="ln"><span>Право простым языком</span></em></h1>
@@ -928,10 +928,10 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     legal:'',                        // реквизиты для подвала, например: 'ИП Гридасов А. …, ИНН …'. Пусто = не показывать
     policyUrl:'',                    // ссылка на политику обработки персональных данных
     whatsapp:'79000000000',          // номер без + и пробелов
-    // avatar пока вырезан из обложки ролика; лучше заменить своим файлом, например 'img/avatar.jpg', и очистить avatarCrop
-    photos:{avatar:'https://i.ytimg.com/vi/vntlyKwV1NY/oardefault.jpg'},
-    avatarCrop:'50% 12%',            // какая точка картинки в центре кружка; пусто = обычная обрезка
-    avatarZoom:1.75,                   // увеличение, чтобы лицо заняло кружок
+    // avatar — фото профиля из Instagram, лежит файлом avatar.jpg рядом с index.html (150 px; заменить на крупное при случае)
+    photos:{avatar:'avatar.jpg'},
+    avatarCrop:'',                   // какая точка картинки в центре кружка; пусто = обычная обрезка
+    avatarZoom:1,
     // Слева — цифры практики: [число, единица (красным), подпись]. ПОКА ПРИМЕРНЫЕ, заменить на настоящие
     facts:[['7','лет','юридической практики',''],['300','+','дел в судах и до суда',''],['24','ч','отвечаю на заявку','']],
     // Справа — цифры соцсетей: [число, единица, подпись, значок: ig, yt, tt, tg, vk]. Настоящие, сняты 2 октября 2026
