@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://i.ytimg.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@700;800;900&family=Sofia+Sans+Extra+Condensed:wght@800;900&family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@700;800;900&family=Dela+Gothic+One&family=Golos+Text:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: 7 блоков с разной формой. Тёмный первый экран (аватар + лента видео), полоса СМИ, светлый блок «Обо мне» с большим фото, сетка услуг, кейсы, договоры, вопросы и финальный призыв */
 :root{
@@ -33,24 +33,26 @@
   --paper:#ecebe6;    /* светлый блок */
   --paper-line:#d3d2cc;
   --paper-mute:#5f6266;
-  --f-disp:"Sofia Sans Condensed","Arial Narrow",Arial,sans-serif;   /* заголовки: сжатый плакатный, родня обложкам */
-  --f-cover:"Sofia Sans Extra Condensed","Sofia Sans Condensed","Arial Narrow",sans-serif; /* обложки и стикеры */
-  --f-wide:"Unbounded","Arial Black",Arial,sans-serif; /* акцентные слова: широкий гротеск с обложек Алексея против узкого плакатного */
+  --f-disp:"Fira Sans Extra Condensed","Arial Narrow",Arial,sans-serif;   /* заголовки: плотный узкий гротеск с родной кириллицей */
+  --f-cover:"Fira Sans Extra Condensed","Arial Narrow",sans-serif;        /* стикеры и мелкий капс */
+  --f-wide:"Dela Gothic One","Arial Black",Arial,sans-serif;              /* акцентные слова: широкий тяжёлый, ближе всего к шрифту его обложек */
   --f-head:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif; /* кнопки и мелкие подписи */
   --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
+/* плёночное зерно: настоящий фрактальный шум, связывает тёмную и светящуюся части в одну картинку */
+body::after{content:"";position:fixed;inset:0;z-index:35;pointer-events:none;opacity:.1;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0;padding-inline:16px;padding-block:0 0;overflow-x:clip;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .wrap{max-width:1280px;margin:0 auto}
-h1,h2,h3{font-family:var(--f-disp);font-weight:800;letter-spacing:-.005em;line-height:.94;text-transform:uppercase;text-wrap:balance;margin:0}
+h1,h2,h3{font-family:var(--f-disp);font-weight:900;letter-spacing:-.005em;line-height:.94;text-transform:uppercase;text-wrap:balance;margin:0}
 h2{font-size:clamp(40px,5.6vw,68px)}
 .hl{color:var(--red)}
 /* плакатная связка: узкое высокое слово сверху, широкое низкое под ним, обе строки одной ширины */
-h1 .hl,h2 .hl,h3 .hl{display:block;font-family:var(--f-wide);font-weight:800;font-size:.6em;line-height:1.08;letter-spacing:-.03em;margin-top:.22em}
+h1 .hl,h2 .hl,h3 .hl{display:block;font-family:var(--f-wide);font-weight:400;font-size:.56em;line-height:1.1;letter-spacing:-.02em;margin-top:.2em}
 ::selection{background:var(--red);color:#fff}
 .label{font-size:13px;font-weight:500;color:var(--mute);letter-spacing:.02em;margin:0}
 .muted{color:var(--mute)}
@@ -142,20 +144,26 @@ h2{font-size:clamp(40px,5vw,64px)}
 /* ========== ПРАВАЯ КОЛОНКА: ролики и их цифры ========== */
 .rail{position:sticky;top:68px;height:calc(100dvh - 68px);padding:18px 0 0;overflow-x:visible;overflow-y:clip;display:flex;flex-direction:column;gap:16px;isolation:isolate}
 /* ролик лежит на красном круге и выходит за него; в просвете между колонками вертикальное слово */
-/* Вся правая половина — красное поле бренда: косой срез слева, свет сверху, мелкий растр, тёмное слово тон в тон */
-.rail::before{content:"";position:absolute;top:0;bottom:0;left:-64px;right:-50vw;z-index:-2;clip-path:polygon(120px 0,100% 0,100% 100%,0 100%);background:radial-gradient(rgba(0,0,0,.17) 1px,transparent 1.5px) 0 0/9px 9px,radial-gradient(110% 70% at 22% 0%,rgba(255,120,110,.75),rgba(255,120,110,0) 60%),linear-gradient(165deg,#e8282f 0%,#b0131a 100%)}
-.rail::after{content:"GRIDZAKON";position:absolute;right:-26px;top:54%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 clamp(150px,24vh,250px)/.78 var(--f-cover);letter-spacing:.01em;white-space:nowrap;color:rgba(0,0,0,.16);pointer-events:none}
-.rail>.side-head,.rail>.brand{padding-left:76px}
-.rail-body{margin-left:34px}
+/* Правая часть светится, а не залита: красное зарево снизу, неоновые лучи через экран смешением screen, неоновое слово */
+.rail::before{content:"";position:absolute;inset:-68px -50vw 0 -150px;z-index:-3;pointer-events:none;background:radial-gradient(58% 48% at 60% 106%,rgba(227,38,45,.7),rgba(227,38,45,0) 72%),radial-gradient(34% 30% at 84% 66%,rgba(255,96,60,.24),transparent 70%),radial-gradient(46% 30% at 34% 6%,rgba(227,38,45,.17),transparent 72%)}
+.rail::after{content:"GRIDZAKON";position:absolute;right:-96px;top:64%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 clamp(150px,24vh,250px)/.78 var(--f-cover);letter-spacing:.01em;white-space:nowrap;color:transparent;-webkit-text-stroke:1.5px rgba(255,70,70,.3);filter:drop-shadow(0 0 14px rgba(227,38,45,.6));pointer-events:none}
+.beams{position:absolute;inset:-68px -46% 0 -34%;width:180%;height:calc(100% + 68px);z-index:-2;pointer-events:none;mix-blend-mode:screen;overflow:visible}
+.beams line{vector-effect:non-scaling-stroke;stroke-linecap:round}
+.beams .halo{stroke:#e3262d;stroke-width:14;opacity:.55;filter:url(#bl14)}
+.beams .tube{stroke:#ff3b42;stroke-width:3;opacity:.9;filter:url(#bl3)}
+.beams .core{stroke:#ffe1dd;stroke-width:1}
+.beams .run{stroke:#fff;stroke-width:2.5;stroke-dasharray:36 964;filter:url(#bl3);animation:run 7s linear infinite}
+.beams .run:nth-of-type(2n){animation-duration:10s;animation-delay:-3s}
+@keyframes run{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
 .side-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.rail .side-head small{color:rgba(255,255,255,.82)}
-.rail .soc-row a{border-color:rgba(255,255,255,.5);color:#fff}
+.rail .side-head small{color:var(--mute)}
+.rail .soc-row a{border-color:rgba(255,255,255,.22);color:#fff}
 .rail .soc-row a:hover{background:#fff;color:var(--red);border-color:#fff}
 /* цифры соцсетей: всегда справа, над роликом */
 .brand{display:flex;justify-content:space-between;gap:10px 18px;padding-top:6px}
 .brand b{display:block;font:800 clamp(40px,4.4vw,60px)/.84 var(--f-disp);letter-spacing:-.005em;text-transform:uppercase;white-space:nowrap;color:#fff}
 .brand b var{font-style:normal}
-.brand b i{font-style:normal;font-size:.46em;margin-left:.12em;color:var(--bg)}
+.brand b i{font-style:normal;font-size:.46em;margin-left:.12em;color:var(--red)}
 .brand span{display:flex;align-items:center;gap:7px;margin-top:9px;font:500 13px/1.2 var(--f-head);color:rgba(255,255,255,.9)}
 .brand svg{flex:none;width:15px;height:15px}
 .side-head b{font:600 15px var(--f-head);letter-spacing:-.01em}
@@ -189,14 +197,37 @@ h2{font-size:clamp(40px,5vw,64px)}
 /* ролики справа: стопка, которая листается вместе с прокруткой страницы, без рывков */
 .slide{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center;will-change:transform,opacity}
 .slide+.slide{visibility:hidden}
-.slide .card{position:relative;width:min(100%,500px);margin-top:8px;transform-origin:50% 0;transform:rotate(-3deg);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.slide .card{position:relative;width:min(100%,500px);margin-top:8px;transform-origin:50% 0;transform:rotate(-2deg);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 .slide .card:hover{transform:rotate(0)}
 .slide .reel{width:100%;border-radius:24px;padding:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
 .slide .reel:hover{transform:none}
-/* ролик без рамки: срезанные углы вместо скруглений и жёсткая чёрная тень-подложка, как на плакате */
-.reel{border:0;border-radius:6px}
-.slide .card{filter:drop-shadow(18px 18px 0 rgba(0,0,0,.9))}
-.slide .reel{border-radius:0;box-shadow:none;clip-path:polygon(0 0,calc(100% - 52px) 0,100% 52px,100% 100%,0 100%)}
+/* ролик оформлен как Reels: полоски серий, шапка аккаунта, просмотры и лайк поверх видео.
+   Вместо рамки — тонкий блик, который бежит по периметру (conic-gradient под маской), и красное свечение под карточкой */
+.reel{border:0;border-radius:8px}
+@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
+.slide .card{--r:22px}
+.slide .reel{border-radius:var(--r);box-shadow:0 0 0 1px rgba(255,255,255,.07),0 50px 130px -24px rgba(227,38,45,.6),0 30px 60px -30px #000}
+.slide .card::before{content:"";position:absolute;inset:-2px;z-index:3;border-radius:calc(var(--r) + 2px);padding:2px;background:conic-gradient(from var(--a),transparent 0 58%,rgba(255,80,72,.95) 76%,#fff 84%,rgba(255,80,72,.95) 91%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:edge 8s linear infinite;pointer-events:none}
+@keyframes edge{to{--a:360deg}}
+.ig{position:absolute;inset:0;z-index:2;border-radius:var(--r);overflow:hidden;pointer-events:none;color:#fff;background:linear-gradient(rgba(0,0,0,.62),rgba(0,0,0,0) 190px)}
+.bars{position:absolute;left:16px;right:16px;top:14px;display:flex;gap:4px}
+.bars i{flex:1;height:2.5px;border-radius:2px;background:rgba(255,255,255,.3)}
+.bars i.on{background:#fff}
+.ighead{position:absolute;left:16px;top:30px;display:flex;align-items:center;gap:10px;font:600 14px var(--f-head)}
+.ighead small{font-size:13px;font-weight:500;opacity:.72}
+.igava{flex:none;width:38px;height:38px;border-radius:50%;padding:2px;background:conic-gradient(var(--red),#ff9a4a,var(--red))}
+.igava span{display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;border:2px solid #000}
+.igava img{width:100%;height:100%;object-fit:cover}
+.igviews{position:absolute;left:16px;top:86px;display:inline-flex;align-items:baseline;gap:8px;padding:9px 15px 8px;border-radius:999px;background:rgba(12,13,15,.5);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.16);font:500 13px var(--f-head)}
+.igviews svg{width:15px;height:15px;align-self:center}
+.igviews b{font:900 24px/1 var(--f-disp);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.igact{position:absolute;right:14px;top:292px;display:grid;justify-items:center;gap:7px;font:600 12px var(--f-head);text-shadow:0 1px 8px rgba(0,0,0,.7)}
+.igact .hrt{width:48px;height:48px;background:rgba(12,13,15,.5);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);color:#fff;transition:background .3s,border-color .3s}
+.igact .hrt svg{width:22px;height:22px}
+.igact.pop .hrt{background:var(--red);border-color:var(--red)}
+.igact .plus{right:-4px;top:-18px}
+.igplay{position:absolute;right:14px;top:386px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.34)}
+.igplay svg{width:17px;height:17px;margin-left:2px}
 /* цифры ролика на плашках, которые выступают за край карточки и «живут»: просмотры подрастают, лайки ставятся */
 .plate{position:absolute;z-index:2;display:grid;gap:4px;padding:13px 18px 12px;border-radius:16px;pointer-events:none;box-shadow:0 18px 40px -14px rgba(0,0,0,.75);animation:bob 7s ease-in-out infinite alternate}
 .plate small{display:flex;align-items:center;gap:6px;font:500 12px var(--f-head);opacity:.72}
@@ -365,9 +396,7 @@ footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line
   .flowcol{display:contents}
   .hero{order:1;min-height:0;padding-block:20px 0}
   .rail{order:2;position:static;height:auto;padding:36px 0 0}
-  .rail::before,.rail::after,.slide+.slide{display:none}
-  .rail>.side-head,.rail>.brand{padding-left:0}
-  .rail-body{margin-left:0}
+  .rail::before,.rail::after,.beams,.slide+.slide{display:none}
   .brand{margin:18px 0 6px}
   .brand b i{color:var(--red)}
   .rail .soc-row a{border-color:var(--line);color:var(--mute)}
@@ -647,6 +676,23 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
        <a href="https://vk.com/gridzakon" target="_blank" rel="noopener" aria-label="ВКонтакте"><svg><use href="#i-vk"/></svg></a>
      </div>
    </div>
+   <svg class="beams" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+     <defs>
+       <filter id="bl14" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16"/></filter>
+       <filter id="bl3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
+       <g id="rays">
+         <line x1="250" y1="1000" x2="470" y2="-20" pathLength="1000"/>
+         <line x1="330" y1="1000" x2="455" y2="420" pathLength="1000"/>
+         <line x1="760" y1="1000" x2="965" y2="60" pathLength="1000"/>
+         <line x1="860" y1="700" x2="950" y2="290" pathLength="1000"/>
+         <line x1="150" y1="780" x2="1000" y2="610" pathLength="1000"/>
+       </g>
+     </defs>
+     <use href="#rays" class="halo"/><use href="#rays" class="tube"/><use href="#rays" class="core"/>
+     <line class="run" x1="250" y1="1000" x2="470" y2="-20" pathLength="1000"/>
+     <line class="run" x1="760" y1="1000" x2="965" y2="60" pathLength="1000"/>
+     <line class="run" x1="150" y1="780" x2="1000" y2="610" pathLength="1000"/>
+   </svg>
    <div class="brand" id="brand" aria-label="Алексей в соцсетях"></div>
    <div class="rail-body" id="railBody">
      <div class="slide"><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
@@ -896,13 +942,18 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   // правая колонка: на первом экране лента, дальше один ролик крупно под каждый раздел
   var railEl=$('rail'),railBody=$('railBody');
   function fmt(n){return String(n).replace(/\B(?=(\d{3})+$)/g,'\u00a0')}
-  function soloHTML(i){var r=R[i];return '<div class="card">'+soloBtn(i)+(r[2]?'<span class="plate views"><small>'+EYE+'просмотров</small><b class="cv">'+(r[8]?fmt(r[8]):esc(r[2]))+'</b></span>':'')+(r[7]?'<span class="plate likes"><small>лайков</small><span class="hrt">'+HEART+'</span><b class="cl">'+(r[9]?fmt(r[9]):esc(r[7]))+'</b><i class="plus">+1</i></span>':'')+'<span class="badge" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"><text><textPath href="#circ" textLength="232">СМОТРЕТЬ РОЛИК • СМОТРЕТЬ РОЛИК • </textPath></text></svg><svg class="tri"><use href="#i-play"/></svg></span></div>'}
+  var AVA=SITE.photos.avatar?'<img src="'+esc(SITE.photos.avatar)+'" alt=""'+(SITE.avatarCrop?' style="object-position:'+SITE.avatarCrop+';transform:scale('+(SITE.avatarZoom||1)+')"':'')+'>':'';
+  function soloHTML(i,k,n){var r=R[i],bars='';for(var j=0;j<n;j++)bars+='<i'+(j<=k?' class="on"':'')+'></i>';
+    return '<div class="card">'+soloBtn(i)+'<div class="ig" aria-hidden="true"><div class="bars">'+bars+'</div><div class="ighead"><span class="igava"><span>'+AVA+'</span></span>gridzakon<small>Reels</small></div>'
+      +(r[2]?'<div class="igviews">'+EYE+'<b class="cv">'+(r[8]?fmt(r[8]):esc(r[2]))+'</b>просмотров</div>':'')
+      +(r[7]?'<div class="igact"><span class="hrt">'+HEART+'</span><b class="cl">'+(r[9]?fmt(r[9]):esc(r[7]))+'</b><i class="plus">+1</i></div>':'')
+      +'<span class="igplay"><svg><use href="#i-play"/></svg></span></div></div>'}
   function soloBtn(i){var r=R[i],im=rImg(r);
     return '<button type="button" class="reel'+(im?' has-img':'')+'" data-v="'+i+'" aria-label="Смотреть ролик: '+esc(plain(r[0]))+'">'+(im?'<img class="ok" src="'+esc(im)+'" alt="" loading="lazy">':'')+'<span class="pf"><span class="at">@gridzakon</span></span><span class="cover">'+cover(r[0])+'</span></button>'}
   // Стопка роликов привязана к прокрутке: ролик стоит на месте, пока читаешь раздел,
   // и плавно сменяется следующим, пока подъезжает следующий раздел. Никаких рывков по таймеру.
-  var railSecs=[];
-  for(var rk in SITE.rail){var rs0=$(rk);if(rs0&&R[SITE.rail[rk]]){railSecs.push(rs0);railBody.insertAdjacentHTML('beforeend','<div class="slide">'+soloHTML(SITE.rail[rk])+'</div>')}}
+  var railSecs=[],railN=0;for(var rn in SITE.rail)if($(rn)&&R[SITE.rail[rn]])railN++;
+  for(var rk in SITE.rail){var rs0=$(rk);if(rs0&&R[SITE.rail[rk]]){railSecs.push(rs0);railBody.insertAdjacentHTML('beforeend','<div class="slide">'+soloHTML(SITE.rail[rk],railSecs.length-1,railN)+'</div>')}}
   var slides=[].slice.call(railBody.querySelectorAll('.slide')),railP=0,railTo=0,railRaf=0,wide=matchMedia('(min-width:1001px)'),calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
   // следующий ролик въезжает снизу поверх текущего; текущий стоит на месте и гаснет, пока его накрывают
   function railDraw(){slides.forEach(function(sl,i){var d=i-railP;
@@ -915,13 +966,13 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     if(calm||Math.abs(diff)<.002)railP=railTo;else{railP+=diff*.085;railRaf=requestAnimationFrame(railStep)}
     railDraw()}
   function railAim(){if(!wide.matches){slides.forEach(function(sl){sl.removeAttribute('style')});return}
-    var vh=innerHeight,m=vh*.5,w=vh*.6,p=0;
+    var vh=innerHeight,m=vh*.5,w=vh*.34,p=0;
     railSecs.forEach(function(el){var t=(m-el.getBoundingClientRect().top+w)/w;t=t<0?0:t>1?1:t;p+=t*t*(3-2*t)});
     railTo=p;if(!railRaf)railRaf=requestAnimationFrame(railStep)}
   addEventListener('scroll',railAim,{passive:true});addEventListener('resize',railAim);railAim();
   function setRail(){}
   // просмотры понемногу растут, время от времени ставится лайк (декоративная имитация, стартует от настоящих чисел)
-  var live=slides.map(function(sl,i){if(!i)return null;var r=R[SITE.rail[railSecs[i-1].id]];return r[8]?{v:r[8],l:r[9],cv:sl.querySelector('.cv'),cl:sl.querySelector('.cl'),pl:sl.querySelector('.plate.likes')}:null});
+  var live=slides.map(function(sl,i){if(!i)return null;var r=R[SITE.rail[railSecs[i-1].id]];return r[8]?{v:r[8],l:r[9],cv:sl.querySelector('.cv'),cl:sl.querySelector('.cl'),pl:sl.querySelector('.igact')}:null});
   function replay(el,c){el.classList.remove(c);void el.offsetWidth;el.classList.add(c)}
   if(!calm)setInterval(function(){if(!wide.matches||document.hidden||openM)return;var o=live[Math.round(railP)];if(!o)return;
     if(o.cv&&Math.random()<.7){o.v+=1+Math.floor(Math.random()*3);o.cv.textContent=fmt(o.v);replay(o.cv,'tick')}
