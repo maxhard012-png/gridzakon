@@ -142,9 +142,22 @@ h2{font-size:clamp(40px,5vw,64px)}
 /* ========== ПРАВАЯ КОЛОНКА: ролики и их цифры ========== */
 .rail{position:sticky;top:68px;height:calc(100dvh - 68px);padding:18px 0 0;overflow-x:visible;overflow-y:clip;display:flex;flex-direction:column;gap:16px;isolation:isolate}
 /* ролик лежит на красном круге и выходит за него; в просвете между колонками вертикальное слово */
-.rail::before{content:"";position:absolute;right:-230px;top:50%;width:680px;height:680px;border-radius:50%;background:var(--red);transform:translateY(-54%);z-index:-1;pointer-events:none}
-.rail::after{content:"GRIDZAKON";position:absolute;right:calc(100% + 14px);top:50%;transform:translateY(-52%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 76px/1 var(--f-cover);letter-spacing:.03em;white-space:nowrap;color:transparent;-webkit-text-stroke:1px rgba(241,241,238,.14);pointer-events:none}
+/* Вся правая половина — красное поле бренда: косой срез слева, свет сверху, мелкий растр, тёмное слово тон в тон */
+.rail::before{content:"";position:absolute;top:0;bottom:0;left:-64px;right:-50vw;z-index:-2;clip-path:polygon(120px 0,100% 0,100% 100%,0 100%);background:radial-gradient(rgba(0,0,0,.17) 1px,transparent 1.5px) 0 0/9px 9px,radial-gradient(110% 70% at 22% 0%,rgba(255,120,110,.75),rgba(255,120,110,0) 60%),linear-gradient(165deg,#e8282f 0%,#b0131a 100%)}
+.rail::after{content:"GRIDZAKON";position:absolute;right:-26px;top:54%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 clamp(150px,24vh,250px)/.78 var(--f-cover);letter-spacing:.01em;white-space:nowrap;color:rgba(0,0,0,.16);pointer-events:none}
+.rail>.side-head,.rail>.brand{padding-left:76px}
+.rail-body{margin-left:34px}
 .side-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.rail .side-head small{color:rgba(255,255,255,.82)}
+.rail .soc-row a{border-color:rgba(255,255,255,.5);color:#fff}
+.rail .soc-row a:hover{background:#fff;color:var(--red);border-color:#fff}
+/* цифры соцсетей: всегда справа, над роликом */
+.brand{display:flex;justify-content:space-between;gap:10px 18px;padding-top:6px}
+.brand b{display:block;font:800 clamp(40px,4.4vw,60px)/.84 var(--f-disp);letter-spacing:-.005em;text-transform:uppercase;white-space:nowrap;color:#fff}
+.brand b var{font-style:normal}
+.brand b i{font-style:normal;font-size:.46em;margin-left:.12em;color:var(--bg)}
+.brand span{display:flex;align-items:center;gap:7px;margin-top:9px;font:500 13px/1.2 var(--f-head);color:rgba(255,255,255,.9)}
+.brand svg{flex:none;width:15px;height:15px}
 .side-head b{font:600 15px var(--f-head);letter-spacing:-.01em}
 .side-head small{display:block;font-size:13px;color:var(--mute)}
 .soc-row{display:flex;gap:6px}
@@ -180,21 +193,20 @@ h2{font-size:clamp(40px,5vw,64px)}
 .slide .card:hover{transform:rotate(0)}
 .slide .reel{width:100%;border-radius:24px;padding:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
 .slide .reel:hover{transform:none}
-/* вместо тонкой чёрной линии: полупрозрачный стеклянный корпус с бликом и «островком», как у телефона */
-.reel{border:0}
-.slide .card{padding:11px;border-radius:48px;background:linear-gradient(150deg,rgba(255,255,255,.36),rgba(255,255,255,.07) 36%,rgba(255,255,255,.05) 62%,rgba(255,255,255,.2));-webkit-backdrop-filter:blur(18px) saturate(1.35);backdrop-filter:blur(18px) saturate(1.35);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),inset 0 1.5px 0 rgba(255,255,255,.65),0 60px 100px -34px rgba(0,0,0,.9)}
-.slide .reel{border-radius:38px;box-shadow:0 0 0 1px rgba(0,0,0,.55)}
-.slide .card::after{content:"";position:absolute;left:50%;top:27px;width:96px;height:27px;margin-left:-48px;border-radius:99px;background:#000;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);z-index:2;pointer-events:none}
+/* ролик без рамки: срезанные углы вместо скруглений и жёсткая чёрная тень-подложка, как на плакате */
+.reel{border:0;border-radius:6px}
+.slide .card{filter:drop-shadow(18px 18px 0 rgba(0,0,0,.9))}
+.slide .reel{border-radius:0;box-shadow:none;clip-path:polygon(0 0,calc(100% - 52px) 0,100% 52px,100% 100%,0 100%)}
 /* цифры ролика на плашках, которые выступают за край карточки и «живут»: просмотры подрастают, лайки ставятся */
 .plate{position:absolute;z-index:2;display:grid;gap:4px;padding:13px 18px 12px;border-radius:16px;pointer-events:none;box-shadow:0 18px 40px -14px rgba(0,0,0,.75);animation:bob 7s ease-in-out infinite alternate}
 .plate small{display:flex;align-items:center;gap:6px;font:500 12px var(--f-head);opacity:.72}
 .plate small svg{width:13px;height:13px}
 .plate b{display:block;font:800 44px/.9 var(--f-disp);letter-spacing:-.005em;white-space:nowrap;font-variant-numeric:tabular-nums}
 .plate.views{left:-44px;top:330px;background:var(--fg);color:var(--bg);transform:rotate(5deg)}
-.plate.likes{left:-20px;top:440px;background:var(--red);color:#fff;transform:rotate(1deg);animation-duration:9s;grid-template-columns:auto auto;align-items:center;column-gap:12px}
+.plate.likes{left:-20px;top:440px;background:var(--bg);color:#fff;transform:rotate(1deg);animation-duration:9s;grid-template-columns:auto auto;align-items:center;column-gap:12px}
 .plate.likes b{font-size:36px}
 .plate.likes small{grid-column:1/3}
-.hrt{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#fff;color:var(--red)}
+.hrt{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff}
 .hrt svg{width:17px;height:17px}
 .plus{position:absolute;right:14px;top:-4px;font:800 20px var(--f-disp);font-style:normal;opacity:0}
 @keyframes bob{to{translate:0 -9px}}
@@ -205,7 +217,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 .pop .plus{animation:plus 1.3s ease-out}
 @keyframes plus{0%{opacity:0;transform:translateY(6px)}25%{opacity:1}100%{opacity:0;transform:translateY(-30px)}}
 /* круглый бейдж с текстом по кругу, сидит на краю карточки */
-.badge{position:absolute;right:-12px;top:150px;width:104px;height:104px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;pointer-events:none;box-shadow:0 12px 30px -8px rgba(0,0,0,.6)}
+.badge{position:absolute;right:-12px;top:120px;width:104px;height:104px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;pointer-events:none;box-shadow:0 12px 30px -8px rgba(0,0,0,.6)}
 .badge .ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 16s linear infinite}
 .badge .ring text{font:700 11.5px var(--f-head);letter-spacing:.06em;fill:currentColor}
 .badge .tri{width:22px;height:22px;margin-left:3px}
@@ -296,6 +308,28 @@ details.case summary::-webkit-details-marker{display:none}
 .gift h3{font-size:30px}
 .gift p{margin:6px 0 0;color:var(--mute);font-size:15px}
 
+/* каталог шаблонов */
+.cat{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:0 16px 96px}
+.cat-top{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;padding:18px 0;background:var(--bg)}
+.cat h2{margin-top:40px}
+.chipsb{display:flex;flex-wrap:wrap;gap:8px;margin:34px 0 26px}
+.chip{font:500 14px var(--f-head);color:var(--mute);background:none;border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer;transition:color .2s,border-color .2s}
+.chip:hover{color:var(--fg);border-color:var(--mute)}
+.chip.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip sup{font-size:11px;opacity:.6;margin-left:5px;vertical-align:baseline}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:12px}
+.tpl{display:flex;flex-direction:column;gap:12px;min-height:214px;padding:22px;border-radius:6px;background:var(--surface);clip-path:polygon(0 0,calc(100% - 26px) 0,100% 26px,100% 100%,0 100%);transition:background .2s}
+.tpl:hover{background:var(--raise)}
+.tpl .tag{align-self:flex-start;font:800 14px/1 var(--f-cover);letter-spacing:.07em;text-transform:uppercase;padding:5px 8px 4px;border-radius:4px;background:var(--raise);color:var(--mute)}
+.tpl.free .tag{background:var(--red);color:#fff}
+.tpl b{font:800 28px/1 var(--f-disp);text-transform:uppercase;text-wrap:balance}
+.tpl p{margin:0;font-size:14px;line-height:1.45;color:var(--mute)}
+.tpl .row{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.tpl .p{font:800 26px/1 var(--f-disp);text-transform:uppercase;white-space:nowrap}
+.tpl.free .p{color:var(--red-hi)}
+.tpl button{font:500 14px var(--f-head);background:none;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer;transition:background .2s,color .2s}
+.tpl button:hover,.tpl.free button{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
 /* ========== 6. ВОПРОСЫ И КОНТАКТЫ ========== */
 #qaList{margin-top:36px}
 .qa{border-top:1px solid var(--line)}
@@ -332,6 +366,11 @@ footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line
   .hero{order:1;min-height:0;padding-block:20px 0}
   .rail{order:2;position:static;height:auto;padding:36px 0 0}
   .rail::before,.rail::after,.slide+.slide{display:none}
+  .rail>.side-head,.rail>.brand{padding-left:0}
+  .rail-body{margin-left:0}
+  .brand{margin:18px 0 6px}
+  .brand b i{color:var(--red)}
+  .rail .soc-row a{border-color:var(--line);color:var(--mute)}
   .slide{position:static;display:block;transform:none!important;opacity:1!important;visibility:visible!important}
   [data-ghost]::before{display:block;max-width:calc(100vw - 16px);overflow:hidden}
   .rail-body{flex:none}
@@ -446,7 +485,6 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 .who small,.hero .lead,.hero .cta{animation:riseIn .8s cubic-bezier(.2,.7,.1,1) .45s both}
 .hero .cta{animation-delay:.58s}
 @keyframes riseIn{from{opacity:0;transform:translateY(16px)}}
-.rail::before{animation:pop 1.1s cubic-bezier(.2,.8,.2,1) .25s backwards;transition:transform .9s cubic-bezier(.2,.7,.1,1)}
 @keyframes pop{from{transform:translateY(-54%) scale(0)}}
 .feed{animation:riseIn 1s cubic-bezier(.2,.7,.1,1) .5s backwards}
 
@@ -487,11 +525,11 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   <div class="wrap">
     <a class="logo" href="#top">Grid<span>Zakon</span></a>
     <div class="navlinks">
-      <a href="#about">Обо мне</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#docs">Договоры</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a>
+      <a href="#about">Обо мне</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#docs">Шаблоны</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a>
     </div>
     <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mmenu">Меню</button>
     <div class="mmenu" id="mmenu" hidden>
-      <a href="#about">Обо мне</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#docs">Договоры</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a>
+      <a href="#about">Обо мне</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#docs">Шаблоны</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a>
     </div>
   </div>
 </nav>
@@ -565,22 +603,11 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     </div>
   </section>
 
-  <!-- 5. Договоры -->
-  <section id="docs" data-ghost="Договоры">
-    <h2>Готовые шаблоны</h2>
-    <p class="sub">В Word. Подскажу, как заполнить.</p>
-    <div class="docs">
-      <div class="doc"><div><b>Договор ГПХ</b><small>для работы с исполнителями</small></div><span class="p">2 500 ₽</span><button type="button" data-order="Договор ГПХ">Заказать</button></div>
-      <div class="doc"><div><b>Договор займа</b><small>с распиской и процентами</small></div><span class="p">2 000 ₽</span><button type="button" data-order="Договор займа">Заказать</button></div>
-      <div class="doc"><div><b>Партнёрский договор</b><small>доли и выход партнёра</small></div><span class="p">4 000 ₽</span><button type="button" data-order="Партнёрский договор">Заказать</button></div>
-      <div class="doc"><div><b>Договор аренды</b><small>квартира или офис</small></div><span class="p">2 500 ₽</span><button type="button" data-order="Договор аренды">Заказать</button></div>
-      <div class="doc"><div><b>Купля-продажа авто</b><small>защищает обе стороны</small></div><span class="p">1 500 ₽</span><button type="button" data-order="Купля-продажа авто">Заказать</button></div>
-      <div class="doc"><div><b>Оказание услуг</b><small>для самозанятых и ИП</small></div><span class="p">2 500 ₽</span><button type="button" data-order="Договор оказания услуг">Заказать</button></div>
-    </div>
-    <div class="gift">
-      <div><h3>3 шаблона <span class="hl">бесплатно</span></h3><p>Претензия должнику, расписка и акт выполненных работ.</p></div>
-      <button class="btn" data-gift>Забрать<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
-    </div>
+  <!-- 5. Шаблоны: на главной только вход в каталог -->
+  <section id="docs" data-ghost="Шаблоны">
+    <h2>Готовые <span class="hl">шаблоны</span></h2>
+    <p class="sub" id="docsSub"></p>
+    <button class="btn" type="button" data-cat style="margin-top:34px">Открыть каталог<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
   </section>
 
   <!-- 6. Вопросы -->
@@ -605,7 +632,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     </div>
   </section>
 
-  <footer><span>© 2026 Алексей Гридасов · GridZakon</span><span id="legal" hidden></span><span>Информация на сайте не является публичной офертой.</span><span class="ex" id="demoNote">Цены, кейсы и телефон пока примерные.</span></footer>
+  <footer><span>© 2026 Алексей Гридасов · GridZakon</span><span id="legal" hidden></span><span>Информация на сайте не является публичной офертой.</span><span class="ex" id="demoNote">Цифры практики, цены, кейсы и телефон пока примерные.</span></footer>
  </div>
 
  <!-- Правая колонка: всегда ролики -->
@@ -620,11 +647,23 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
        <a href="https://vk.com/gridzakon" target="_blank" rel="noopener" aria-label="ВКонтакте"><svg><use href="#i-vk"/></svg></a>
      </div>
    </div>
+   <div class="brand" id="brand" aria-label="Алексей в соцсетях"></div>
    <div class="rail-body" id="railBody">
      <div class="slide"><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
    </div>
  </aside>
 </main>
+
+<!-- каталог шаблонов: отдельный экран, адрес #templates -->
+<div class="cat" id="cat" hidden role="dialog" aria-modal="true" aria-labelledby="catTitle">
+  <div class="wrap">
+    <div class="cat-top"><button class="link" type="button" id="catBack">← На сайт</button><span class="logo">Grid<span>Zakon</span></span></div>
+    <h2 id="catTitle">Шаблоны <span class="hl">документов</span></h2>
+    <p class="sub" id="catSub"></p>
+    <div class="chipsb" id="catChips"></div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</div>
 
 <div class="float off" id="float">
   <a class="tg" href="https://t.me/gridzakon" target="_blank" rel="noopener" aria-label="Написать в Telegram"><svg><use href="#i-tg"/></svg></a>
@@ -724,15 +763,15 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   <form class="sheet" id="gform" novalidate>
     <div class="top"><span class="label">Подарок</span><button class="x" type="button" data-close aria-label="Закрыть">×</button></div>
     <div id="gask" style="display:grid;gap:14px">
-      <h3 id="gtitle">Куда прислать шаблоны?</h3>
-      <p class="muted" style="margin:0">Претензия должнику, расписка и акт выполненных работ в Word.</p>
+      <h3 id="gtitle">Куда прислать шаблон?</h3>
+      <p class="muted" style="margin:0" id="gdoc"></p>
       <label class="f">Telegram или телефон<input id="gcontact" placeholder="@username или +7…"></label>
       <p class="err" id="gerr"></p>
       <p class="ex consent" style="margin:0">Отправляя форму, вы соглашаетесь на <a href="#" data-policy>обработку персональных данных</a>.</p>
       <button class="btn" type="submit" style="justify-self:start">Получить бесплатно<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
     </div>
     <div id="gdone" class="done" hidden>
-      <div class="okc">✓</div><h3>Шаблоны в пути</h3>
+      <div class="okc">✓</div><h3>Шаблон в пути</h3>
       <p class="muted" style="margin:0">Если остались вопросы, запишитесь на консультацию.</p>
       <button class="btn" type="button" id="g2c">Записаться<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
       <p class="ex preview-note" style="margin:0">В превью ничего не отправляется.</p>
@@ -762,8 +801,10 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     photos:{avatar:'https://i.ytimg.com/vi/vntlyKwV1NY/oardefault.jpg'},
     avatarCrop:'50% 12%',            // какая точка картинки в центре кружка; пусто = обычная обрезка
     avatarZoom:1.75,                   // увеличение, чтобы лицо заняло кружок
-    // Цифры: [число, единица (красным), подпись, значок площадки: ig, yt, tt, tg, vk или пусто]
-    facts:[['190','K','подписчиков в Instagram','ig'],['4,1','млн','просмотров у одного ролика','yt'],['428','','роликов о праве на YouTube','yt']],
+    // Слева — цифры практики: [число, единица (красным), подпись]. ПОКА ПРИМЕРНЫЕ, заменить на настоящие
+    facts:[['7','лет','юридической практики',''],['300','+','дел в судах и до суда',''],['24','ч','отвечаю на заявку','']],
+    // Справа — цифры соцсетей: [число, единица, подпись, значок: ig, yt, tt, tg, vk]. Настоящие, сняты 2 октября 2026
+    social:[['190','K','в Instagram','ig'],['58','K','на YouTube','yt'],['4,1','млн','у одного ролика','eye']],
     // СМИ: [название или путь к логотипу (svg/png), ссылка на выступление]. Пустой список = полоса скрыта
     media:[],
     // Ролики: [название (*слово* = красная плашка), площадка, просмотры, ID на YouTube, своя ссылка, свой mp4, своя обложка, лайки, точное число просмотров, точное число лайков (для живых счётчиков)]
@@ -781,6 +822,25 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
       ['Спецслужбы *тебя видят*','YouTube','269 тыс.','UeD3XVgRgBA','','','','3,4 тыс.',268510,3370]
     ],
     // Какой ролик (номер в списке выше, с нуля) стоит справа у каждого раздела. Раздела нет в списке = лента
+    // Каталог шаблонов: [название, пояснение, цена (0 = бесплатно), раздел]. Цены пока примерные
+    templates:[
+      ['Претензия должнику','Требование вернуть деньги до суда.',0,'Претензии'],
+      ['Расписка','К договору займа или отдельно.',0,'Для себя'],
+      ['Акт выполненных работ','Закрывает заказ и защищает оплату.',0,'Для бизнеса'],
+      ['Заявление на возврат товара','Для магазина или маркетплейса.',0,'Претензии'],
+      ['Договор ГПХ','Работа с исполнителями без штата.',2500,'Для бизнеса'],
+      ['Оказание услуг','Для самозанятых и ИП.',2500,'Для бизнеса'],
+      ['Договор подряда','Ремонт, монтаж, разработка.',3000,'Для бизнеса'],
+      ['Договор поставки','Сроки, качество, ответственность.',3500,'Для бизнеса'],
+      ['Партнёрский договор','Доли, вклад и выход партнёра.',4000,'Для бизнеса'],
+      ['Соглашение о неразглашении','NDA для сотрудников и подрядчиков.',2000,'Для бизнеса'],
+      ['Оферта для сайта','Продажа услуг и товаров онлайн.',4000,'Для бизнеса'],
+      ['Договор займа','С процентами и сроками возврата.',2000,'Для себя'],
+      ['Аренда квартиры','С описью имущества и залогом.',2500,'Для себя'],
+      ['Купля-продажа авто','Защищает обе стороны сделки.',1500,'Для себя'],
+      ['Претензия продавцу','Возврат денег за товар или услугу.',1500,'Претензии'],
+      ['Претензия застройщику','Неустойка за просрочку сдачи.',2000,'Претензии']
+    ],
     rail:{about:0,services:1,cases:2,docs:3,faq:6,contacts:5},
     // Отзывы: [подпись (*слово* = красная плашка), видеофайл mp4 (если есть), картинка: скриншот отзыва или обложка видео]
     reviews:[
@@ -872,6 +932,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   if(SITE.media.length)$('logos').innerHTML=SITE.media.map(function(m){var t=isImg(m[0])?'<img src="'+esc(m[0])+'" alt="">':esc(m[0]);
     return m[1]?'<a href="'+esc(m[1])+'" target="_blank" rel="noopener">'+t+'</a>':'<span>'+t+'</span>'}).join('')+(DEMO?'<span class="ex">пример</span>':'');
   else $('media').hidden=true;
+  $('brand').innerHTML=SITE.social.map(function(f){return '<div><b><var class="n">'+esc(f[0])+'</var>'+(f[1]?'<i>'+esc(f[1])+'</i>':'')+'</b><span>'+(f[3]?'<svg><use href="#i-'+f[3]+'"/></svg>':'')+esc(f[2])+'</span></div>'}).join('');
   $('phone').textContent=SITE.phone;
   if(SITE.legal){$('legal').textContent=SITE.legal;$('legal').hidden=false}
   document.querySelectorAll('[data-wa]').forEach(function(a){a.href='https://wa.me/'+SITE.whatsapp});
@@ -893,7 +954,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   var openM=null,lastF=null;
   function show(m){if(openM)openM.hidden=true;else lastF=document.activeElement;m.hidden=false;openM=m;document.body.style.overflow='hidden';
     var c=m.querySelector('[data-close]');if(c)c.focus({preventScroll:true})}
-  function hide(){if(openM){var v=openM.querySelector('video');if(v)v.pause();var f=openM.querySelector('iframe');if(f)f.remove();openM.hidden=true;openM=null}document.body.style.overflow='';
+  function hide(){if(openM){var v=openM.querySelector('video');if(v)v.pause();var f=openM.querySelector('iframe');if(f)f.remove();openM.hidden=true;openM=null}document.body.style.overflow=$('cat').hidden?'':'hidden';
     if(lastF&&lastF.focus)lastF.focus({preventScroll:true});lastF=null}
   document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)hide()})});
   document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=hide});
@@ -963,8 +1024,30 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 
   // подарок
   document.querySelectorAll('[data-gift]').forEach(function(b){b.addEventListener('click',function(){$('gform').reset();$('gask').hidden=false;$('gdone').hidden=true;$('gerr').textContent='';show($('gmodal'))})});
-  $('gform').addEventListener('submit',function(e){e.preventDefault();if(!$('gcontact').value.trim()){$('gerr').textContent='Укажите Telegram или телефон.';return}send('Подарок: 3 шаблона',{contact:$('gcontact').value});$('gask').hidden=true;$('gdone').hidden=false});
+  $('gform').addEventListener('submit',function(e){e.preventDefault();if(!$('gcontact').value.trim()){$('gerr').textContent='Укажите Telegram или телефон.';return}send('Бесплатный шаблон',{doc:giftDoc,contact:$('gcontact').value});$('gask').hidden=true;$('gdone').hidden=false});
   $('g2c').onclick=function(){book()};
+
+  // каталог шаблонов
+  var T=SITE.templates,catEl=$('cat'),giftDoc='',catF='Все',nFree=T.filter(function(t){return !t[2]}).length;
+  function money(n){return String(n).replace(/\B(?=(\d{3})+$)/g,' ')+' ₽'}
+  function plural(n,a,b,c){var m=n%100,k=n%10;return m>10&&m<20?c:k===1?a:k>1&&k<5?b:c}
+  var catTxt=T.length+' '+plural(T.length,'документ','документа','документов')+' в Word: договоры, претензии, расписки. '+nFree+' '+plural(nFree,'из них бесплатный','из них бесплатно','из них бесплатно')+'.';
+  $('docsSub').textContent=catTxt;$('catSub').textContent=catTxt+' Подскажу, как заполнить.';
+  var cats=['Все','Бесплатные'];T.forEach(function(t){if(cats.indexOf(t[3])<0)cats.push(t[3])});
+  function catDraw(){
+    $('catChips').innerHTML=cats.map(function(c){var n=c==='Все'?T.length:c==='Бесплатные'?nFree:T.filter(function(t){return t[3]===c}).length;
+      return '<button type="button" class="chip'+(c===catF?' on':'')+'" data-f="'+esc(c)+'">'+esc(c)+'<sup>'+n+'</sup></button>'}).join('');
+    $('catGrid').innerHTML=T.map(function(t,i){if(catF==='Бесплатные'?t[2]:catF!=='Все'&&t[3]!==catF)return '';
+      return '<article class="tpl'+(t[2]?'':' free')+'"><span class="tag">'+(t[2]?esc(t[3]):'Бесплатно')+'</span><b>'+esc(t[0])+'</b><p>'+esc(t[1])+'</p><div class="row"><span class="p">'+(t[2]?money(t[2]):'0 ₽')+'</span><button type="button" data-tpl="'+i+'">'+(t[2]?'Заказать':'Забрать')+'</button></div></article>'}).join('')}
+  $('catChips').addEventListener('click',function(e){var b=e.target.closest('.chip');if(b){catF=b.dataset.f;catDraw()}});
+  $('catGrid').addEventListener('click',function(e){var b=e.target.closest('[data-tpl]');if(!b)return;var t=T[+b.dataset.tpl];
+    if(t[2]){$('oform').reset();$('otitle').textContent=t[0];$('oprice').textContent=money(t[2]);$('oask').hidden=false;$('odone').hidden=true;$('oerr').textContent='';show($('omodal'))}
+    else{giftDoc=t[0];$('gform').reset();$('gdoc').textContent=t[0]+' в Word. Пришлю в Telegram.';$('gask').hidden=false;$('gdone').hidden=true;$('gerr').textContent='';show($('gmodal'))}});
+  function catSync(){var on=location.hash==='#templates';catEl.hidden=!on;if(!openM)document.body.style.overflow=on?'hidden':'';if(on){catDraw();catEl.scrollTop=0}}
+  document.querySelectorAll('[data-cat]').forEach(function(b){b.addEventListener('click',function(){location.hash='templates'})});
+  $('catBack').onclick=function(){if(history.length>1)history.back();else{location.hash='';catSync()}};
+  addEventListener('hashchange',catSync);catSync();
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!openM&&!catEl.hidden)$('catBack').click()});
 
   document.addEventListener('keydown',function(e){if(!openM)return;if(e.key==='Escape')hide();
     // Tab ходит по кругу внутри открытого окна
@@ -1003,18 +1086,19 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     var rvs=[].slice.call(document.querySelectorAll('.flowcol>section'));
     rvs.forEach(function(el){el.classList.add('rv');
       // что поднимается по очереди внутри раздела
-      [].forEach.call(el.querySelectorAll('#stats>div,.story,.sub,.reasons>div,.dipl,details.svc,.steps,details.case,.doc,.gift,.qa'),function(x,i){x.classList.add('st');x.style.setProperty('--i',i)})});
+      [].forEach.call(el.querySelectorAll('#stats>div,.story,.sub,.reasons>div,.dipl,details.svc,.steps,details.case,[data-cat],.qa'),function(x,i){x.classList.add('st');x.style.setProperty('--i',i)})});
     // цифры досчитываются до своего значения
-    var countUp=function(){[].forEach.call(document.querySelectorAll('#stats .n'),function(n){var raw=n.textContent,to=parseFloat(raw.replace(',','.')),dec=(raw.split(',')[1]||'').length,t0=0;
+    var countUp=function(sel){[].forEach.call(document.querySelectorAll(sel),function(n){var raw=n.textContent,to=parseFloat(raw.replace(',','.')),dec=(raw.split(',')[1]||'').length,t0=0;
       if(isNaN(to))return;
       (function tick(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1800),v=to*(1-Math.pow(1-p,3));n.textContent=v.toFixed(dec).replace('.',',');if(p<1)requestAnimationFrame(tick);else n.textContent=raw})(performance.now())})};
+    setTimeout(function(){countUp('#brand .n')},900);
     // контурные слова чуть плывут вбок при прокрутке
     var ghosts=[].slice.call(document.querySelectorAll('[data-ghost]')),gt=0;
     var drift=function(){gt=0;var vh=innerHeight;ghosts.forEach(function(g){var r=g.getBoundingClientRect();if(r.bottom<-200||r.top>vh+200)return;
       g.style.setProperty('--gx',((r.top-vh*.3)/vh*-3).toFixed(2))})};
     addEventListener('scroll',function(){if(!gt)gt=requestAnimationFrame(drift)},{passive:true});
     // всё, что уже на экране или выше него, показываем сразу: блок не может остаться невидимым
-    var rchk=function(){var h=innerHeight*.86;rvs=rvs.filter(function(el){if(el.getBoundingClientRect().top<h){el.classList.add('in');if(el.id==='stats')countUp();return false}return true});
+    var rchk=function(){var h=innerHeight*.86;rvs=rvs.filter(function(el){if(el.getBoundingClientRect().top<h){el.classList.add('in');if(el.id==='stats')countUp('#stats .n');return false}return true});
       if(!rvs.length){removeEventListener('scroll',rchk);removeEventListener('resize',rchk)}};
     addEventListener('scroll',rchk,{passive:true});addEventListener('resize',rchk);rchk();
   }
