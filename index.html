@@ -144,17 +144,20 @@ h2{font-size:clamp(40px,5vw,64px)}
 /* ========== ПРАВАЯ КОЛОНКА: ролики и их цифры ========== */
 .rail{position:sticky;top:68px;height:calc(100dvh - 68px);padding:18px 0 0;overflow-x:visible;overflow-y:clip;display:flex;flex-direction:column;gap:16px;isolation:isolate}
 /* ролик лежит на красном круге и выходит за него; в просвете между колонками вертикальное слово */
-/* Правая часть светится, а не залита: красное зарево снизу, неоновые лучи через экран смешением screen, неоновое слово */
-.rail::before{content:"";position:absolute;inset:-68px -50vw 0 -150px;z-index:-3;pointer-events:none;background:radial-gradient(58% 48% at 60% 106%,rgba(227,38,45,.7),rgba(227,38,45,0) 72%),radial-gradient(34% 30% at 84% 66%,rgba(255,96,60,.24),transparent 70%),radial-gradient(46% 30% at 34% 6%,rgba(227,38,45,.17),transparent 72%)}
-.rail::after{content:"GRIDZAKON";position:absolute;right:-96px;top:64%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 clamp(150px,24vh,250px)/.78 var(--f-cover);letter-spacing:.01em;white-space:nowrap;color:transparent;-webkit-text-stroke:1.5px rgba(255,70,70,.3);filter:drop-shadow(0 0 14px rgba(227,38,45,.6));pointer-events:none}
-.beams{position:absolute;inset:-68px -46% 0 -34%;width:180%;height:calc(100% + 68px);z-index:-2;pointer-events:none;mix-blend-mode:screen;overflow:visible}
-.beams line{vector-effect:non-scaling-stroke;stroke-linecap:round}
-.beams .halo{stroke:#e3262d;stroke-width:14;opacity:.55;filter:url(#bl14)}
-.beams .tube{stroke:#ff3b42;stroke-width:3;opacity:.9;filter:url(#bl3)}
-.beams .core{stroke:#ffe1dd;stroke-width:1}
-.beams .run{stroke:#fff;stroke-width:2.5;stroke-dasharray:36 964;filter:url(#bl3);animation:run 7s linear infinite}
-.beams .run:nth-of-type(2n){animation-duration:10s;animation-delay:-3s}
-@keyframes run{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+/* ФОН ПРАВОЙ ЧАСТИ: три варианта на выбор, переключаются атрибутом data-bg у .rail (временный переключатель внизу слева) */
+.rail::before,.rail::after{content:"";position:absolute;pointer-events:none}
+/* A. Прожектор: один источник света сверху справа, луч падает на ролик, под роликом красный отсвет от пола */
+.rail[data-bg="a"]::before{inset:-68px -50vw 0 -200px;z-index:-3;background:radial-gradient(54% 24% at 50% 100%,rgba(227,38,45,.7),transparent 72%)}
+.rail[data-bg="a"] .rail-body::after{content:"";position:absolute;inset:-170px -60px -40px -190px;z-index:5;pointer-events:none;mix-blend-mode:screen;filter:blur(8px);background:conic-gradient(from 198deg at 97% 0%,transparent 0deg,rgba(255,236,226,.12) 8deg,rgba(255,236,226,.62) 21deg,rgba(255,236,226,.18) 34deg,transparent 50deg)}
+/* B. Плакат: без света вообще. Огромное красное слово стоит за роликом, ролик его перекрывает */
+.rail[data-bg="b"]::after{content:"GRIDZAKON";right:calc(100% + 2px);top:50%;transform:translateY(-46%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 min(104px,6.6vw)/.8 var(--f-cover);letter-spacing:.005em;white-space:nowrap;color:var(--red)}
+/* C. Свет от самого видео: за роликом его же кадр, сильно размытый. Фон принимает цвета текущего ролика и меняется вместе с ним */
+.amb{display:none;position:absolute;left:-24%;top:-6%;width:150%;height:122%;z-index:-1;object-fit:cover;filter:blur(60px) saturate(2.1) brightness(1.15);opacity:1;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 55%,transparent);mask-image:radial-gradient(closest-side,#000 55%,transparent)}
+.rail[data-bg="c"] .amb{display:block}
+.bgpick{position:fixed;left:16px;bottom:16px;z-index:45;display:flex;align-items:center;gap:6px;padding:8px 10px 8px 14px;border-radius:999px;background:rgba(21,23,26,.9);border:1px solid var(--line);font:500 13px var(--f-head);color:var(--mute)}
+.bgpick button{font:600 13px var(--f-head);width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--fg);cursor:pointer}
+.bgpick button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+@media (max-width:1000px){.bgpick{display:none}}
 .side-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .rail .side-head small{color:var(--mute)}
 .rail .soc-row a{border-color:rgba(255,255,255,.22);color:#fff}
@@ -206,7 +209,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 .reel{border:0;border-radius:8px}
 @property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
 .slide .card{--r:22px}
-.slide .reel{border-radius:var(--r);box-shadow:0 0 0 1px rgba(255,255,255,.07),0 50px 130px -24px rgba(227,38,45,.6),0 30px 60px -30px #000}
+.slide .reel{border-radius:var(--r);box-shadow:0 0 0 1px rgba(255,255,255,.07),0 34px 70px -28px #000}
 .slide .card::before{content:"";position:absolute;inset:-2px;z-index:3;border-radius:calc(var(--r) + 2px);padding:2px;background:conic-gradient(from var(--a),transparent 0 58%,rgba(255,80,72,.95) 76%,#fff 84%,rgba(255,80,72,.95) 91%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:edge 8s linear infinite;pointer-events:none}
 @keyframes edge{to{--a:360deg}}
 .ig{position:absolute;inset:0;z-index:2;border-radius:var(--r);overflow:hidden;pointer-events:none;color:#fff;background:linear-gradient(rgba(0,0,0,.62),rgba(0,0,0,0) 190px)}
@@ -396,7 +399,7 @@ footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line
   .flowcol{display:contents}
   .hero{order:1;min-height:0;padding-block:20px 0}
   .rail{order:2;position:static;height:auto;padding:36px 0 0}
-  .rail::before,.rail::after,.beams,.slide+.slide{display:none}
+  .rail::before,.rail::after,.amb,.slide+.slide{display:none!important}
   .brand{margin:18px 0 6px}
   .brand b i{color:var(--red)}
   .rail .soc-row a{border-color:var(--line);color:var(--mute)}
@@ -665,7 +668,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
  </div>
 
  <!-- Правая колонка: всегда ролики -->
- <aside class="rail" id="rail" aria-label="Ролики Алексея">
+ <aside class="rail" id="rail" data-bg="a" aria-label="Ролики Алексея">
    <div class="side-head">
      <div><b>@gridzakon</b><small>закон и правовые лайфхаки</small></div>
      <div class="soc-row">
@@ -676,26 +679,9 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
        <a href="https://vk.com/gridzakon" target="_blank" rel="noopener" aria-label="ВКонтакте"><svg><use href="#i-vk"/></svg></a>
      </div>
    </div>
-   <svg class="beams" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
-     <defs>
-       <filter id="bl14" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16"/></filter>
-       <filter id="bl3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
-       <g id="rays">
-         <line x1="250" y1="1000" x2="470" y2="-20" pathLength="1000"/>
-         <line x1="330" y1="1000" x2="455" y2="420" pathLength="1000"/>
-         <line x1="760" y1="1000" x2="965" y2="60" pathLength="1000"/>
-         <line x1="860" y1="700" x2="950" y2="290" pathLength="1000"/>
-         <line x1="150" y1="780" x2="1000" y2="610" pathLength="1000"/>
-       </g>
-     </defs>
-     <use href="#rays" class="halo"/><use href="#rays" class="tube"/><use href="#rays" class="core"/>
-     <line class="run" x1="250" y1="1000" x2="470" y2="-20" pathLength="1000"/>
-     <line class="run" x1="760" y1="1000" x2="965" y2="60" pathLength="1000"/>
-     <line class="run" x1="150" y1="780" x2="1000" y2="610" pathLength="1000"/>
-   </svg>
    <div class="brand" id="brand" aria-label="Алексей в соцсетях"></div>
    <div class="rail-body" id="railBody">
-     <div class="slide"><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
+     <div class="slide"><img class="amb" id="amb0" alt=""><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
    </div>
  </aside>
 </main>
@@ -944,7 +930,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   function fmt(n){return String(n).replace(/\B(?=(\d{3})+$)/g,'\u00a0')}
   var AVA=SITE.photos.avatar?'<img src="'+esc(SITE.photos.avatar)+'" alt=""'+(SITE.avatarCrop?' style="object-position:'+SITE.avatarCrop+';transform:scale('+(SITE.avatarZoom||1)+')"':'')+'>':'';
   function soloHTML(i,k,n){var r=R[i],bars='';for(var j=0;j<n;j++)bars+='<i'+(j<=k?' class="on"':'')+'></i>';
-    return '<div class="card">'+soloBtn(i)+'<div class="ig" aria-hidden="true"><div class="bars">'+bars+'</div><div class="ighead"><span class="igava"><span>'+AVA+'</span></span>gridzakon<small>Reels</small></div>'
+    return (rImg(r)?'<img class="amb" src="'+esc(rImg(r))+'" alt="">':'')+'<div class="card">'+soloBtn(i)+'<div class="ig" aria-hidden="true"><div class="bars">'+bars+'</div><div class="ighead"><span class="igava"><span>'+AVA+'</span></span>gridzakon<small>Reels</small></div>'
       +(r[2]?'<div class="igviews">'+EYE+'<b class="cv">'+(r[8]?fmt(r[8]):esc(r[2]))+'</b>просмотров</div>':'')
       +(r[7]?'<div class="igact"><span class="hrt">'+HEART+'</span><b class="cl">'+(r[9]?fmt(r[9]):esc(r[7]))+'</b><i class="plus">+1</i></div>':'')
       +'<span class="igplay"><svg><use href="#i-play"/></svg></span></div></div>'}
@@ -971,6 +957,12 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     railTo=p;if(!railRaf)railRaf=requestAnimationFrame(railStep)}
   addEventListener('scroll',railAim,{passive:true});addEventListener('resize',railAim);railAim();
   function setRail(){}
+  if(rImg(R[0]))$('amb0').src=rImg(R[0]);
+  // ВРЕМЕННО: переключатель трёх вариантов фона правой части. Удалить вместе с .bgpick, когда вариант выбран
+  document.body.insertAdjacentHTML('beforeend','<div class="bgpick">Фон справа<button data-b="a">A</button><button data-b="b">B</button><button data-b="c">C</button></div>');
+  function bgSet(v){railEl.dataset.bg=v;document.querySelectorAll('.bgpick button').forEach(function(x){x.classList.toggle('on',x.dataset.b===v)});try{localStorage.setItem('gz-bg',v)}catch(e){}}
+  document.querySelector('.bgpick').addEventListener('click',function(e){if(e.target.dataset.b)bgSet(e.target.dataset.b)});
+  var bg0='a';try{bg0=localStorage.getItem('gz-bg')||'a'}catch(e){}bgSet(/^[abc]$/.test(bg0)?bg0:'a');
   // просмотры понемногу растут, время от времени ставится лайк (декоративная имитация, стартует от настоящих чисел)
   var live=slides.map(function(sl,i){if(!i)return null;var r=R[SITE.rail[railSecs[i-1].id]];return r[8]?{v:r[8],l:r[9],cv:sl.querySelector('.cv'),cl:sl.querySelector('.cl'),pl:sl.querySelector('.igact')}:null});
   function replay(el,c){el.classList.remove(c);void el.offsetWidth;el.classList.add(c)}
