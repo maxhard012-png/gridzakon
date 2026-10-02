@@ -6,6 +6,10 @@
 <meta name="description" content="Алексей Гридасов, юрист в Москве и области. Договоры, суды, консультации простым языком. Запись на консультацию онлайн.">
 <meta name="theme-color" content="#0c0d0f">
 <meta name="robots" content="noindex">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GridZakon">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Алексей Гридасов: юрист для своих">
 <meta property="og:description" content="Договоры, суды и консультации простым языком. Москва и область, онлайн по всей России.">
@@ -52,8 +56,12 @@ body{font-synthesis:none}
 /* плёночное зерно: настоящий фрактальный шум, связывает тёмную и светящуюся части в одну картинку */
 body::after{content:"";position:fixed;inset:0;z-index:35;pointer-events:none;opacity:.1;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 [hidden]{display:none!important}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0;padding-inline:16px;padding-block:0 0;overflow-x:clip;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* iPhone: без серой вспышки при тапе, без системного вида у кнопок и полей, отступы под вырез экрана */
+*{-webkit-tap-highlight-color:transparent}
+button,select,textarea,input:not([type=radio]):not([type=checkbox]){-webkit-appearance:none;appearance:none}
+label.f select{padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238a8f96' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 16px center!important;background-size:12px 8px!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0;padding-inline:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right));padding-block:0 0;overflow-x:hidden;overflow-x:clip;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .wrap{max-width:1280px;margin:0 auto}
 h1,h2,h3{font-family:var(--f-disp);font-weight:900;letter-spacing:-.005em;line-height:.94;text-transform:uppercase;text-wrap:balance;margin:0}
@@ -87,7 +95,7 @@ h1 .hl,h2 .hl,h3 .hl{display:block;font-family:var(--f-wide);font-weight:500;fon
 .link.tg svg{width:19px;height:19px;flex:none}
 
 /* nav */
-nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);margin-inline:-16px;padding:14px 16px}
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);margin-inline:-16px;padding:14px 16px}
 nav.top .wrap{position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .logo{font:800 24px/1 var(--f-disp);letter-spacing:.01em;text-transform:uppercase;text-decoration:none}
 .logo span{color:var(--red)}
@@ -404,6 +412,19 @@ details.case summary::-webkit-details-marker{display:none}
 .copyrow button{font:500 13px var(--f-head);background:none;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
 footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line);font-size:13px;color:var(--mute);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 24px}
 
+/* сенсорные экраны: наведения нет, поэтому эффекты «под курсором» не должны залипать после тапа; зерно выключено ради плавной прокрутки */
+@media (hover:none){
+  body::after{display:none}
+  .reel:hover{transform:none;border-color:transparent}
+  .svc summary:hover{transform:none}
+  .svc summary:hover h3{color:inherit}
+  .svc summary:hover i{background:none;border-color:var(--line);color:inherit}
+  details.svc:hover::before{transform:scaleY(0)}
+  details.svc[open]::before{transform:scaleY(1)}
+  .svc[open] summary i{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+  .btn:hover .ar{transform:none}
+}
+
 /* ========== узкие экраны: ролики лентой под первым экраном ========== */
 @media (max-width:1000px){
   .page{display:flex;flex-direction:column;align-items:stretch}
@@ -421,7 +442,11 @@ footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line
   .feed,.rail.is-solo .feed{position:static;opacity:1;pointer-events:auto;display:flex;overflow-x:auto;-webkit-mask-image:none;mask-image:none;margin-inline:-16px;padding-inline:16px;scroll-snap-type:x mandatory;scrollbar-width:none}
   .col{display:contents;animation:none}
   .col .dup{display:none}
-  .feed .reel{flex:0 0 172px;width:172px;scroll-snap-align:start}
+  /* ролики на телефоне: крупная карусель, один ролик в центре, соседние выглядывают по краям */
+  .feed{gap:12px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scroll-padding-inline:16px}
+  .feed .reel{flex:0 0 min(66vw,300px);width:min(66vw,300px);scroll-snap-align:center;border-radius:16px;padding:14px}
+  .feed .reel .meta{font-size:14px;gap:6px 14px}
+  .feed .reel .meta svg{width:15px;height:15px}
   .flowcol>section{order:3}
   .flowcol>footer{order:4}
   #stats{margin-top:44px}
@@ -431,6 +456,23 @@ footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line
   .hero .lead{font-size:17px;margin:20px 0 28px}
 }
 @media (max-width:700px){
+  .menu-btn{min-height:44px;padding:0 18px}
+  .soc-row{gap:8px}
+  .soc-row a{width:44px;height:44px}
+  .side-head{flex-wrap:wrap}
+  .dipl button,.chip,.tpl button,.copyrow button{min-height:44px}
+  .ways a{min-height:56px}
+  .brand{gap:8px 12px}
+  .brand b{font-size:clamp(34px,10.5vw,48px)}
+  .brand span{font-size:10.5px;letter-spacing:.06em}
+  .idx{margin-bottom:16px}
+  /* формы как нижний лист iOS: на всю ширину, скруглён только верх, отступ под полоску «домой» */
+  #modal,#omodal,#gmodal{place-items:end stretch;padding:0}
+  .sheet{max-width:none;border-radius:26px 26px 0 0;border-width:1px 0 0;padding:14px 20px calc(22px + env(safe-area-inset-bottom));max-height:calc(100vh - 44px);max-height:calc(100dvh - 44px - env(safe-area-inset-top));animation:sheetUp .42s cubic-bezier(.2,.8,.2,1)}
+  .sheet::before{content:"";justify-self:center;width:38px;height:5px;border-radius:3px;background:var(--line)}
+  .sheet .nav .btn{flex:1;justify-content:space-between}
+  .cat{padding-inline:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right));padding-bottom:calc(60px + env(safe-area-inset-bottom))}
+  .cat-top{padding-top:calc(14px + env(safe-area-inset-top))}
   .cta{gap:18px}
   .cta .btn{width:100%;justify-content:space-between}
   #stats{grid-template-columns:1fr}
@@ -468,8 +510,8 @@ footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line
 }
 
 /* modals */
-.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:grid;place-items:center;padding:16px}
-.sheet{width:100%;max-width:460px;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px;display:grid;gap:20px;max-height:calc(100dvh - 32px);overflow:auto}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:grid;place-items:center;padding:16px}
+.sheet{width:100%;max-width:460px;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px;display:grid;gap:20px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .sheet .top{display:flex;justify-content:space-between;align-items:center}
 .x{background:none;border:1px solid var(--line);color:var(--fg);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px}
 .bar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
@@ -495,7 +537,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 .done{text-align:center;display:grid;gap:12px;justify-items:center}
 .done .okc{width:60px;height:60px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:26px}
 .vsheet{width:100%;max-width:400px;display:grid;gap:14px}
-.vframe{position:relative;aspect-ratio:9/16;max-height:70dvh;max-width:100%;margin:0 auto;border-radius:24px;overflow:hidden;background:radial-gradient(120% 55% at 50% 108%,rgba(227,38,45,.42),transparent 62%),#131417;border:1px solid var(--line);display:flex;flex-direction:column;padding:22px}
+.vframe{position:relative;aspect-ratio:9/16;max-height:70vh;max-height:70dvh;max-width:100%;margin:0 auto;border-radius:24px;overflow:hidden;background:radial-gradient(120% 55% at 50% 108%,rgba(227,38,45,.42),transparent 62%),#131417;border:1px solid var(--line);display:flex;flex-direction:column;padding:22px}
 .vframe>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .vframe.has-img .cover,.vframe.has-img .pf{visibility:hidden}
 .vframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2}
@@ -515,6 +557,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 .dscan b{display:block;font:800 34px/1 var(--f-disp);text-transform:uppercase;margin-bottom:6px}
 
 @keyframes rise{from{transform:translateY(16px)}to{transform:none}}
+@keyframes sheetUp{from{transform:translateY(100%)}}
 /* блоки мягко появляются при прокрутке (класс ставит скрипт) */
 /* ДВИЖЕНИЕ. Четыре приёма на весь сайт, у каждого своя роль:
    1) заголовки выезжают из-за маски, 2) строки списков поднимаются по очереди,
@@ -1006,10 +1049,14 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   }
 
   // ---------- модалки ----------
-  var openM=null,lastF=null;
-  function show(m){if(openM)openM.hidden=true;else lastF=document.activeElement;m.hidden=false;openM=m;document.body.style.overflow='hidden';
+  var openM=null,lastF=null,lockY=0,locked=false;
+  // overflow:hidden на body в iOS Safari фон не останавливает, поэтому страница на время окна фиксируется целиком
+  function lock(on){if(on===locked)return;locked=on;var b=document.body.style,h=document.documentElement.style;
+    if(on){lockY=scrollY;b.position='fixed';b.top=-lockY+'px';b.left='0';b.right='0'}
+    else{b.position=b.top=b.left=b.right='';h.scrollBehavior='auto';scrollTo(0,lockY);h.scrollBehavior=''}}
+  function show(m){if(openM)openM.hidden=true;else lastF=document.activeElement;m.hidden=false;openM=m;lock(true);
     var c=m.querySelector('[data-close]');if(c)c.focus({preventScroll:true})}
-  function hide(){if(openM){var v=openM.querySelector('video');if(v)v.pause();var f=openM.querySelector('iframe');if(f)f.remove();openM.hidden=true;openM=null}document.body.style.overflow=$('cat').hidden?'':'hidden';
+  function hide(){if(openM){var v=openM.querySelector('video');if(v)v.pause();var f=openM.querySelector('iframe');if(f)f.remove();openM.hidden=true;openM=null}lock(!$('cat').hidden);
     if(lastF&&lastF.focus)lastF.focus({preventScroll:true});lastF=null}
   document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)hide()})});
   document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=hide});
@@ -1098,7 +1145,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   $('catGrid').addEventListener('click',function(e){var b=e.target.closest('[data-tpl]');if(!b)return;var t=T[+b.dataset.tpl];
     if(t[2]){$('oform').reset();$('otitle').textContent=t[0];$('oprice').textContent=money(t[2]);$('oask').hidden=false;$('odone').hidden=true;$('oerr').textContent='';show($('omodal'))}
     else{giftDoc=t[0];$('gform').reset();$('gdoc').textContent=t[0]+' в Word. Пришлю в Telegram.';$('gask').hidden=false;$('gdone').hidden=true;$('gerr').textContent='';show($('gmodal'))}});
-  function catSync(){var on=location.hash==='#templates';catEl.hidden=!on;if(!openM)document.body.style.overflow=on?'hidden':'';if(on){catDraw();catEl.scrollTop=0}}
+  function catSync(){var on=location.hash==='#templates';catEl.hidden=!on;if(!openM)lock(on);if(on){catDraw();catEl.scrollTop=0}}
   document.querySelectorAll('[data-cat]').forEach(function(b){b.addEventListener('click',function(){location.hash='templates'})});
   $('catBack').onclick=function(){if(history.length>1)history.back();else{location.hash='';catSync()}};
   addEventListener('hashchange',catSync);catSync();
