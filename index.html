@@ -86,6 +86,8 @@ h1 .hl,h2 .hl,h3 .hl{display:block;font-family:var(--f-wide);font-weight:500;fon
 .btn .ar{flex:none;width:40px;height:40px;border-radius:50%;background:var(--bg);color:var(--fg);display:grid;place-items:center;transition:transform .25s}
 .btn:hover .ar{transform:rotate(-45deg)}
 .btn:hover{background:#fff}
+.btn:active{transform:scale(.975)}
+.btn{transition:background .2s,transform .15s}
 .btn.dark{background:var(--bg);color:var(--fg)}
 .btn.dark .ar{background:var(--fg);color:var(--bg)}
 .btn.dark:hover{background:#000}
@@ -102,6 +104,9 @@ nav.top .wrap{position:relative;display:flex;align-items:center;justify-content:
 .navlinks{display:flex;gap:28px;font-size:14px}
 .navlinks a{text-decoration:none;color:var(--mute);transition:color .2s}
 .navlinks a:hover,.navlinks a.on{color:var(--fg)}
+.navlinks a{position:relative}
+.navlinks a::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:2px;background:var(--red);transform:scaleX(0);transform-origin:0 50%;transition:transform .35s cubic-bezier(.2,.7,.1,1)}
+.navlinks a.on::after{transform:scaleX(1)}
 .menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--fg);font:500 14px var(--f-head);border-radius:999px;padding:8px 16px;cursor:pointer}
 @media (max-width:900px){
   .navlinks{display:none}
@@ -120,7 +125,7 @@ section{padding-block:96px}
 /* ========== КАРКАС: слева текст с воздухом, справа всегда видео ========== */
 .page{display:grid;grid-template-columns:minmax(0,1fr) minmax(400px,43%);column-gap:clamp(64px,7vw,104px);align-items:start}
 .flowcol{min-width:0}
-section{padding-block:0;margin-top:clamp(120px,14vw,176px)}
+section{padding-block:0;margin-top:clamp(150px,17vw,230px)}
 h2{font-size:clamp(40px,5vw,64px)}
 /* гигантское контурное слово за заголовком, уходит под колонку с роликом */
 .flowcol>section,.hero{position:relative}
@@ -212,8 +217,9 @@ h2{font-size:clamp(40px,5vw,64px)}
 /* ролики справа: стопка, которая листается вместе с прокруткой страницы, без рывков */
 .slide{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center;will-change:transform,opacity}
 .slide+.slide{visibility:hidden}
-.slide .card{position:relative;width:min(100%,500px);margin-top:8px;transform-origin:50% 0;transform:rotate(-2deg);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
-.slide .card:hover{transform:rotate(0)}
+.slide .card{position:relative;width:min(100%,500px);margin-top:8px;transform-origin:50% 22%;transform:perspective(1200px) rotate(-2deg) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .7s cubic-bezier(.2,.7,.1,1)}
+.ig::after{content:"";position:absolute;inset:0;background:radial-gradient(460px circle at var(--mx,50%) var(--my,20%),rgba(255,255,255,.17),transparent 62%);opacity:0;transition:opacity .5s}
+.card:hover .ig::after{opacity:1}
 .slide .reel{width:100%;border-radius:24px;padding:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
 .slide .reel:hover{transform:none}
 /* ролик оформлен как Reels: полоски серий, шапка аккаунта, просмотры и лайк поверх видео.
@@ -295,6 +301,8 @@ details.svc{border-top:1px solid var(--line)}
 .svc .price{grid-column:2;grid-row:1/3;font:600 16px var(--f-head);letter-spacing:-.01em;white-space:nowrap}
 .svc summary i,.case .more i{font-style:normal;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:16px;transition:transform .3s,background .3s,color .3s}
 .svc summary i{grid-column:3;grid-row:1/3}
+/* пока строка сворачивается, значок уже возвращается в «плюс» */
+details.cl summary i,details.cl .more i{transform:none!important;background:none!important;border-color:var(--line)!important;color:inherit!important}
 .svc[open] summary i,details.case[open] .more i{transform:rotate(45deg);background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .svc .in{padding:0 0 28px}
 .svc ul{margin:0 0 18px;padding-left:18px;color:var(--mute)}
@@ -328,6 +336,21 @@ details.svc:hover::before,details.svc[open]::before{transform:scaleY(1)}
 .steps{font-family:var(--f-mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
 footer{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.02em}
 
+/* порядок работы: вертикальная шкала, красная линия растёт вместе с прокруткой, пройденные шаги загораются */
+.proc{margin-top:76px}
+.proc h3{font-size:clamp(28px,3vw,38px);margin-bottom:30px}
+.proc ol{position:relative;list-style:none;margin:0;padding:0 0 0 36px;--p:0}
+.proc ol::before{content:"";position:absolute;left:4px;top:8px;bottom:8px;width:1px;background:var(--line)}
+.proc ol::after{content:"";position:absolute;left:3px;top:8px;width:3px;border-radius:2px;height:calc((100% - 16px)*var(--p));background:var(--red);transition:height .25s linear}
+.proc li{position:relative;display:grid;grid-template-columns:44px minmax(0,1fr);column-gap:8px;padding:0 0 30px}
+.proc li:last-child{padding-bottom:0}
+.proc li::before{content:"";position:absolute;left:-36px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1px solid var(--mute);transition:background .4s,border-color .4s,transform .4s cubic-bezier(.2,.7,.1,1)}
+.proc li.on::before{background:var(--red);border-color:var(--red);transform:scale(1.3)}
+.proc em{font:500 13px/1 var(--f-mono);font-style:normal;letter-spacing:.06em;color:var(--red-hi);padding-top:4px}
+.proc b{font:600 18px/1.2 var(--f-head);letter-spacing:-.01em;color:var(--mute);transition:color .4s}
+.proc li.on b{color:var(--fg)}
+.proc li>span{grid-column:2;margin-top:5px;font-size:15px;line-height:1.5;color:var(--mute)}
+
 /* ========== 4. КЕЙСЫ ========== */
 .cases{margin-top:44px;border-bottom:1px solid var(--line)}
 details.case{border-top:1px solid var(--line);padding:30px 0}
@@ -337,7 +360,7 @@ details.case summary::-webkit-details-marker{display:none}
 .case p{grid-column:1;margin:0;color:var(--mute);max-width:48ch}
 .case .law{grid-column:1;justify-self:start;font:500 12.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);border:1px solid var(--line);padding:6px 9px;border-radius:4px}
 .case .more{grid-column:2;grid-row:1;font-size:0}
-.cbody{display:grid;gap:14px;margin-top:24px;max-width:52ch}
+.cbody{display:grid;gap:14px;padding-top:24px;max-width:52ch}
 .cbody div{display:grid;gap:2px}
 .cbody b{font:600 12px var(--f-head);color:var(--red-hi);letter-spacing:.04em;text-transform:uppercase}
 .cbody span{font-size:15px}
@@ -557,6 +580,15 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 .dscan b{display:block;font:800 34px/1 var(--f-disp);text-transform:uppercase;margin-bottom:6px}
 
 @keyframes rise{from{transform:translateY(16px)}to{transform:none}}
+.modal:not([hidden]){animation:mfade .28s ease both}
+@keyframes mfade{from{opacity:0}}
+@media (min-width:701px){.modal:not([hidden]) .sheet,.modal:not([hidden]) .dsheet{animation:mpop .4s cubic-bezier(.2,.7,.1,1) both}}
+.modal:not([hidden]) .vsheet{animation:mpop .4s cubic-bezier(.2,.7,.1,1) both}
+@keyframes mpop{from{opacity:0;transform:translateY(16px) scale(.975)}}
+.cat:not([hidden]){animation:mfade .3s ease both}
+.cat:not([hidden]) .wrap>*{animation:riseIn .6s cubic-bezier(.2,.7,.1,1) both}
+.cat:not([hidden]) .wrap>*:nth-child(n+3){animation-delay:.08s}
+.cat:not([hidden]) .cat-grid{animation-delay:.16s}
 @keyframes sheetUp{from{transform:translateY(100%)}}
 /* блоки мягко появляются при прокрутке (класс ставит скрипт) */
 /* ДВИЖЕНИЕ. Четыре приёма на весь сайт, у каждого своя роль:
@@ -677,9 +709,16 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
       <details class="svc"><summary><h3>Для бизнеса</h3><span class="d">Абонентское обслуживание для ИП и компаний.</span><span class="price"><small>от</small>20 000 ₽<small>/мес</small></span><i>+</i></summary>
         <div class="in"><ul><li>Вопросы в мессенджере без ограничений</li><li>Проверка договоров и счетов</li><li>Претензионная работа</li></ul><button class="link" data-open data-pick="Абонентское обслуживание">Подключить</button></div></details>
     </div>
-    <ol class="steps" aria-label="Порядок работы">
-      <li><em>01</em>Заявка</li><li><em>02</em>Разбор</li><li><em>03</em>Договор</li><li><em>04</em>Работа</li><li><em>05</em>Результат</li>
-    </ol>
+    <div class="proc">
+      <h3>Как <span class="thin">работаем</span></h3>
+      <ol id="proc">
+        <li><em>01</em><b>Заявка</b><span>На сайте или в Telegram. Отвечаю в течение дня.</span></li>
+        <li><em>02</em><b>Разбор</b><span>Изучаю документы и называю шансы.</span></li>
+        <li><em>03</em><b>Договор</b><span>Фиксируем объём работы и цену.</span></li>
+        <li><em>04</em><b>Работа</b><span>Вы в курсе каждого шага.</span></li>
+        <li><em>05</em><b>Результат</b><span>Деньги, решение суда или готовый договор.</span></li>
+      </ol>
+    </div>
   </section>
 
   <!-- 4. Кейсы -->
@@ -1017,6 +1056,29 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     railTo=p;if(!railRaf)railRaf=requestAnimationFrame(railStep)}
   addEventListener('scroll',railAim,{passive:true});addEventListener('resize',railAim);railAim();
   function setRail(){}
+  // шкала «Как работаем»
+  var procEl=$('proc'),procLi=procEl?[].slice.call(procEl.children):[];
+  function procAim(){if(!procEl)return;var r=procEl.getBoundingClientRect(),m=innerHeight*.62,p=(m-r.top-8)/(r.height-16);
+    procEl.style.setProperty('--p',(p<0?0:p>1?1:p).toFixed(3));
+    procLi.forEach(function(li){li.classList.toggle('on',li.getBoundingClientRect().top+10<m)})}
+  addEventListener('scroll',procAim,{passive:true});addEventListener('resize',procAim);procAim();
+  // ролик наклоняется за курсором, по нему скользит блик
+  if(matchMedia('(hover:hover)').matches&&!calm){
+    railBody.addEventListener('pointermove',function(e){var c=e.target.closest&&e.target.closest('.card');if(!c)return;
+      var r=c.getBoundingClientRect(),vis=Math.min(r.height,innerHeight-r.top),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/vis;
+      c.style.setProperty('--ry',((x-.5)*8).toFixed(2)+'deg');c.style.setProperty('--rx',((.5-y)*4).toFixed(2)+'deg');
+      c.style.setProperty('--mx',(x*100).toFixed(1)+'%');c.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%')});
+    railBody.addEventListener('pointerleave',function(){[].forEach.call(railBody.querySelectorAll('.card'),function(c){c.style.removeProperty('--rx');c.style.removeProperty('--ry')})})}
+  // строки услуг, кейсов и вопросов раскрываются плавно; в услугах и вопросах открыта только одна
+  function accBody(d){return d.querySelector('.in,.cbody')||d.querySelector('summary').nextElementSibling}
+  function accSet(d,open){var b=accBody(d);if(!b||calm||!b.animate){d.open=open;return}
+    var done=function(){b.style.overflow='';d.classList.remove('cl');dispatchEvent(new Event('scroll'))};b.style.overflow='hidden';
+    if(open){d.open=true;b.animate([{height:'0px',opacity:0},{height:b.offsetHeight+'px',opacity:1}],{duration:380,easing:'cubic-bezier(.2,.7,.1,1)'}).onfinish=done}
+    else{d.classList.add('cl');b.animate([{height:b.offsetHeight+'px',opacity:1},{height:'0px',opacity:0}],{duration:260,easing:'cubic-bezier(.4,0,.2,1)'}).onfinish=function(){d.open=false;done()}}}
+  document.addEventListener('click',function(e){var sm=e.target.closest&&e.target.closest('summary');if(!sm)return;var d=sm.parentNode;
+    if(!d.matches('details.svc,details.case,details.qa'))return;e.preventDefault();var open=!d.open||d.classList.contains('cl');
+    if(open&&d.matches('.qa,.svc'))[].forEach.call(d.parentNode.children,function(x){if(x!==d&&x.open&&!x.classList.contains('cl'))accSet(x,false)});
+    accSet(d,open)});
 
   // просмотры понемногу растут, время от времени ставится лайк (декоративная имитация, стартует от настоящих чисел)
   var live=slides.map(function(sl,i){if(!i)return null;var r=R[SITE.rail[railSecs[i-1].id]];return r[8]?{v:r[8],l:r[9],cv:sl.querySelector('.cv'),cl:sl.querySelector('.cl'),pl:sl.querySelector('.igact')}:null});
@@ -1190,7 +1252,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     var rvs=[].slice.call(document.querySelectorAll('.flowcol>section'));
     rvs.forEach(function(el){el.classList.add('rv');
       // что поднимается по очереди внутри раздела
-      [].forEach.call(el.querySelectorAll('#stats>div,.idx,.story,.sub,.reasons>div,.dipl,details.svc,.steps,details.case,[data-cat],.qa'),function(x,i){x.classList.add('st');x.style.setProperty('--i',i)})});
+      [].forEach.call(el.querySelectorAll('#stats>div,.idx,.story,.sub,.reasons>div,.dipl,details.svc,.proc,details.case,[data-cat],.qa'),function(x,i){x.classList.add('st');x.style.setProperty('--i',i)})});
     // цифры досчитываются до своего значения
     var countUp=function(sel){[].forEach.call(document.querySelectorAll(sel),function(n){var raw=n.textContent,to=parseFloat(raw.replace(',','.')),dec=(raw.split(',')[1]||'').length,t0=0;
       if(isNaN(to))return;
