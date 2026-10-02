@@ -906,7 +906,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
       ['Носи *паспорт*','YouTube','2,2 млн','-7mFIKnAt74','','','','74,8 тыс.',2229020,74807],
       ['Что в *карманах?*','YouTube','2 млн','KtgiC6N-OdA','','','','34,9 тыс.',2048913,34911],
       ['Полиция просит *телефон*','YouTube','806 тыс.','Qn4AaSbcUZw','','','','25,2 тыс.',805890,25192],
-      ['Грязные *бабки*','YouTube','634 тыс.','wp5ojuQ_5dw','','','','9,8 тыс.',634061,9794],
+      ['Говорить ли *«да»?*','YouTube','184 тыс.','TPL1nmW2KYU','','','','6,1 тыс.',183884,6085],
       ['Зовут *просто поговорить*','YouTube','551 тыс.','VZcNqgvh6QU','','','','13,9 тыс.',551128,13852],
       ['Носишь с собой *нож?*','YouTube','450 тыс.','KwJEAxMRHeg','','','','8 тыс.',449693,8000],
       ['Мифы о *признании*','YouTube','413 тыс.','ziGff-U4wEk','','','','8,9 тыс.',412553,8877],
@@ -1131,7 +1131,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 
   // каталог шаблонов
   var T=SITE.templates,catEl=$('cat'),giftDoc='',catF='Все',nFree=T.filter(function(t){return !t[2]}).length;
-  function money(n){return String(n).replace(/\B(?=(\d{3})+$)/g,' ')+' ₽'}
+  function money(n){return String(n).replace(/\B(?=(\d{3})+$)/g,' ')+' ₽'}
   function plural(n,a,b,c){var m=n%100,k=n%10;return m>10&&m<20?c:k===1?a:k>1&&k<5?b:c}
   var catTxt=T.length+' '+plural(T.length,'документ','документа','документов')+' в Word: договоры, претензии, расписки. '+nFree+' '+plural(nFree,'из них бесплатный','из них бесплатно','из них бесплатно')+'.';
   $('docsSub').textContent=catTxt;$('catSub').textContent=catTxt+' Подскажу, как заполнить.';
@@ -1146,8 +1146,10 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     if(t[2]){$('oform').reset();$('otitle').textContent=t[0];$('oprice').textContent=money(t[2]);$('oask').hidden=false;$('odone').hidden=true;$('oerr').textContent='';show($('omodal'))}
     else{giftDoc=t[0];$('gform').reset();$('gdoc').textContent=t[0]+' в Word. Пришлю в Telegram.';$('gask').hidden=false;$('gdone').hidden=true;$('gerr').textContent='';show($('gmodal'))}});
   function catSync(){var on=location.hash==='#templates';catEl.hidden=!on;if(!openM)lock(on);if(on){catDraw();catEl.scrollTop=0}}
-  document.querySelectorAll('[data-cat]').forEach(function(b){b.addEventListener('click',function(){location.hash='templates'})});
-  $('catBack').onclick=function(){if(history.length>1)history.back();else{location.hash='';catSync()}};
+  document.querySelectorAll('[data-cat]').forEach(function(b){b.addEventListener('click',function(){catIn=true;location.hash='templates'})});
+  // по прямой ссылке на каталог «На сайт» не должно уводить с сайта на предыдущую страницу
+  var catIn=false;
+  $('catBack').onclick=function(){if(catIn){catIn=false;history.back()}else{history.replaceState(null,'',location.pathname+location.search);catSync()}};
   addEventListener('hashchange',catSync);catSync();
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!openM&&!catEl.hidden)$('catBack').click()});
 
