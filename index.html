@@ -70,7 +70,7 @@ h2{font-size:clamp(40px,5.6vw,68px)}
 /* сверхтонкий Oswald рядом с обычным: служебные слова заголовка уходят на второй план */
 .thin{font-weight:200}
 /* номер раздела, как нумерация пунктов в документе */
-.idx{display:flex;align-items:center;gap:12px;margin:0 0 20px;font:500 12px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.idx{display:flex;align-items:center;gap:12px;margin:0 0 20px;font:500 13px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
 .idx b{font-weight:500;color:var(--red-hi)}
 .idx::after{content:"";flex:0 0 56px;height:1px;background:var(--line)}
 /* плакатная связка: узкое высокое слово сверху, широкое низкое под ним, обе строки одной ширины */
@@ -139,7 +139,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 .hero h1{font-size:calc(clamp(110px,min(15.4vw,27vh),212px)*var(--h1k,1));line-height:.9}
 .hero h1 .hl{position:relative;overflow:visible;white-space:nowrap;font-size:var(--hlk,.355em);line-height:1.15;margin-top:.14em}
 .hero h1 .hl>span{display:inline-block;position:relative}
-.hero h1 em{display:block;font:500 13px/1.4 var(--f-mono);font-style:normal;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-top:30px}
+.hero h1 em{display:block;font:500 14px/1.4 var(--f-mono);font-style:normal;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-top:30px}
 .hero h1 em span::before{content:"§ ";color:var(--red-hi)}
 .hero .lead{font-size:18px;color:var(--mute);max-width:40ch;margin:20px 0 34px}
 .hero .lead b{color:var(--fg);font-weight:500}
@@ -167,9 +167,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 /* ========== ПРАВАЯ КОЛОНКА: ролики и их цифры ========== */
 .rail{position:sticky;top:68px;height:calc(100dvh - 68px);padding:18px 0 0;overflow-x:visible;overflow-y:clip;display:flex;flex-direction:column;gap:16px;isolation:isolate}
 /* ролик лежит на красном круге и выходит за него; в просвете между колонками вертикальное слово */
-/* фон правой части: без световых эффектов, красное слово в просвете между колонками */
 .rail::before,.rail::after{content:"";position:absolute;pointer-events:none}
-.rail::after{content:"GRIDZAKON";right:calc(100% + 2px);top:50%;transform:translateY(-46%) rotate(180deg);writing-mode:vertical-rl;z-index:-1;font:900 min(104px,6.6vw)/.8 var(--f-cover);letter-spacing:.005em;white-space:nowrap;color:var(--red)}
 .side-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .rail .side-head small{color:var(--mute)}
 .rail .soc-row a{border-color:rgba(255,255,255,.22);color:#fff}
@@ -236,7 +234,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 .igviews{position:absolute;left:16px;top:86px;display:inline-flex;align-items:baseline;gap:8px;padding:9px 15px 8px;border-radius:999px;background:rgba(12,13,15,.5);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.16);font:500 13px var(--f-head)}
 .igviews svg{width:15px;height:15px;align-self:center}
 .igviews b{font:900 24px/1 var(--f-disp);font-variant-numeric:tabular-nums;letter-spacing:.01em}
-.igact{position:absolute;right:14px;top:292px;display:grid;justify-items:center;gap:7px;font:600 12px var(--f-head);text-shadow:0 1px 8px rgba(0,0,0,.7)}
+.igact{position:absolute;right:14px;top:292px;display:grid;justify-items:center;gap:7px;font:600 13px var(--f-head);text-shadow:0 1px 8px rgba(0,0,0,.7)}
 .igact .hrt{width:48px;height:48px;background:rgba(12,13,15,.5);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);color:#fff;transition:background .3s,border-color .3s}
 .igact .hrt svg{width:22px;height:22px}
 .igact.pop .hrt{background:var(--red);border-color:var(--red)}
@@ -278,7 +276,7 @@ h2{font-size:clamp(40px,5vw,64px)}
 .reasons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:52px}
 .reasons div{border-top:1px solid var(--line);padding-top:16px;display:grid;gap:6px;align-content:start}
 .reasons b{font:600 17px var(--f-head);letter-spacing:-.01em}
-.reasons span{font-size:14px;line-height:1.5;color:var(--mute)}
+.reasons span{font-size:15px;line-height:1.5;color:var(--mute)}
 .dipl{display:flex;flex-wrap:wrap;gap:8px;margin-top:40px}
 .dipl button{font:500 14px var(--f-head);color:var(--fg);background:none;border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer;transition:border-color .2s}
 .dipl button:hover{border-color:var(--fg)}
@@ -321,12 +319,12 @@ details.svc:hover::before,details.svc[open]::before{transform:scaleY(1)}
 .svc .in{padding:0 0 32px 60px}
 
 /* роль «документ»: всё служебное набрано моноширинным */
-#stats span,#stats div:first-child span,.brand span{font:500 11.5px/1.45 var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
-#stats div:first-child span{font-size:13px;color:var(--fg)}
+#stats span,#stats div:first-child span,.brand span{font:500 12.5px/1.45 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+#stats div:first-child span{font-size:14px;color:var(--fg)}
 .svc summary::before,.steps em,.svc .price small{font-family:var(--f-mono);font-weight:500;letter-spacing:.06em}
-.svc .price small{font-size:12px;text-transform:uppercase}
-.steps{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase}
-footer{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em}
+.svc .price small{font-size:13px;text-transform:uppercase}
+.steps{font-family:var(--f-mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+footer{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.02em}
 
 /* ========== 4. КЕЙСЫ ========== */
 .cases{margin-top:44px;border-bottom:1px solid var(--line)}
@@ -335,7 +333,7 @@ details.case summary{list-style:none;cursor:pointer;display:grid;grid-template-c
 details.case summary::-webkit-details-marker{display:none}
 .case .res{grid-column:1;font:800 clamp(44px,5vw,60px)/.9 var(--f-disp);text-transform:uppercase}
 .case p{grid-column:1;margin:0;color:var(--mute);max-width:48ch}
-.case .law{grid-column:1;justify-self:start;font:500 11.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);border:1px solid var(--line);padding:6px 9px;border-radius:4px}
+.case .law{grid-column:1;justify-self:start;font:500 12.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);border:1px solid var(--line);padding:6px 9px;border-radius:4px}
 .case .more{grid-column:2;grid-row:1;font-size:0}
 .cbody{display:grid;gap:14px;margin-top:24px;max-width:52ch}
 .cbody div{display:grid;gap:2px}
@@ -354,7 +352,7 @@ details.case summary::-webkit-details-marker{display:none}
 .docs{margin-top:44px;border-bottom:1px solid var(--line)}
 .doc{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:18px;align-items:center;padding:18px 0;border-top:1px solid var(--line)}
 .doc b{font:500 17px var(--f-head);letter-spacing:-.01em}
-.doc small{display:block;color:var(--mute);font-size:13px}
+.doc small{display:block;color:var(--mute);font-size:14px}
 .doc .p{font-variant-numeric:tabular-nums;color:var(--mute);font-size:15px;white-space:nowrap}
 .doc button{font:500 14px var(--f-head);background:none;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer;transition:background .2s,color .2s}
 .doc button:hover{background:var(--fg);color:var(--bg)}
@@ -464,7 +462,7 @@ footer{margin-top:112px;padding-block:28px 120px;border-top:1px solid var(--line
   .ways a{min-height:56px}
   .brand{gap:8px 12px}
   .brand b{font-size:clamp(34px,10.5vw,48px)}
-  .brand span{font-size:10.5px;letter-spacing:.06em}
+  .brand span{font-size:11.5px;letter-spacing:.04em;align-items:flex-start}
   .idx{margin-bottom:16px}
   /* формы как нижний лист iOS: на всю ширину, скруглён только верх, отступ под полоску «домой» */
   #modal,#omodal,#gmodal{place-items:end stretch;padding:0}
@@ -896,7 +894,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     // Слева — цифры практики: [число, единица (красным), подпись]. ПОКА ПРИМЕРНЫЕ, заменить на настоящие
     facts:[['7','лет','юридической практики',''],['300','+','дел в судах и до суда',''],['24','ч','отвечаю на заявку','']],
     // Справа — цифры соцсетей: [число, единица, подпись, значок: ig, yt, tt, tg, vk]. Настоящие, сняты 2 октября 2026
-    social:[['190','K','в Instagram','ig'],['58','K','на YouTube','yt'],['4,1','млн','у одного ролика','eye']],
+    social:[['190','K','Instagram','ig'],['58','K','YouTube','yt'],['17,2','млн','просмотров','eye']],
     // СМИ: [название или путь к логотипу (svg/png), ссылка на выступление]. Пустой список = полоса скрыта
     media:[],
     // Ролики: [название (*слово* = красная плашка), площадка, просмотры, ID на YouTube, своя ссылка, свой mp4, своя обложка, лайки, точное число просмотров, точное число лайков (для живых счётчиков)]
