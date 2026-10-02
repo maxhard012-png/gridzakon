@@ -558,6 +558,8 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 .consent a{color:inherit}
 .err{color:var(--red-hi);font-size:14px;min-height:1em;margin:0}
 .done{text-align:center;display:grid;gap:12px;justify-items:center}
+.done .tgo{margin-top:6px}
+.copyme{width:100%;margin:2px 0 0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--bg);font:400 13px/1.55 var(--f-mono);color:var(--fg);text-align:left;white-space:pre-wrap;overflow-wrap:anywhere;user-select:all;-webkit-user-select:all}
 .done .okc{width:60px;height:60px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:26px}
 .vsheet{width:100%;max-width:400px;display:grid;gap:14px}
 .vframe{position:relative;aspect-ratio:9/16;max-height:70vh;max-height:70dvh;max-width:100%;margin:0 auto;border-radius:24px;overflow:hidden;background:radial-gradient(120% 55% at 50% 108%,rgba(227,38,45,.42),transparent 62%),#131417;border:1px solid var(--line);display:flex;flex-direction:column;padding:22px}
@@ -840,7 +842,6 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
       <div class="okc">✓</div>
       <h3>Заявка принята</h3>
       <p class="muted" style="margin:0">Алексей ответит в течение дня в удобном мессенджере.</p>
-      <p class="ex preview-note" style="margin:0">В превью заявка никуда не отправляется. На сайте подключим отправку в Telegram.</p>
     </div>
     <p class="err" id="err"></p>
     <div data-consent hidden><p class="ex consent" style="margin:0">Отправляя форму, вы соглашаетесь на <a href="#" data-policy>обработку персональных данных</a>.</p></div>
@@ -884,7 +885,6 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     <div id="odone" class="done" hidden>
       <div class="okc">✓</div><h3>Заказ принят</h3>
       <p class="muted" style="margin:0">Алексей пришлёт договор и ссылку на оплату в течение дня.</p>
-      <p class="ex preview-note" style="margin:0">В превью ничего не отправляется.</p>
     </div>
   </form>
 </div>
@@ -892,7 +892,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 <!-- подарок -->
 <div class="modal" id="gmodal" hidden role="dialog" aria-modal="true" aria-labelledby="gtitle">
   <form class="sheet" id="gform" novalidate>
-    <div class="top"><span class="label">Подарок</span><button class="x" type="button" data-close aria-label="Закрыть">×</button></div>
+    <div class="top"><span class="label">Бесплатный шаблон</span><button class="x" type="button" data-close aria-label="Закрыть">×</button></div>
     <div id="gask" style="display:grid;gap:14px">
       <h3 id="gtitle">Куда прислать шаблон?</h3>
       <p class="muted" style="margin:0" id="gdoc"></p>
@@ -905,7 +905,6 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
       <div class="okc">✓</div><h3>Шаблон в пути</h3>
       <p class="muted" style="margin:0">Если остались вопросы, запишитесь на консультацию.</p>
       <button class="btn" type="button" id="g2c">Записаться<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
-      <p class="ex preview-note" style="margin:0">В превью ничего не отправляется.</p>
     </div>
   </form>
 </div>
@@ -1099,7 +1098,6 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   if(SITE.photos.avatar)document.querySelectorAll('.ava .in').forEach(function(el){el.innerHTML='<img src="'+esc(SITE.photos.avatar)+'" alt="Алексей Гридасов"'+(SITE.avatarCrop?' style="object-position:'+SITE.avatarCrop+';transform:scale('+(SITE.avatarZoom||1)+')"':'')+'>'});
   if(!DEMO){$('demoNote').hidden=true;document.querySelectorAll('.logos .ex').forEach(function(x){x.remove()})}
   document.querySelectorAll('[data-policy]').forEach(function(a){if(SITE.policyUrl){a.href=SITE.policyUrl;a.target='_blank'}else{a.removeAttribute('href')}});
-  if(SITE.leadsEndpoint)document.querySelectorAll('.preview-note').forEach(function(n){n.hidden=true});
   $('caseList').innerHTML=C.map(function(c){return '<details class="case"><summary><div class="res">'+c[0]+'</div><p>'+c[1]+'</p><span class="law">'+c[2]+'</span><span class="more">Как решили<i>+</i></span></summary><div class="cbody"><div><b>Ситуация</b><span>'+c[3]+'</span></div><div><b>Что сделали</b><span>'+c[4]+'</span></div><div><b>Итог</b><span>'+c[5]+'</span></div></div></details>'}).join('');
   $('qaList').innerHTML=Q.map(function(q,i){return '<details class="qa"'+(i===0?' open':'')+'><summary>'+q[0]+'<i>+</i></summary><p>'+q[1]+'</p></details>'}).join('');
 
@@ -1109,6 +1107,15 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     data.kind=kind;data.page=location.href;
     try{fetch(SITE.leadsEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(function(){})}catch(e){}
   }
+
+  // Пока leadsEndpoint пуст, заявка с сайта никуда не уходит. Тогда вместо «Заявка принята»
+  // честно говорим об этом, копируем текст заявки и даём кнопку в Telegram.
+  var EP=!!SITE.leadsEndpoint;
+  function noSend(done,text){var pre=done.querySelector('.copyme');if(!pre){done.querySelector('p').insertAdjacentHTML('afterend','<pre class="copyme"></pre>');pre=done.querySelector('.copyme')}
+    pre.textContent=text;var note=function(ok){done.querySelector('p').textContent='Отправка с сайта пока не подключена. '+(ok?'Текст заявки уже скопирован: вставьте':'Скопируйте текст заявки и вставьте')+' его в сообщение Алексею в Telegram.'};
+    note(false);try{navigator.clipboard.writeText(text).then(function(){note(true)},function(){})}catch(e){}
+    done.querySelector('.okc').textContent='→';done.querySelector('h3').textContent='Осталось отправить';
+    if(!done.querySelector('.tgo'))pre.insertAdjacentHTML('afterend','<a class="btn tgo" href="https://t.me/gridzakon" target="_blank" rel="noopener">Открыть Telegram<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></a>')}
 
   // ---------- модалки ----------
   var openM=null,lastF=null,lockY=0,locked=false;
@@ -1144,7 +1151,8 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     if(step===3&&(!$('name').value.trim()||!$('contact').value.trim())){$('err').textContent='Укажите имя и телефон или Telegram, чтобы Алексей мог ответить.';return}
     if(step===4){hide();return}
     if(step===3){var t=form.querySelector('input[name=topic]:checked'),w=form.querySelector('input[name=way]:checked');
-      send('Заявка на консультацию',{topic:t?t.value:'',desc:$('desc').value,urgency:$('urg').value,name:$('name').value,contact:$('contact').value,way:w?w.value:''})}
+      send('Заявка на консультацию',{topic:t?t.value:'',desc:$('desc').value,urgency:$('urg').value,name:$('name').value,contact:$('contact').value,way:w?w.value:''});
+      if(!EP)noSend(form.querySelector('[data-step="4"]'),'Заявка с сайта GridZakon\nТема: '+(t?t.value:'')+'\nСитуация: '+($('desc').value||'не указана')+'\nСрочность: '+$('urg').value+'\nИмя: '+$('name').value+'\nКонтакт: '+$('contact').value+(w?' ('+w.value+')':''))}
     if(step===1&&cb()){go(3);return}
     go(step+1)});
 
@@ -1175,6 +1183,8 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 
   // дипломы
   var dInner=$('dscan').innerHTML;
+  var anyD=false;document.querySelectorAll('[data-dipl]').forEach(function(b){if(SITE.diplomas[b.dataset.dipl.split('|')[0]])anyD=true;else b.hidden=true});
+  if(!anyD)document.querySelector('.dipl').hidden=true;
   document.querySelectorAll('[data-dipl]').forEach(function(b){b.onclick=function(){var p=b.dataset.dipl.split('|'),src=SITE.diplomas[p[0]];
     $('dscan').innerHTML=src?'<img src="'+esc(src)+'" alt="'+esc(p[0])+'">':dInner;
     if(!src){$('dtitle').textContent=p[0];$('dsub').textContent=p[1]}
@@ -1184,11 +1194,15 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   document.querySelectorAll('[data-order]').forEach(function(b){b.addEventListener('click',function(){
     $('oform').reset();$('otitle').textContent=b.dataset.order;$('oprice').textContent=b.parentNode.querySelector('.p').textContent;
     $('oask').hidden=false;$('odone').hidden=true;$('oerr').textContent='';show($('omodal'))})});
-  $('oform').addEventListener('submit',function(e){e.preventDefault();if(!$('ocontact').value.trim()){$('oerr').textContent='Укажите Telegram или телефон.';return}send('Заказ договора',{doc:$('otitle').textContent,price:$('oprice').textContent,contact:$('ocontact').value,custom:$('ocustom').checked?'да':'нет'});$('oask').hidden=true;$('odone').hidden=false});
+  $('oform').addEventListener('submit',function(e){e.preventDefault();if(!$('ocontact').value.trim()){$('oerr').textContent='Укажите Telegram или телефон.';return}send('Заказ договора',{doc:$('otitle').textContent,price:$('oprice').textContent,contact:$('ocontact').value,custom:$('ocustom').checked?'да':'нет'});
+    if(!EP)noSend($('odone'),'Заказ шаблона с сайта GridZakon\nДокумент: '+$('otitle').textContent+' ('+$('oprice').textContent+')\nДоработать под ситуацию: '+($('ocustom').checked?'да':'нет')+'\nКонтакт: '+$('ocontact').value);
+    $('oask').hidden=true;$('odone').hidden=false});
 
   // подарок
   document.querySelectorAll('[data-gift]').forEach(function(b){b.addEventListener('click',function(){$('gform').reset();$('gask').hidden=false;$('gdone').hidden=true;$('gerr').textContent='';show($('gmodal'))})});
-  $('gform').addEventListener('submit',function(e){e.preventDefault();if(!$('gcontact').value.trim()){$('gerr').textContent='Укажите Telegram или телефон.';return}send('Бесплатный шаблон',{doc:giftDoc,contact:$('gcontact').value});$('gask').hidden=true;$('gdone').hidden=false});
+  $('gform').addEventListener('submit',function(e){e.preventDefault();if(!$('gcontact').value.trim()){$('gerr').textContent='Укажите Telegram или телефон.';return}send('Бесплатный шаблон',{doc:giftDoc,contact:$('gcontact').value});
+    if(!EP){noSend($('gdone'),'Бесплатный шаблон с сайта GridZakon\nДокумент: '+giftDoc+'\nКонтакт: '+$('gcontact').value);$('g2c').hidden=true}
+    $('gask').hidden=true;$('gdone').hidden=false});
   $('g2c').onclick=function(){book()};
 
   // каталог шаблонов
