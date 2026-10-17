@@ -624,6 +624,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 .hero .main>*:nth-child(4){animation-delay:.18s}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
+<link rel="stylesheet" href="updates.css">
 </head>
 <body>
 
@@ -646,11 +647,11 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   <div class="wrap">
     <a class="logo" href="#top">Grid<span>Zakon</span></a>
     <div class="navlinks">
-      <a href="#about">Обо мне</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#docs">Шаблоны</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a>
+      <a href="#about">Обо мне</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#docs">Полезное</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a>
     </div>
     <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mmenu">Меню</button>
     <div class="mmenu" id="mmenu" hidden>
-      <a href="#about">Обо мне</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#docs">Шаблоны</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a>
+      <a href="#about">Обо мне</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#docs">Полезное</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a>
     </div>
   </div>
 </nav>
@@ -659,33 +660,25 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
  <div class="flowcol">
 
   <!-- 1. Первый экран -->
-  <header class="hero" id="hero">
+  <header class="hero" id="about">
     <div class="who">
       <div class="ava" role="img" aria-label="Алексей Гридасов"><div class="in">АГ</div></div>
       <div><b>Алексей Гридасов</b><small>Юрист · Москва и область</small></div>
     </div>
     <h1><span class="ln"><span>Юрист</span></span> <span class="ln hl"><span>для своих</span></span> <em class="ln"><span>Право простым языком</span></em></h1>
-    <p class="lead"><b>Договоры, суды, консультации.</b> Решаю вопрос под ключ, онлайн по всей России.</p>
+    <p class="lead"><b>Я Гридасов Алексей, юрист-общественник.</b> Практикую более 7 лет. Помог более тысячи клиентам. Веду дела в Москве и области. Пиши — помогу и тебе.</p>
     <div class="cta" id="heroCta">
-      <button class="btn" data-open>Записаться на консультацию<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+      <a class="btn" href="https://t.me/gridzakon" target="_blank" rel="noopener">Записаться на консультацию<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></a>
       <a class="link tg" href="https://t.me/gridzakon" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-tg"/></svg>Написать в Telegram</a>
     </div>
   </header>
 
-  <!-- Цифры -->
-  <section id="stats" aria-label="Алексей в цифрах"></section>
-  <section id="media" aria-label="СМИ, где выступал Алексей">
-    <p class="label">Комментирую законы в СМИ</p>
-    <div class="logos" id="logos"></div>
-  </section>
 
-  <!-- 2. Обо мне -->
-  <section id="about" data-ghost="Юрист">
-    <p class="idx"><b>01</b>Обо мне</p>
-    <h2>Веду дело <span class="hl">до результата</span></h2>
-    <p class="story">Объясняю, что происходит, какие шансы и что делать. Беру дело целиком: от первой претензии до исполнения решения.</p>
+  <section id="approach" data-ghost="Принцип" aria-label="Принципы работы">
+    <p class="idx"><b>01</b>Подход к делу</p>
+    <h2>Мой принцип <span class="thin">работы</span></h2>
+    <p class="story">Решаю проблемы своих до того, как они случились, а не разбираю последствия после.</p>
     <div class="reasons">
-      <div><b>Депутатские запросы</b><span>Когда ведомство молчит, запрос от депутата заставляет ответить.</span></div>
       <div><b>Под ключ</b><span>От претензии до исполнения решения.</span></div>
       <div><b>На связи лично</b><span>Отвечаю сам, без секретарей.</span></div>
     </div>
@@ -702,31 +695,22 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     <h2>Услуги <span class="thin">и цены</span></h2>
     <p class="sub">Цену фиксируем в договоре до начала работы.</p>
     <div class="svcs">
-      <details class="svc"><summary><h3>Консультация</h3><span class="d">За час: шансы, риски и план действий.</span><span class="price"><small>от</small>3 000 ₽</span><i>+</i></summary>
-        <div class="in"><ul><li>Разбор документов и переписки до встречи</li><li>Оценка шансов и рисков простыми словами</li><li>План действий на ближайший месяц</li></ul><button class="link" data-open data-pick="Консультация">Записаться</button></div></details>
-      <details class="svc"><summary><h3>Договоры</h3><span class="d">Составлю свой или проверю чужой.</span><span class="price"><small>от</small>5 000 ₽</span><i>+</i></summary>
-        <div class="in"><ul><li>Составление под вашу ситуацию</li><li>Проверка договора контрагента</li><li>Протокол разногласий</li></ul><button class="link" data-open data-pick="Договор">Заказать договор</button></div></details>
-      <details class="svc"><summary><h3>Суды</h3><span class="d">Долги, права потребителей, споры с бизнесом.</span><span class="price"><small>от</small>30 000 ₽</span><i>+</i></summary>
-        <div class="in"><ul><li>Претензия и переговоры до суда</li><li>Иск, доказательства, участие в заседаниях</li><li>Апелляция и исполнение решения</li></ul><button class="link" data-open data-pick="Суд">Обсудить дело</button></div></details>
-      <details class="svc"><summary><h3>Для бизнеса</h3><span class="d">Абонентское обслуживание для ИП и компаний.</span><span class="price"><small>от</small>20 000 ₽<small>/мес</small></span><i>+</i></summary>
-        <div class="in"><ul><li>Вопросы в мессенджере без ограничений</li><li>Проверка договоров и счетов</li><li>Претензионная работа</li></ul><button class="link" data-open data-pick="Абонентское обслуживание">Подключить</button></div></details>
+      <details class="svc"><summary><h3>Консультация</h3><span class="d">За час: шансы, риски и план действий.</span><span class="price"><small>от</small>5 000 ₽</span><i>+</i></summary>
+        <div class="in"><ul><li>Разбор документов и переписки до встречи</li><li>Оценка шансов и рисков простыми словами</li><li>План действий на ближайший месяц</li></ul><a class="link" href="https://t.me/gridzakon" target="_blank" rel="noopener">Записаться</a></div></details>
+      <details class="svc"><summary><h3>Договоры</h3><span class="d">Составлю свой или проверю чужой.</span><span class="price"><small>от</small>10 000 ₽</span><i>+</i></summary>
+        <div class="in"><ul><li>Составление под вашу ситуацию</li><li>Проверка договора контрагента</li><li>Протокол разногласий</li></ul><a class="link" href="https://t.me/gridzakon" target="_blank" rel="noopener">Заказать договор</a></div></details>
+      <details class="svc"><summary><h3>Суды</h3><span class="d">Долги, права потребителей, споры с бизнесом.</span><span class="price"><small>от</small>80 000 ₽</span><i>+</i></summary>
+        <div class="in"><ul><li>Претензия и переговоры до суда</li><li>Иск, доказательства, участие в заседаниях</li><li>Апелляция и исполнение решения</li></ul><a class="link" href="https://t.me/gridzakon" target="_blank" rel="noopener">Обсудить дело</a></div></details>
+      <details class="svc"><summary><h3>Потерпевшим</h3><span class="d">Сопровождение по уголовному праву для потерпевших.</span><span class="price"><small>от</small>20 000 ₽</span><i>+</i></summary>
+        <div class="in"><ul><li>Консультации по правовым вопросам, анализ ситуации и перспектив</li><li>Составление и проверка документов</li><li>Очное представительство потерпевших в государственных органах</li></ul><a class="link" href="https://t.me/gridzakon" target="_blank" rel="noopener">Подключить</a></div></details>
     </div>
-    <div class="proc">
-      <h3>Порядок <span class="thin">работы</span></h3>
-      <ol id="proc">
-        <li><em>01</em><b>Заявка</b><span>На сайте или в Telegram. Отвечаю в течение дня.</span></li>
-        <li><em>02</em><b>Разбор</b><span>Изучаю документы и называю шансы.</span></li>
-        <li><em>03</em><b>Договор</b><span>Фиксируем объём работы и цену.</span></li>
-        <li><em>04</em><b>Работа</b><span>Вы в курсе каждого шага.</span></li>
-        <li><em>05</em><b>Результат</b><span>Деньги, решение суда или готовый договор.</span></li>
-      </ol>
-    </div>
+
   </section>
 
   <!-- 4. Кейсы -->
   <section id="cases" data-ghost="Кейсы">
     <p class="idx"><b>03</b>Кейсы</p>
-    <h2>Дела <span class="thin">и результаты</span></h2>
+    <h2>Мои <span class="thin">кейсы</span></h2>
     <div class="cases" id="caseList"></div>
     <div id="revwrap" hidden>
       <div class="revhead"><p class="label">Отзывы клиентов</p><div class="arrows"><button class="circ" type="button" id="rprev" aria-label="Назад">←</button><button class="circ" type="button" id="rnext" aria-label="Вперёд">→</button></div></div>
@@ -735,12 +719,11 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   </section>
 
   <!-- 5. Шаблоны: на главной только вход в каталог -->
-  <section id="docs" data-ghost="Шаблоны">
-    <p class="idx"><b>04</b>Шаблоны</p>
-    <h2>Шаблоны <span class="hl">документов</span></h2>
-    <p class="sub" id="docsSub"></p>
-    <button class="btn" type="button" data-cat style="margin-top:34px">Открыть каталог<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
-  </section>
+  <section id="docs" data-ghost="Полезное"><p class="idx"><b>04</b>Полезное</p><h2>Полезное</h2><div class="useful-grid">
+  <details class="qa useful-item"><summary>Полезные статьи<i>+</i></summary><div class="in"><p>О законе, правах и повседневных ситуациях — простым языком в моём Telegram-канале.</p><a class="link" href="https://t.me/grid_zakon" target="_blank" rel="noopener">Перейти в канал ↗</a></div></details>
+  <details class="qa useful-item"><summary>Шаблоны документов<i>+</i></summary><div class="in"><p id="documentsIntro">Готовлю документы в Word. Скоро их можно будет скачать здесь.</p><div id="documentList"></div></div></details>
+  <details class="qa useful-item"><summary>Бесплатные советы<i>+</i></summary><div class="in"><ul><li><a class="link" href="https://t.me/gridzakon" target="_blank" rel="noopener">Записаться на платную консультацию</a></li><li>Не верить 100% гарантиям</li><li>Не говорить код из СМС</li><li>Не экономить на юристе или адвокате</li><li>Не думать, что если друг, то точно не кинет</li><li>Не торопиться признаваться и рассказывать «как было»</li></ul></div></details>
+ </div></section>
 
   <!-- 6. Вопросы -->
   <section id="faq" data-ghost="Вопросы">
@@ -753,15 +736,13 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   <section id="contacts">
     <div class="final">
       <h2>Запись <span class="hl">на консультацию</span></h2>
-      <p>Опишите ситуацию. Отвечу в течение дня.</p>
-      <button class="btn" data-open>Записаться на консультацию<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+      <p>Консультация от 5 000 ₽. Бесплатно не консультирую. Опишите ситуацию — отвечу в течение дня.</p>
+      <a class="btn" href="https://t.me/gridzakon" target="_blank" rel="noopener">Записаться на консультацию<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></a>
       <div class="ways">
         <a href="https://t.me/gridzakon" target="_blank" rel="noopener"><svg><use href="#i-tg"/></svg><b>Telegram</b><span>@gridzakon</span></a>
-        <a href="https://wa.me/79000000000" target="_blank" rel="noopener" data-wa><svg><use href="#i-wa"/></svg><b>WhatsApp</b><span>написать</span></a>
         <a href="https://instagram.com/gridzakon" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg><b>Instagram</b><span>gridzakon</span></a>
-        <a href="https://vk.com/gridzakon" target="_blank" rel="noopener"><svg><use href="#i-vk"/></svg><b>ВКонтакте</b><span>gridzakon</span></a>
       </div>
-      <div class="copyrow"><span id="phone">+7 (900) 000-00-00</span><button id="copy" type="button">Копировать</button></div>
+
     </div>
   </section>
 
@@ -777,12 +758,12 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
        <a href="https://instagram.com/gridzakon" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a>
        <a href="https://www.tiktok.com/@gridzakon" target="_blank" rel="noopener" aria-label="TikTok"><svg><use href="#i-tt"/></svg></a>
        <a href="https://www.youtube.com/@gridzakon" target="_blank" rel="noopener" aria-label="YouTube"><svg><use href="#i-yt"/></svg></a>
-       <a href="https://vk.com/gridzakon" target="_blank" rel="noopener" aria-label="ВКонтакте"><svg><use href="#i-vk"/></svg></a>
      </div>
    </div>
    <div class="brand" id="brand" aria-label="Алексей в соцсетях"></div>
+
    <div class="rail-body" id="railBody">
-     <div class="slide"><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
+     <div class="slide opening-slide">   <section id="press" aria-labelledby="mediaTitle"><div class="small-heading"><h2 id="mediaTitle">В СМИ</h2><span>Россия 1 · Вести</span></div><div class="press-grid"><a class="press-card" href="https://smotrim.ru/brand/5403#playing_video=6074096" target="_blank" rel="noopener"><span class="press-image press-1"><img src="assets/press/appearances.png" width="681" height="691" alt="" decoding="async"><span class="play-icon" aria-hidden="true">▶</span></span><b>Вести — Москва</b><span>09.09.2026 ↗</span></a><a class="press-card" href="https://smotrim.ru/video/6051419" target="_blank" rel="noopener"><span class="press-image press-2"><img src="assets/press/appearances.png" width="681" height="691" alt="" decoding="async"><span class="play-icon" aria-hidden="true">▶</span></span><b>Вести — Москва</b><span>27.07.2026 ↗</span></a><a class="press-card" href="https://smotrim.ru/brand/5403#playing_video=6046737" target="_blank" rel="noopener"><span class="press-image press-3"><img src="assets/press/appearances.png" width="681" height="691" alt="" decoding="async"><span class="play-icon" aria-hidden="true">▶</span></span><b>Вести — Москва</b><span>16.07.2026 ↗</span></a></div></section><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
    </div>
  </aside>
 </main>
@@ -800,7 +781,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 
 <div class="float off" id="float">
   <a class="tg" href="https://t.me/gridzakon" target="_blank" rel="noopener" aria-label="Написать в Telegram"><svg><use href="#i-tg"/></svg></a>
-  <button class="btn" data-open><span>Записаться<span class="lg"> на консультацию</span></span><span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button>
+  <a class="btn" href="https://t.me/gridzakon" target="_blank" rel="noopener"><span>Записаться<span class="lg"> на консультацию</span></span><span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></a>
 </div>
 
 <!-- запись -->
@@ -833,7 +814,6 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
         <div class="label">Как удобнее</div>
         <div class="chips" role="radiogroup" aria-label="Способ связи">
           <label><input type="radio" name="way" id="w1" value="Telegram" checked><span>Telegram</span></label>
-          <label><input type="radio" name="way" id="w2" value="WhatsApp"><span>WhatsApp</span></label>
           <label><input type="radio" name="way" id="w3" value="Звонок"><span>Звонок</span></label>
         </div>
       </div>
@@ -857,7 +837,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   <div class="vsheet">
     <div class="vctl"><div class="vhead"><span class="label" id="vcount">1 / 10</span><b class="vtitle" id="vtitle"></b></div><div class="nav2"><button class="circ" type="button" id="vprev" aria-label="Предыдущее видео">←</button><button class="circ" type="button" id="vnext" aria-label="Следующее видео">→</button><button class="circ" type="button" data-close aria-label="Закрыть">×</button></div></div>
     <div class="vframe" id="vframe"><img id="vimg" alt="" hidden><span class="pf" id="vpf"></span><div class="cover" id="vcover"></div><a class="big" id="vplay" target="_blank" rel="noopener" aria-label="Смотреть видео"><svg><use href="#i-play"/></svg></a><small id="vnote">Здесь будет само видео</small></div>
-    <div class="vfoot"><a class="link" id="vlink" href="#" target="_blank" rel="noopener">Смотреть в соцсети</a><button class="btn" type="button" id="vcta">Похожая ситуация?<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></button></div>
+    <div class="vfoot"><a class="link" id="vlink" href="#" target="_blank" rel="noopener">Смотреть в соцсети</a><a class="btn" href="https://t.me/gridzakon" target="_blank" rel="noopener" id="vcta">Похожая ситуация?<span class="ar"><svg width="18" height="18"><use href="#i-arr"/></svg></span></a></div>
   </div>
 </div>
 
@@ -921,77 +901,37 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
      например portrait: 'img/portrait.jpg'. Пустая строка = заглушка.
      ===================================================================== */
   var SITE={
-    demo:true,                       // false = убрать пометки «пример»
+    demo:false,                       // false = убрать пометки «пример»
     leadsEndpoint:'',                // адрес Cloudflare Worker для заявок (см. launch.md)
-    phone:'+7 (900) 000-00-00',
+    phone:'',
     legal:'',                        // реквизиты для подвала, например: 'ИП Гридасов А. …, ИНН …'. Пусто = не показывать
     policyUrl:'',                    // ссылка на политику обработки персональных данных
-    whatsapp:'79000000000',          // номер без + и пробелов
+    whatsapp:'',          // номер без + и пробелов
     // avatar — фото профиля из Instagram, лежит файлом avatar.jpg рядом с index.html (150 px; заменить на крупное при случае)
     photos:{avatar:'avatar.jpg'},
     avatarCrop:'',                   // какая точка картинки в центре кружка; пусто = обычная обрезка
     avatarZoom:1,
     // Слева — цифры практики: [число, единица (красным), подпись]. ПОКА ПРИМЕРНЫЕ, заменить на настоящие
-    facts:[['7','лет','юридической практики',''],['300','+','дел в судах и до суда',''],['24','ч','отвечаю на заявку','']],
+    facts:[],
     // Справа — цифры соцсетей: [число, единица, подпись, значок: ig, yt, tt, tg, vk]. Настоящие, сняты 2 октября 2026
-    social:[['190','K','Instagram','ig'],['58','K','YouTube','yt'],['17,2','млн','просмотров','eye']],
+    social:[['180','K','Instagram','ig'],['58','K','YouTube','yt'],['17,2','млн','просмотров','eye']],
     // СМИ: [название или путь к логотипу (svg/png), ссылка на выступление]. Пустой список = полоса скрыта
     media:[],
     // Ролики: [название (*слово* = красная плашка), площадка, просмотры, ID на YouTube, своя ссылка, свой mp4, своя обложка, лайки, точное число просмотров, точное число лайков (для живых счётчиков)]
     // По ID с YouTube обложка, ссылка и плеер подставляются сами. Цифры сняты с YouTube 2 октября 2026.
-    reels:[
-      ['Опасные *фразы*','YouTube','4,1 млн','6BAATHihmHg','','','','100 тыс.',4077121,100714],
-      ['Носи *паспорт*','YouTube','2,2 млн','-7mFIKnAt74','','','','74,8 тыс.',2229020,74807],
-      ['Что в *карманах?*','YouTube','2 млн','KtgiC6N-OdA','','','','34,9 тыс.',2048913,34911],
-      ['Полиция просит *телефон*','YouTube','806 тыс.','Qn4AaSbcUZw','','','','25,2 тыс.',805890,25192],
-      ['Говорить ли *«да»?*','YouTube','184 тыс.','TPL1nmW2KYU','','','','6,1 тыс.',183884,6085],
-      ['Зовут *просто поговорить*','YouTube','551 тыс.','VZcNqgvh6QU','','','','13,9 тыс.',551128,13852],
-      ['Носишь с собой *нож?*','YouTube','450 тыс.','KwJEAxMRHeg','','','','8 тыс.',449693,8000],
-      ['Мифы о *признании*','YouTube','413 тыс.','ziGff-U4wEk','','','','8,9 тыс.',412553,8877],
-      ['Нашли *пакетик*','YouTube','281 тыс.','TtElTGsUIRg','','','','8,4 тыс.',281280,8362],
-      ['Спецслужбы *тебя видят*','YouTube','269 тыс.','UeD3XVgRgBA','','','','3,4 тыс.',268510,3370]
-    ],
+    reels:[["Опасные *фразы*", "Instagram", "", "", "https://www.instagram.com/reel/DYB-5M3syB_/", "", "assets/reels/DYB-5M3syB_.jpg", "", 0, 0], ["Полиция просит *телефон*", "Instagram", "", "", "https://www.instagram.com/reel/DSKoEPrDORg/", "", "assets/reels/DSKoEPrDORg.jpg", "", 0, 0], ["Знай свои *права*", "Instagram", "", "", "https://www.instagram.com/reel/DRe178VEd8r/", "", "assets/reels/DRe178VEd8r.jpg", "", 0, 0], ["Осторожно с *разговорами*", "Instagram", "", "", "https://www.instagram.com/reel/DYHO8LnsR_X/", "", "assets/reels/DYHO8LnsR_X.jpg", "", 0, 0]],
     // Какой ролик (номер в списке выше, с нуля) стоит справа у каждого раздела. Раздела нет в списке = лента
     // Каталог шаблонов: [название, пояснение, цена (0 = бесплатно), раздел]. Цены пока примерные
-    templates:[
-      ['Претензия должнику','Требование вернуть деньги до суда.',0,'Претензии'],
-      ['Расписка','К договору займа или отдельно.',0,'Для себя'],
-      ['Акт выполненных работ','Закрывает заказ и защищает оплату.',0,'Для бизнеса'],
-      ['Заявление на возврат товара','Для магазина или маркетплейса.',0,'Претензии'],
-      ['Договор ГПХ','Работа с исполнителями без штата.',2500,'Для бизнеса'],
-      ['Оказание услуг','Для самозанятых и ИП.',2500,'Для бизнеса'],
-      ['Договор подряда','Ремонт, монтаж, разработка.',3000,'Для бизнеса'],
-      ['Договор поставки','Сроки, качество, ответственность.',3500,'Для бизнеса'],
-      ['Партнёрский договор','Доли, вклад и выход партнёра.',4000,'Для бизнеса'],
-      ['Соглашение о неразглашении','NDA для сотрудников и подрядчиков.',2000,'Для бизнеса'],
-      ['Оферта для сайта','Продажа услуг и товаров онлайн.',4000,'Для бизнеса'],
-      ['Договор займа','С процентами и сроками возврата.',2000,'Для себя'],
-      ['Аренда квартиры','С описью имущества и залогом.',2500,'Для себя'],
-      ['Купля-продажа авто','Защищает обе стороны сделки.',1500,'Для себя'],
-      ['Претензия продавцу','Возврат денег за товар или услугу.',1500,'Претензии'],
-      ['Претензия застройщику','Неустойка за просрочку сдачи.',2000,'Претензии']
-    ],
-    rail:{about:0,services:1,cases:2,docs:3,faq:6,contacts:5},
+    templates:[],
+    rail:{approach:0,services:1,cases:2,docs:3,faq:0,contacts:1},
     // Отзывы: [подпись (*слово* = красная плашка), видеофайл mp4 (если есть), картинка: скриншот отзыва или обложка видео]
-    reviews:[
-      ['«Вернули *840 тысяч* за 2 месяца»','',''],
-      ['«Договор с партнёром *спас бизнес*»','',''],
-      ['«Застройщик *выплатил* неустойку»','',''],
-      ['«Юрист, которому можно *написать вечером*»','',''],
-      ['«Налоговая *без штрафа*»','',''],
-      ['«Вернули деньги *за машину*»','',''],
-      ['«Объяснил всё *за 20 минут*»','','']
-    ],
+    reviews:[["Видеоотзыв клиента", "assets/videos/client-review.mp4", "assets/reviews/video-review.jpg"], ["Отзыв клиента 1", "", "assets/reviews/review-01.jpg"], ["Отзыв клиента 2", "", "assets/reviews/review-02.jpg"], ["Отзыв клиента 3", "", "assets/reviews/review-03.jpg"], ["Отзыв клиента 4", "", "assets/reviews/review-04.jpg"], ["Отзыв клиента 5", "", "assets/reviews/review-05.jpg"], ["Отзыв клиента 6", "", "assets/reviews/review-06.jpg"], ["Отзыв клиента 7", "", "assets/reviews/review-07.jpg"], ["Отзыв клиента 8", "", "assets/reviews/review-08.jpg"], ["Отзыв клиента 9", "", "assets/reviews/review-09.jpg"], ["Отзыв клиента 10", "", "assets/reviews/review-10.jpg"], ["Отзыв клиента 11", "", "assets/reviews/review-11.jpg"], ["Отзыв клиента 12", "", "assets/reviews/review-12.jpg"], ["Отзыв клиента 13", "", "assets/reviews/review-13.jpg"], ["Отзыв клиента 14", "", "assets/reviews/review-14.jpg"], ["Отзыв клиента 15", "", "assets/reviews/review-15.jpg"], ["Отзыв клиента 16", "", "assets/reviews/review-16.jpg"], ["Отзыв клиента 17", "", "assets/reviews/review-17.jpg"], ["Отзыв клиента 18", "", "assets/reviews/review-18.jpg"], ["Отзыв клиента 19", "", "assets/reviews/review-19.jpg"]],
     // Кейсы: [итог крупно, коротко, статья, ситуация, что сделали, итог]
-    cases:[
-      ['+840 000 ₽','Взыскали с заказчика долг фрилансера вместе с процентами за просрочку.','ст. 309, 395 ГК РФ','Заказчик принял сайт и 4 месяца не платил, перестал отвечать.','Собрали переписку как доказательство договора, отправили претензию, подали иск и взыскали проценты.','Деньги на счёте клиента через 2 месяца.'],
-      ['Возврат ×2','Автосалон вернул деньги за машину с дефектом и заплатил штраф 50%.','Закон о защите прав потребителей','Через неделю после покупки обнаружился скрытый дефект коробки, салон отказал в возврате.','Назначили независимую экспертизу, подали иск о расторжении, неустойке и штрафе.','Полный возврат стоимости, неустойка и штраф 50%.'],
-      ['0 ₽ потерь','Нашли в партнёрском договоре пункт, по которому клиент терял долю в бизнесе.','ст. 432 ГК РФ','Клиент собирался подписать договор, присланный второй стороной.','Нашли условие о переходе доли при «любом нарушении сроков», подготовили протокол разногласий.','Пункт убрали, доля клиента защищена.']
-    ],
+    cases:[["Запрос записи", "Помощь после ДТП на парковке: обращение за видеозаписью с камер.", "ДТП", "В автомобиль клиентов въехали на парковке и скрылись. Для установления обстоятельств потребовалась запись камер.", "Подготовили запрос видеозаписи.", "В материалах — обращение клиентов, запрос и обратная связь."], ["150 000 ₽", "Помог клиенту вернуть деньги за обучение.", "Возврат денег", "Клиент обратился за помощью с возвратом оплаты за обучение.", "Юридическое сопровождение и переговоры по возврату денег.", "По отзыву клиента, деньги вернули."], ["Претензия", "Помощь в подготовке досудебной претензии.", "Досудебная работа", "Клиентке потребовалась помощь перед подачей досудебной претензии.", "Подготовка претензии и поддержка по юридическим вопросам.", "В видео клиентка рассказывает о помощи Алексея."]],
     // Дипломы: путь к скану по названию кнопки
     diplomas:{'Диплом юриста':'','Повышение квалификации':'','Удостоверение':''},
     faq:[
-      ['Сколько стоит консультация?','От 3 000 ₽. Стоимость дела называю после разбора документов и фиксирую в договоре.'],
+      ['Сколько стоит консультация?','От 5 000 ₽. Бесплатно не консультирую. Стоимость дела называю после разбора документов и фиксирую в договоре.'],
       ['Можно решить вопрос онлайн?','Да, по всей России. В суды Москвы и области выезжаю лично.'],
       ['У меня только переписка. Есть смысл обращаться?','Да. Переписка в мессенджерах часто работает как доказательство.'],
       ['Как быстро вы ответите?','В течение дня. Срочный вопрос отметьте в заявке.'],
@@ -1079,26 +1019,16 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     if(open&&d.matches('.qa,.svc'))[].forEach.call(d.parentNode.children,function(x){if(x!==d&&x.open&&!x.classList.contains('cl'))accSet(x,false)});
     accSet(d,open)});
 
-  // просмотры понемногу растут, время от времени ставится лайк (декоративная имитация, стартует от настоящих чисел)
-  var live=slides.map(function(sl,i){if(!i)return null;var r=R[SITE.rail[railSecs[i-1].id]];return r[8]?{v:r[8],l:r[9],cv:sl.querySelector('.cv'),cl:sl.querySelector('.cl'),pl:sl.querySelector('.igact')}:null});
-  function replay(el,c){el.classList.remove(c);void el.offsetWidth;el.classList.add(c)}
-  if(!calm)setInterval(function(){if(!wide.matches||document.hidden||openM)return;var o=live[Math.round(railP)];if(!o)return;
-    if(o.cv&&Math.random()<.7){o.v+=1+Math.floor(Math.random()*3);o.cv.textContent=fmt(o.v);replay(o.cv,'tick')}
-    if(o.cl&&o.l&&Math.random()<.2){o.l+=1;o.cl.textContent=fmt(o.l);replay(o.pl,'pop')}},1200);
   railEl.addEventListener('click',function(e){var b=e.target.closest('.reel[data-v]');if(b){vlist='reels';vshow(+b.dataset.v);show($('vmodal'))}});
   // факты, СМИ, контакты, фото
-  $('stats').innerHTML=SITE.facts.map(function(f){return '<div><b><var class="n">'+esc(f[0])+'</var>'+(f[1]?'<i>'+esc(f[1])+'</i>':'')+'</b><span>'+(f[3]?'<svg><use href="#i-'+f[3]+'"/></svg>':'')+esc(f[2])+'</span></div>'}).join('');
-  if(SITE.media.length)$('logos').innerHTML=SITE.media.map(function(m){var t=isImg(m[0])?'<img src="'+esc(m[0])+'" alt="">':esc(m[0]);
-    return m[1]?'<a href="'+esc(m[1])+'" target="_blank" rel="noopener">'+t+'</a>':'<span>'+t+'</span>'}).join('')+(DEMO?'<span class="ex">пример</span>':'');
-  else $('media').hidden=true;
   $('brand').innerHTML=SITE.social.map(function(f){return '<div><b><var class="n">'+esc(f[0])+'</var>'+(f[1]?'<i>'+esc(f[1])+'</i>':'')+'</b><span>'+(f[3]?'<svg><use href="#i-'+f[3]+'"/></svg>':'')+esc(f[2])+'</span></div>'}).join('');
-  $('phone').textContent=SITE.phone;
+
   if(SITE.legal){$('legal').textContent=SITE.legal;$('legal').hidden=false}
   document.querySelectorAll('[data-wa]').forEach(function(a){a.href='https://wa.me/'+SITE.whatsapp});
   if(SITE.photos.avatar)document.querySelectorAll('.ava .in').forEach(function(el){el.innerHTML='<img src="'+esc(SITE.photos.avatar)+'" alt="Алексей Гридасов"'+(SITE.avatarCrop?' style="object-position:'+SITE.avatarCrop+';transform:scale('+(SITE.avatarZoom||1)+')"':'')+'>'});
   if(!DEMO){$('demoNote').hidden=true;document.querySelectorAll('.logos .ex').forEach(function(x){x.remove()})}
   document.querySelectorAll('[data-policy]').forEach(function(a){if(SITE.policyUrl){a.href=SITE.policyUrl;a.target='_blank'}else{a.removeAttribute('href')}});
-  $('caseList').innerHTML=C.map(function(c){return '<details class="case"><summary><div class="res">'+c[0]+'</div><p>'+c[1]+'</p><span class="law">'+c[2]+'</span><span class="more">Как решили<i>+</i></span></summary><div class="cbody"><div><b>Ситуация</b><span>'+c[3]+'</span></div><div><b>Что сделали</b><span>'+c[4]+'</span></div><div><b>Итог</b><span>'+c[5]+'</span></div></div></details>'}).join('');
+  $('caseList').innerHTML=C.map(function(c,i){return '<details class="case"><summary><div class="res">'+c[0]+'</div><p>'+c[1]+'</p><span class="law">'+c[2]+'</span><span class="more">Как решили<i>+</i></span></summary><div class="cbody"><div><b>Ситуация</b><span>'+c[3]+'</span></div><div><b>Что сделали</b><span>'+c[4]+'</span></div><div><b>Материалы</b><span>'+c[5]+'</span></div><button class="link case-media" type="button" data-gallery="case-'+i+'">Смотреть фото и видео ↗</button></div></details>'}).join('');
   $('qaList').innerHTML=Q.map(function(q,i){return '<details class="qa"'+(i===0?' open':'')+'><summary>'+q[0]+'<i>+</i></summary><p>'+q[1]+'</p></details>'}).join('');
 
   // ---------- отправка заявок ----------
@@ -1166,8 +1096,8 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     else if(yt&&WEB)f.insertAdjacentHTML('beforeend','<iframe src="https://www.youtube-nocookie.com/embed/'+esc(yt)+'?autoplay=1&playsinline=1&rel=0" title="Видео" allow="autoplay; encrypted-media; picture-in-picture; fullscreen"></iframe>');
     $('vnote').hidden=!!(src||yt)}
   function vshow(i){var rl=vlist==='reels',L=rl?R:V;vi=(i+L.length)%L.length;var r=L[vi],im=rl?rImg(r):r[2],link=rl?rLink(r):'';
-    $('vcover').innerHTML=cover(r[0]);
-    $('vimg').hidden=!im;if(im)$('vimg').src=im;$('vframe').classList.toggle('has-img',!!im);
+    $('vcover').innerHTML=rl?cover(r[0]):'';
+    $('vimg').hidden=!im;if(im)$('vimg').src=im;$('vframe').classList.toggle('has-img',!!im);$('vframe').classList.toggle('review-view',!rl);
     $('vpf').textContent=rl?r[1]:(r[1]?'Видео-отзыв':'Отзыв');
     $('vlink').hidden=!rl;
     if(rl){$('vlink').href=link;$('vlink').textContent='Смотреть '+(WHERE[r[1]]||'в соцсети')}
@@ -1175,13 +1105,13 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     if(link)$('vplay').href=link;else $('vplay').removeAttribute('href');
     setVideo(rl?r[5]:r[1],rl?r[3]:'');
     // отзыв-скриншот: без кнопки «играть», просто картинка
-    $('vplay').hidden=!rl&&!r[1];$('vnote').textContent=rl?'Здесь будет само видео':'Здесь будет отзыв клиента';
+    $('vplay').hidden=!rl&&!r[1];$('vnote').textContent=rl?'Нажмите ▶, чтобы открыть ролик в Instagram':'';
     if(!rl)$('vnote').hidden=!!(r[1]||im);
     $('vcount').textContent=(vi+1)+' / '+L.length}
   $('vimg').addEventListener('error',function(){this.hidden=true;$('vframe').classList.remove('has-img')});
   document.querySelectorAll('#revs .reel').forEach(function(b){b.addEventListener('click',function(){vlist='reviews';vshow(+b.dataset.r);show($('vmodal'))})});
   $('vprev').onclick=function(){vshow(vi-1)};$('vnext').onclick=function(){vshow(vi+1)};
-  $('vcta').onclick=function(){book()};
+
 
   // дипломы
   var dInner=$('dscan').innerHTML;
@@ -1212,7 +1142,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   function money(n){return String(n).replace(/\B(?=(\d{3})+$)/g,' ')+' ₽'}
   function plural(n,a,b,c){var m=n%100,k=n%10;return m>10&&m<20?c:k===1?a:k>1&&k<5?b:c}
   var catTxt=T.length+' '+plural(T.length,'документ','документа','документов')+' в Word: договоры, претензии, расписки. '+nFree+' '+plural(nFree,'из них бесплатный','из них бесплатно','из них бесплатно')+'.';
-  $('docsSub').textContent=catTxt;$('catSub').textContent=catTxt+' Подскажу, как заполнить.';
+  $('catSub').textContent='Документы готовятся к публикации.';
   var cats=['Все','Бесплатные'];T.forEach(function(t){if(cats.indexOf(t[3])<0)cats.push(t[3])});
   function catDraw(){
     $('catChips').innerHTML=cats.map(function(c){var n=c==='Все'?T.length:c==='Бесплатные'?nFree:T.filter(function(t){return t[3]===c}).length;
@@ -1258,11 +1188,6 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     fo.observe($('heroCta'));fo.observe($('contacts'));
   }else{$('float').classList.remove('off')}
 
-  // телефон
-  $('copy').addEventListener('click',function(){var el=$('phone'),btn=this;
-    function sel(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r)}
-    try{navigator.clipboard.writeText(el.textContent).then(function(){btn.textContent='Скопировано'},sel)}catch(e){sel()}});
-
   // появление блоков при прокрутке
   if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
     var rvs=[].slice.call(document.querySelectorAll('.flowcol>section'));
@@ -1294,5 +1219,9 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 })();
 </script>
 
+<dialog id="gallery" aria-labelledby="galleryTitle"><div class="gallery-shell"><div class="gallery-top"><div><span id="galleryCount" class="label" aria-live="polite"></span><h2 id="galleryTitle"></h2></div><button id="galleryClose" type="button" aria-label="Закрыть просмотр">×</button></div><div id="galleryStage"></div><div class="gallery-bottom"><button id="galleryPrev" type="button" aria-label="Предыдущий материал">←</button><a id="galleryOriginal" target="_blank" rel="noopener">Открыть оригинал ↗</a><button id="galleryNext" type="button" aria-label="Следующий материал">→</button></div></div></dialog>
+<script id="galleryData" type="application/json">{"case-0": [{"src": "assets/cases/case-1-situation.png", "label": "ДТП: обращение клиентов"}, {"src": "assets/cases/case-1-request.png", "label": "Запрос видеозаписи и обратная связь"}, {"src": "assets/videos/client-review.mp4", "poster": "assets/reviews/video-review.jpg", "label": "Видео к кейсу о ДТП", "video": true}], "case-1": [{"src": "assets/cases/case-2-refund.png", "label": "Возврат денег за обучение: отзыв клиента"}], "case-2": [{"src": "assets/videos/case-3.mp4", "poster": "assets/cases/case-3-poster.jpg", "label": "Клиентка о досудебной претензии", "video": true}], "reviews": [{"src": "assets/videos/client-review.mp4", "poster": "assets/reviews/video-review.jpg", "label": "Видеоотзыв клиента", "video": true}, {"src": "assets/reviews/review-01.jpg", "label": "Отзыв клиента — скриншот 1"}, {"src": "assets/reviews/review-02.jpg", "label": "Отзыв клиента — скриншот 2"}, {"src": "assets/reviews/review-03.jpg", "label": "Отзыв клиента — скриншот 3"}, {"src": "assets/reviews/review-04.jpg", "label": "Отзыв клиента — скриншот 4"}, {"src": "assets/reviews/review-05.jpg", "label": "Отзыв клиента — скриншот 5"}, {"src": "assets/reviews/review-06.jpg", "label": "Отзыв клиента — скриншот 6"}, {"src": "assets/reviews/review-07.jpg", "label": "Отзыв клиента — скриншот 7"}, {"src": "assets/reviews/review-08.jpg", "label": "Отзыв клиента — скриншот 8"}, {"src": "assets/reviews/review-09.jpg", "label": "Отзыв клиента — скриншот 9"}, {"src": "assets/reviews/review-10.jpg", "label": "Отзыв клиента — скриншот 10"}, {"src": "assets/reviews/review-11.jpg", "label": "Отзыв клиента — скриншот 11"}, {"src": "assets/reviews/review-12.jpg", "label": "Отзыв клиента — скриншот 12"}, {"src": "assets/reviews/review-13.jpg", "label": "Отзыв клиента — скриншот 13"}, {"src": "assets/reviews/review-14.jpg", "label": "Отзыв клиента — скриншот 14"}, {"src": "assets/reviews/review-15.jpg", "label": "Отзыв клиента — скриншот 15"}, {"src": "assets/reviews/review-16.jpg", "label": "Отзыв клиента — скриншот 16"}, {"src": "assets/reviews/review-17.jpg", "label": "Отзыв клиента — скриншот 17"}, {"src": "assets/reviews/review-18.jpg", "label": "Отзыв клиента — скриншот 18"}, {"src": "assets/reviews/review-19.jpg", "label": "Отзыв клиента — скриншот 19"}]}</script>
+<script src="documents.js"></script>
+<script src="site.js"></script>
 </body>
 </html>

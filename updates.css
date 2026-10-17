@@ -1,0 +1,70 @@
+.press-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.press-card { min-width:0; text-decoration:none; }
+.press-image { display:block; position:relative; overflow:hidden; aspect-ratio:16/9; border-radius:8px; background:var(--surface); }
+.press-image img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .25s; }
+.press-image[class*="press-"] img { position:absolute; height:auto; max-width:none; object-fit:initial; transform:none; }
+.press-1 img { width:105.58%; left:-3.72%; top:-.56%; }
+.press-2 img { width:224.01%; left:-10.20%; top:-216.37%; }
+.press-3 img { width:224.01%; left:-117.11%; top:-216.37%; }
+.play-icon { position:absolute; inset:0; display:grid; place-items:center; color:white; font-size:18px; background:#0003; }
+.press-card>b { display:block; font-size:12px; font-weight:500; margin-top:8px; }
+dialog#gallery { border:1px solid var(--line); border-radius:16px; padding:0; background:var(--bg); color:var(--fg); width:min(900px,calc(100% - 24px)); max-width:none; max-height:calc(100dvh - 24px); }
+#gallery::backdrop { background:#000d; }
+.gallery-shell { display:flex; flex-direction:column; max-height:calc(100dvh - 26px); }
+.gallery-top { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:16px 20px; border-bottom:1px solid var(--line); flex-shrink:0; }
+.gallery-top h2 { font:500 15px/1.4 var(--f-head); text-transform:none; margin-top:4px; }
+.gallery-top button,.gallery-bottom button { flex:none; width:44px; height:44px; border:1px solid var(--line); border-radius:50%; background:var(--surface); color:var(--fg); cursor:pointer; font-size:24px; }
+#galleryStage { min-height:0; display:flex; align-items:center; justify-content:center; overflow:auto; background:#08090a; padding:8px; }
+#galleryStage img,#galleryStage video { display:block; max-width:100%; max-height:calc(100dvh - 200px); object-fit:contain; width:auto; height:auto; }
+#galleryStage video { min-height:260px; }
+.gallery-bottom { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 20px; border-top:1px solid var(--line); flex-shrink:0; }
+.gallery-bottom a { font-size:14px; text-underline-offset:4px; margin-inline:auto; }
+
+/* The original grid, type scale, spacing and scroll choreography live in index.html. */
+#approach .reasons {grid-template-columns:repeat(2,minmax(0,1fr))}
+#press {margin:0;padding:0;flex-shrink:0}
+#press .small-heading {display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#press .small-heading h2 {font-size:22px;margin:0}
+#press .small-heading>span {font-size:11px;color:var(--mute)}
+.rail .side-head,.rail .brand {flex-shrink:0}
+.rail-body {min-height:0}
+.soc-row a[aria-label="Telegram"] {background:#229ed9;color:white;border-color:#229ed9}
+.soc-row a[aria-label="Instagram"] {background:linear-gradient(35deg,#f9a13d,#dd286a,#824bc4);color:white;border-color:#c63c8a}
+.soc-row a[aria-label="YouTube"] {background:#e3262d;color:white;border-color:#e3262d}
+.soc-row a[aria-label="TikTok"] {color:#25f4ee;border-color:#fe2c55}
+.useful-grid {margin-top:40px}
+.useful-item .in {padding:0 0 28px}
+.useful-item .in>p {margin-top:0}
+.useful-item .in>ul {margin-top:0;padding-left:20px}
+
+.useful-item p,.useful-item ul {color:var(--mute);line-height:1.7}
+.useful-item li {margin-bottom:12px}
+.document-link {display:block;margin-top:16px}
+.case-media {margin-top:24px;justify-self:start}
+.review-view img {object-fit:contain!important}
+.review-view .cover,.review-view .pf {display:none}
+.revs .reel img {object-fit:contain}
+.revs .reel .cover {display:none}
+.revs .reel::after {background:none}
+.svc h3 {overflow-wrap:anywhere}
+[data-ghost]::before {max-width:100%;left:0}
+@media(max-width:360px){.hero h1{font-size:30vw}.svc h3{font-size:26px}.brand span{font-size:10px;gap:4px}.brand{gap:8px}}
+@media(max-width:1000px){#press{margin-bottom:24px}.rail{gap:16px}}
+@media(max-width:700px){#approach .reasons{grid-template-columns:1fr}}
+@media(max-width:500px){.press-grid{gap:8px}.press-card>b{font-size:10px}.gallery-top,.gallery-bottom{padding:12px;gap:8px}}
+
+
+/* The press strip belongs to the opening reel scene, not the persistent rail. */
+.opening-slide {flex-direction:column;gap:20px;justify-content:flex-start}
+.opening-slide #press {width:100%}
+.opening-slide .feed {position:relative;inset:auto;flex:1;width:100%;min-height:0}
+.press-card>span:last-child {font:400 11px/1.5 var(--f-mono);color:var(--mute)}
+.press-image {border-radius:var(--r,18px);border:1px solid var(--line)}
+.press-card:hover .play-icon {background:#0005}
+.press-card:focus-visible {outline:2px solid var(--red-hi);outline-offset:4px}
+@media(max-width:1000px){.opening-slide .feed{position:static;width:auto;min-height:initial}}
+/* Case materials use the same dark stage and circular controls as the reel viewer. */
+dialog#gallery {width:min(480px,calc(100% - 24px));border:0;background:transparent;border-radius:0}
+.gallery-top,.gallery-bottom {padding:12px 0;border:0}
+#galleryStage {border:1px solid var(--line);border-radius:24px;padding:0;background:var(--surface)}
+.gallery-top button,.gallery-bottom button {background:transparent}
