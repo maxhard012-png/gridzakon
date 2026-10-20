@@ -2,10 +2,6 @@
 .press-card { min-width:0; text-decoration:none; }
 .press-image { display:block; position:relative; overflow:hidden; aspect-ratio:16/9; border-radius:8px; background:var(--surface); }
 .press-image img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .25s; }
-.press-image[class*="press-"] img { position:absolute; height:auto; max-width:none; object-fit:initial; transform:none; }
-.press-1 img { width:105.58%; left:-3.72%; top:-.56%; }
-.press-2 img { width:224.01%; left:-10.20%; top:-216.37%; }
-.press-3 img { width:224.01%; left:-117.11%; top:-216.37%; }
 .play-icon { position:absolute; inset:0; display:grid; place-items:center; color:white; font-size:18px; background:#0003; }
 .press-card>b { display:block; font-size:12px; font-weight:500; margin-top:8px; }
 dialog#gallery { border:1px solid var(--line); border-radius:16px; padding:0; background:var(--bg); color:var(--fg); width:min(900px,calc(100% - 24px)); max-width:none; max-height:calc(100dvh - 24px); }
@@ -68,3 +64,16 @@ dialog#gallery {width:min(480px,calc(100% - 24px));border:0;background:transpare
 .gallery-top,.gallery-bottom {padding:12px 0;border:0}
 #galleryStage {border:1px solid var(--line);border-radius:24px;padding:0;background:var(--surface)}
 .gallery-top button,.gallery-bottom button {background:transparent}
+
+/* СМИ: карточки открывают сюжет прямо на сайте */
+.press-card {display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;font:inherit;cursor:pointer}
+.press-card .play-icon svg {width:30px;height:30px;padding:9px 8px 9px 10px;border-radius:50%;background:#0c0d0fb3;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-sizing:border-box;transition:transform .25s,background .25s}
+.press-card:hover .play-icon svg {transform:scale(1.08);background:var(--red)}
+.press-card:hover .press-image img {transform:scale(1.04)}
+dialog#gallery.wide {width:min(960px,calc(100% - 24px))}
+dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16/9;background:#000}
+/* стрелки одной иконкой, левая — зеркальная */
+.circ svg,#galleryPrev svg,#galleryNext svg {width:18px;height:18px;display:block}
+.ar-l {transform:scaleX(-1)}
+/* отзывы: обрезанные истории со скруглением */
+#revs .reel img {object-position:center top}

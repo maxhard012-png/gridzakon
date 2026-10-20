@@ -13,14 +13,15 @@ document.querySelectorAll('#revs [data-r]').forEach((button,i)=>button.setAttrib
     stage.replaceChildren();
     $('galleryTitle').textContent = item.label;
     $('galleryCount').textContent = `${index + 1} / ${group.length}`;
-    $('galleryOriginal').href = item.src;
-    $('galleryOriginal').textContent = item.video ? 'Открыть видео ↗' : 'Открыть оригинал ↗';
+    $('galleryOriginal').href = item.href || item.src;
+    $('galleryOriginal').textContent = item.href ? 'Полный выпуск ↗' : item.video ? 'Открыть видео ↗' : 'Открыть оригинал ↗';
     $('galleryPrev').hidden = $('galleryNext').hidden = group.length < 2;
     const media = document.createElement(item.video ? 'video' : 'img');
     if (item.video) {
       media.controls = true;
       media.playsInline = true;
       media.preload = 'metadata';
+      if (item.href) media.autoplay = true;
       media.poster = item.poster;
       media.setAttribute('aria-label', item.label);
     } else media.alt = item.label;
@@ -40,6 +41,7 @@ document.querySelectorAll('#revs [data-r]').forEach((button,i)=>button.setAttrib
     index = Number(trigger.dataset.index) || 0;
     returnFocus = trigger;
     scrollPosition = scrollY;
+    dialog.classList.toggle('wide', trigger.dataset.gallery === 'press');
     renderMedia();
     dialog.showModal();
     document.body.style.position = 'fixed';
