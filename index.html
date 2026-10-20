@@ -625,6 +625,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 <link rel="stylesheet" href="updates.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 </head>
 <body>
 
@@ -678,6 +679,14 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     <p class="idx"><b>01</b>Подход к делу</p>
     <h2>Мой принцип <span class="thin">работы</span></h2>
     <p class="story">Решаю проблемы своих до того, как они случились, а не разбираю последствия после.</p>
+    <div class="scales" id="scales">
+      <div class="sc-view"><canvas aria-hidden="true"></canvas><span class="sc-state" aria-live="polite">Весы</span></div>
+      <p class="sc-fact">Проблемы приходят без предупреждения</p>
+      <div class="sc-btns" role="group" aria-label="Положить гирю на чашу">
+        <button type="button" data-w="0" disabled>+ Консультация</button><button type="button" data-w="1" disabled>+ Договор</button><button type="button" data-w="2" disabled>+ Суд</button>
+        <button type="button" class="sc-again" hidden>Ещё раз</button>
+      </div>
+    </div>
     <div class="reasons">
       <div><b>Под ключ</b><span>От претензии до исполнения решения.</span></div>
       <div><b>На связи лично</b><span>Отвечаю сам, без секретарей.</span></div>
@@ -1223,5 +1232,6 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 <script id="galleryData" type="application/json">{"case-0": [{"src": "assets/cases/case-1-situation.jpg", "label": "ДТП: обращение клиентов"}, {"src": "assets/cases/case-1-request.jpg", "label": "Запрос видеозаписи и обратная связь"}, {"src": "assets/videos/client-review.mp4", "poster": "assets/reviews/s/video-review.jpg", "label": "Видео к кейсу о ДТП", "video": true}], "case-1": [{"src": "assets/cases/case-2-refund.jpg", "label": "Возврат денег за обучение: отзыв клиента"}], "case-2": [{"src": "assets/videos/case-3.mp4", "poster": "assets/cases/case-3-poster.jpg", "label": "Клиентка о досудебной претензии", "video": true}], "reviews": [{"src": "assets/videos/client-review.mp4", "poster": "assets/reviews/s/video-review.jpg", "label": "Видеоотзыв клиента", "video": true}, {"src": "assets/reviews/s/review-01.jpg", "label": "Отзыв клиента — скриншот 1"}, {"src": "assets/reviews/s/review-02.jpg", "label": "Отзыв клиента — скриншот 2"}, {"src": "assets/reviews/s/review-03.jpg", "label": "Отзыв клиента — скриншот 3"}, {"src": "assets/reviews/s/review-04.jpg", "label": "Отзыв клиента — скриншот 4"}, {"src": "assets/reviews/s/review-05.jpg", "label": "Отзыв клиента — скриншот 5"}, {"src": "assets/reviews/s/review-06.jpg", "label": "Отзыв клиента — скриншот 6"}, {"src": "assets/reviews/s/review-07.jpg", "label": "Отзыв клиента — скриншот 7"}, {"src": "assets/reviews/s/review-08.jpg", "label": "Отзыв клиента — скриншот 8"}, {"src": "assets/reviews/s/review-09.jpg", "label": "Отзыв клиента — скриншот 9"}, {"src": "assets/reviews/s/review-10.jpg", "label": "Отзыв клиента — скриншот 10"}, {"src": "assets/reviews/s/review-11.jpg", "label": "Отзыв клиента — скриншот 11"}, {"src": "assets/reviews/s/review-12.jpg", "label": "Отзыв клиента — скриншот 12"}, {"src": "assets/reviews/s/review-13.jpg", "label": "Отзыв клиента — скриншот 13"}, {"src": "assets/reviews/s/review-14.jpg", "label": "Отзыв клиента — скриншот 14"}, {"src": "assets/reviews/s/review-15.jpg", "label": "Отзыв клиента — скриншот 15"}, {"src": "assets/reviews/s/review-16.jpg", "label": "Отзыв клиента — скриншот 16"}, {"src": "assets/reviews/s/review-17.jpg", "label": "Отзыв клиента — скриншот 17"}, {"src": "assets/reviews/s/review-18.jpg", "label": "Отзыв клиента — скриншот 18"}, {"src": "assets/reviews/s/review-19.jpg", "label": "Отзыв клиента — скриншот 19"}], "press": [{"src": "assets/press/press-1.mp4", "poster": "assets/press/press-1.jpg", "video": true, "href": "https://smotrim.ru/brand/5403#playing_video=6074096", "label": "Вести — Москва, 09.09.2026"}, {"src": "assets/press/press-2.mp4", "poster": "assets/press/press-2.jpg", "video": true, "href": "https://smotrim.ru/video/6051419", "label": "Вести — Москва, 27.07.2026"}, {"src": "assets/press/press-3.mp4", "poster": "assets/press/press-3.jpg", "video": true, "href": "https://smotrim.ru/brand/5403#playing_video=6046737", "label": "Вести — Москва, 16.07.2026"}]}</script>
 <script src="documents.js"></script>
 <script src="site.js"></script>
+<script type="module" src="scales.js"></script>
 </body>
 </html>
