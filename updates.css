@@ -193,3 +193,4 @@ dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16
 .sc-pick button {min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--fg);font:inherit;cursor:pointer}
 .sc-pick button.on {background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .sc-word {paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
+.v-d .sc-gword {top:66%}

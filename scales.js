@@ -1,9 +1,10 @@
-// Сцена «Весы» в блоке «Мой принцип работы», варианты B и C (A — 3D, см. scales3d.js).
+// Сцена «Весы» в блоке «Мой принцип работы», варианты B, C и D (A — 3D, см. scales3d.js).
+// D — тёмный гербовый знак: весы висят на навершии, коромысло крыльями с завитками, большие чаши.
 // B — графика с объёмом: металл, тени, плашки-бруски, гири-кнопки, луч света.
 // C — типографика: слова шрифтом заголовков сайта вместо плашек, красное коромысло.
 // История идёт сама, как только сцена на экране; прокрутка может её ускорить.
 const stage = document.getElementById('scales');
-const VARIANT = window.SC_VARIANT || 'B';
+const VARIANT = window.SC_VARIANT || 'D';
 if (stage && VARIANT !== 'A') {
   const ready = document.fonts && document.fonts.load
     ? Promise.race([Promise.all([document.fonts.load('400 20px Oswald', 'НЕПОНИМАНИЕ ПЕРЕВЕС'), document.fonts.load('200 20px Oswald', 'НЕОПРЕДЕЛЁННОСТЬ'),
@@ -17,41 +18,55 @@ function boot() {
   const el = (tag, attrs, parent) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; };
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const view = stage.querySelector('.sc-view'), chip = stage.querySelector('.sc-state'), gword = stage.querySelector('.sc-gword');
-  const RICH = VARIANT === 'B';
+  const EMB = VARIANT === 'D', LIGHT = VARIANT === 'B', RICH = LIGHT || EMB;
   stage.classList.add('v-' + VARIANT.toLowerCase());
 
   // ---------- сцена ----------
-  const W = 560, H = 400, PX = 280, PY = 92, HALF = 160, DROP = 124;
+  const W = EMB ? 600 : 560, H = 400, PX = W / 2, PY = EMB ? 150 : 92, HALF = EMB ? 178 : 160, DROP = EMB ? 148 : 124, HY = EMB ? 14 : 0;
   const svg = el('svg', { class: 'sc-svg', viewBox: `0 0 ${W} ${H}`, 'aria-hidden': 'true' });
   view.querySelector('canvas')?.remove(); view.prepend(svg);
   const defs = el('defs', {}, svg);
   const grad = (id, kind, attrs, stops) => { const g = el(kind, { id, ...attrs }, defs); stops.forEach(([o, c, a = 1]) => el('stop', { offset: o, 'stop-color': c, 'stop-opacity': a }, g)); return `url(#${id})`; };
-  let metalV, metalH, rimG, redG, greenG, shadowF, beamF;
+  let metalV, metalH, rimG, redG, greenG, shadowF, beamF, darkG;
   if (RICH) {
     metalV = grad('scMV', 'linearGradient', { x1: 0, y1: 0, x2: 0, y2: 1 }, [[0, '#ffffff'], [0.32, '#dcdcd8'], [0.55, '#8f9195'], [0.78, '#e8e8e3'], [1, '#a9aaa7']]);
     metalH = grad('scMH', 'linearGradient', { x1: 0, y1: 0, x2: 1, y2: 0 }, [[0, '#7d7f83'], [0.3, '#f6f6f2'], [0.55, '#c3c4c0'], [1, '#6c6e72']]);
     rimG = grad('scRim', 'linearGradient', { x1: 0, y1: 0, x2: 0, y2: 1 }, [[0, '#2a2c30'], [1, '#6e7074']]);
+    grad('scInk', 'linearGradient', { x1: 0, y1: -60, x2: 0, y2: 60, gradientUnits: 'userSpaceOnUse', gradientTransform: 'translate(0 150)' }, [[0, '#3a3e45'], [0.5, '#1d1f24'], [1, '#111215']]);
+    darkG = grad('scDark', 'linearGradient', { x1: 0, y1: 0, x2: 0, y2: 1 }, [[0, '#3b3f46'], [0.45, '#1c1e22'], [1, '#0e0f12']]);
     redG = grad('scRed', 'radialGradient', { cx: 0.38, cy: 0.32, r: 0.75 }, [[0, '#ff7a7e'], [0.45, '#e3262d'], [1, '#8a1015']]);
     greenG = grad('scGreen', 'radialGradient', { cx: 0.38, cy: 0.32, r: 0.75 }, [[0, '#7cf0a8'], [0.45, '#21b45f'], [1, '#0d6a35']]);
-    grad('scCone', 'linearGradient', { x1: 0, y1: 0, x2: 0, y2: 1 }, [[0, '#ffffff', 0.11], [1, '#ffffff', 0]]);
-    grad('scFloor', 'radialGradient', { cx: 0.5, cy: 0.5, r: 0.5 }, [[0, '#ffffff', 0.09], [1, '#ffffff', 0]]);
     const f = el('filter', { id: 'scSh', x: '-30%', y: '-30%', width: '160%', height: '190%' }, defs);
     el('feDropShadow', { dx: 0, dy: 9, stdDeviation: 8, 'flood-color': '#000', 'flood-opacity': 0.65 }, f);
     const f2 = el('filter', { id: 'scBeam', x: '-10%', y: '-200%', width: '120%', height: '600%' }, defs);
     el('feDropShadow', { dx: 0, dy: 12, stdDeviation: 10, 'flood-color': '#000', 'flood-opacity': 0.7 }, f2);
-    const f3 = el('filter', { id: 'scBlur', x: '-50%', y: '-200%', width: '200%', height: '500%' }, defs);
-    el('feGaussianBlur', { stdDeviation: 7 }, f3);
     shadowF = 'url(#scSh)'; beamF = 'url(#scBeam)';
-    // луч света сверху и пятно на полу
+  }
+  if (LIGHT) {
+    grad('scCone', 'linearGradient', { x1: 0, y1: 0, x2: 0, y2: 1 }, [[0, '#ffffff', 0.11], [1, '#ffffff', 0]]);
+    grad('scFloor', 'radialGradient', { cx: 0.5, cy: 0.5, r: 0.5 }, [[0, '#ffffff', 0.09], [1, '#ffffff', 0]]);
+    const f3 = el('filter', { id: 'scBlur', x: '-50%', y: '-200%', width: '200%', height: '500%' }, defs); el('feGaussianBlur', { stdDeviation: 7 }, f3);
     const f4 = el('filter', { id: 'scSoft', x: '-40%', y: '-20%', width: '180%', height: '140%' }, defs); el('feGaussianBlur', { stdDeviation: 18 }, f4);
+    // луч света сверху и пятно на полу
     el('path', { d: `M${PX - 30} -80 L${PX + 30} -80 L${PX + 230} 357 L${PX - 230} 357 Z`, fill: 'url(#scCone)', filter: 'url(#scSoft)', opacity: 0.8 }, svg);
     el('ellipse', { cx: PX, cy: 357, rx: 250, ry: 26, fill: 'url(#scFloor)' }, svg);
     el('ellipse', { cx: PX, cy: 358, rx: 92, ry: 9, fill: '#000', opacity: 0.75, filter: 'url(#scBlur)' }, svg);
   }
-  el('line', { class: 'sc-floor', x1: 0, x2: W, y1: 357.5, y2: 357.5 }, svg);
+  if (!EMB) el('line', { class: 'sc-floor', x1: 0, x2: W, y1: 357.5, y2: 357.5 }, svg);
 
-  // стойка
-  if (RICH) {
+  // тёмный металл с тонкой светлой обводкой: линия рисуется дважды — кант и тело
+  const ink = (d, w, parent, cap = 'square') => {
+    el('path', { d, fill: 'none', stroke: '#868b93', 'stroke-width': w + 3.4, 'stroke-linejoin': 'miter', 'stroke-linecap': cap }, parent);
+    el('path', { d, fill: 'none', stroke: 'url(#scInk)', 'stroke-width': w, 'stroke-linejoin': 'miter', 'stroke-linecap': cap }, parent);
+  };
+  const solid = (d, parent, fill) => el('path', { d, fill: fill || darkG, stroke: '#868b93', 'stroke-width': 1.7, 'stroke-linejoin': 'miter' }, parent);
+
+  // стойка / навершие
+  if (EMB) {
+    // весы висят на навершии-ромбе, как в гербовом знаке
+    ink(`M${PX} ${PY - 106} L${PX + 17} ${PY - 89} L${PX} ${PY - 72} L${PX - 17} ${PY - 89} Z`, 7, svg);
+    ink(`M${PX} ${PY - 70} L${PX} ${PY - 34}`, 9, svg, 'butt');
+  } else if (LIGHT) {
     el('path', { d: `M${PX - 78} 357 Q${PX - 74} 340 ${PX - 50} 338 L${PX + 50} 338 Q${PX + 74} 340 ${PX + 78} 357 Z`, fill: metalV, filter: shadowF }, svg);
     el('rect', { x: PX - 8, y: PY, width: 16, height: 250, rx: 8, fill: metalH }, svg);
     [150, 326].forEach((y) => el('rect', { x: PX - 14, y, width: 28, height: 9, rx: 4.5, fill: metalV }, svg));
@@ -63,9 +78,15 @@ function boot() {
   }
 
   // чаша: подвесы, чаша, группа для груза
+  const PR = EMB ? 116 : 100;
   function pan() {
     const g = el('g', {}, svg);
-    if (RICH) {
+    if (EMB) {
+      [[-PR + 6, DROP], [0, DROP - 6], [PR - 6, DROP]].forEach(([x, y]) => ink(`M0 4 L${x} ${y}`, 3.2, g, 'butt'));
+      solid(`M${-PR} ${DROP} A${PR} 30 0 0 0 ${PR} ${DROP} Z`, g);
+      el('ellipse', { cx: 0, cy: DROP, rx: PR, ry: 13, fill: '#25282d', stroke: '#9aa0a8', 'stroke-width': 1.7 }, g);
+      el('circle', { cx: 0, cy: 2, r: 7, fill: '#1b1d21', stroke: '#868b93', 'stroke-width': 1.7 }, g);
+    } else if (LIGHT) {
       [-1, 1].forEach((s) => el('line', { x1: 0, y1: 0, x2: s * 92, y2: DROP, stroke: '#cfd0cc', 'stroke-width': 2.6, 'stroke-dasharray': '5 3', 'stroke-linecap': 'round' }, g));
       el('line', { x1: 0, y1: 0, x2: 0, y2: DROP - 8, stroke: '#cfd0cc', 'stroke-width': 2.6, 'stroke-dasharray': '5 3', 'stroke-linecap': 'round', opacity: 0.55 }, g);
       el('path', { d: `M-102 ${DROP} C-74 ${DROP + 38} 74 ${DROP + 38} 102 ${DROP} Z`, fill: metalV, filter: shadowF }, g);
@@ -82,16 +103,28 @@ function boot() {
   const pans = [pan(), pan()];
   // коромысло
   const beam = el('g', {}, svg);
-  if (RICH) {
+  let pivot;
+  if (EMB) {
+    // крылья к центру, квадратные завитки на концах, веер над осью и щиток под ней
+    const L = PX - HALF, R = PX + HALF, y = PY + HY;
+    ink(`M${L} ${y} L${PX - 84} ${PY - 6} L${PX} ${PY + 6} L${PX + 84} ${PY - 6} L${R} ${y}`, 13, beam);
+    [[L, -1], [R, 1]].forEach(([x, s]) => ink(`M${x - s * 4} ${y} L${x + s * 16} ${y} L${x + s * 16} ${y - 28} L${x - s * 10} ${y - 28} L${x - s * 10} ${y - 13} L${x + s * 3} ${y - 13}`, 7, beam));
+    solid(`M${PX - 26} ${PY - 2} L${PX - 4} ${PY - 38} L${PX - 4} ${PY - 2} Z`, beam);
+    solid(`M${PX + 26} ${PY - 2} L${PX + 4} ${PY - 38} L${PX + 4} ${PY - 2} Z`, beam);
+    pivot = solid(`M${PX - 15} ${PY + 12} L${PX + 15} ${PY + 12} L${PX + 15} ${PY + 28} L${PX} ${PY + 44} L${PX - 15} ${PY + 28} Z`, beam, redG);
+    pivot.style.fill = redG;
+  } else if (LIGHT) {
     el('rect', { x: PX - HALF - 8, y: PY - 8, width: HALF * 2 + 16, height: 16, rx: 8, fill: metalV, filter: beamF }, beam);
     el('rect', { x: PX - HALF, y: PY - 6, width: HALF * 2, height: 2, rx: 1, fill: '#fff', opacity: 0.7 }, beam);
     [-1, 1].forEach((s) => el('circle', { cx: PX + s * HALF, cy: PY, r: 11, fill: metalV }, beam));
+    pivot = el('circle', { class: 'sc-pivot', cx: PX, cy: PY, r: 19, filter: shadowF }, svg); pivot.style.fill = redG;
+    el('circle', { cx: PX, cy: PY, r: 19, fill: 'none', stroke: '#fff', 'stroke-opacity': 0.35 }, svg);
+    el('circle', { class: 'sc-hole', cx: PX, cy: PY, r: 5.5 }, svg);
   } else {
     el('rect', { class: 'sc-redbar', x: PX - HALF - 6, y: PY - 6, width: HALF * 2 + 12, height: 12, rx: 6 }, beam);
+    pivot = el('circle', { class: 'sc-pivot', cx: PX, cy: PY, r: 11 }, svg);
+    el('circle', { class: 'sc-hole', cx: PX, cy: PY, r: 3.5 }, svg);
   }
-  const pivot = el('circle', { class: 'sc-pivot', cx: PX, cy: PY, r: RICH ? 19 : 11 }, svg);
-  if (RICH) { pivot.setAttribute('fill', redG); pivot.setAttribute('filter', shadowF); el('circle', { cx: PX, cy: PY, r: 19, fill: 'none', stroke: '#fff', 'stroke-opacity': 0.35 }, svg); }
-  el('circle', { class: 'sc-hole', cx: PX, cy: PY, r: RICH ? 5.5 : 3.5 }, svg);
 
   // ---------- груз ----------
   // B: брусок с торцом и бликом или гиря-кнопка с объёмом; C: просто слово шрифтом заголовков
@@ -148,7 +181,7 @@ function boot() {
     cIdx.textContent = s[1]; cTitle.textContent = s[2]; cText.textContent = s[3]; capEl.classList.add('in');
     chip.textContent = s[4] === 'level' ? 'Проблема решена' : k >= 1 ? 'Перевес' : 'Весы';
     if (gword) gword.textContent = s[5];
-    if (RICH) pivot.setAttribute('fill', s[4] === 'level' ? greenG : redG);
+    if (RICH) pivot.style.fill = s[4] === 'level' ? greenG : redG;
     stage.classList.toggle('is-level', s[4] === 'level'); stage.classList.toggle('is-tilt', s[4] === 'tilt');
   }
 
@@ -189,7 +222,7 @@ function boot() {
     pans.forEach((p, i) => {
       const s = i ? 1 : -1;
       p.phiV += (-p.phi * 26 - p.phiV * 3 + acc * 0.9 * s) * dt; p.phi += p.phiV * dt; if (still) p.phi = p.phiV = 0;
-      const hx = PX + s * HALF * Math.cos(theta), hy = PY - s * HALF * Math.sin(theta);
+      const hx = PX + s * HALF * Math.cos(theta) + HY * Math.sin(theta), hy = PY - s * HALF * Math.sin(theta) + HY * Math.cos(theta);
       p.g.setAttribute('transform', `translate(${hx} ${hy}) rotate(${p.phi})`);
     });
     const moving = Math.abs(thetaV) + Math.abs(target - theta) + pans.reduce((a, p) => a + Math.abs(p.phiV) * 0.02 + Math.abs(p.phi) * 0.02, 0) > 0.0015
