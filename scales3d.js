@@ -31,12 +31,23 @@ async function boot() {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 1.1;
   const ANISO = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  // своя студия для отражений: тёмная комната, софтбокс сверху, световые полосы по бокам и сзади —
+  // на тёмном металле они дают чёткие длинные блики вместо ровной серой заливки
+  const studio = new THREE.Scene(); studio.background = new THREE.Color(0x040405);
+  const panel = (w, h, k, x, y, z, look) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(k, k, k), side: THREE.DoubleSide }));
+    m.position.set(x, y, z); m.lookAt(...look); studio.add(m); };
+  panel(7, 5, 2.6, 0, 9, 1, [0, 0, 0]);          // софтбокс сверху
+  panel(1.1, 9, 4.0, -8, 2, 2, [0, 2, 0]);       // полоса слева
+  panel(0.7, 9, 2.4, 8, 2, -1, [0, 2, 0]);       // полоса справа
+  panel(10, 0.8, 2.2, 0, 4, -8, [0, 2, 0]);      // контровая полоса сзади
+  panel(8, 3, 0.18, 0, 2, 9, [0, 2, 0]);         // слабый фронтальный отсвет
+  panel(30, 30, 0.03, 0, -4, 0, [0, 0, 0]);      // пол
+  scene.environment = pmrem.fromScene(studio, 0.02).texture;
   scene.environmentIntensity = 1.0;
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
 
@@ -83,10 +94,12 @@ async function boot() {
 
   // ---------- материалы: три и только три ----------
   const brush = brushed(512, 512);
-  const blued = new THREE.MeshPhysicalMaterial({ color: 0x30343a, metalness: 0.6, roughness: 0.34, roughnessMap: tex(brush, false, [1.5, 1.5]),
-    clearcoat: 0.6, clearcoatRoughness: 0.1, envMapIntensity: 1.5 });                                              // вороненая сталь
-  const bluedTurned = blued.clone(); bluedTurned.roughnessMap = tex(brush, false, [1, 6]);      // токарные детали: кольцевые риски
-  const polished = new THREE.MeshStandardMaterial({ color: 0x9da2aa, metalness: 1, roughness: 0.16, envMapIntensity: 1.2 }); // полированная сталь
+  const smudge = (() => { const c = cv(512, 512), x = c.getContext('2d'); x.drawImage(brush, 0, 0); x.globalCompositeOperation = 'overlay'; x.globalAlpha = 0.6;
+    x.drawImage(noise(512, 512, 6, 4), 0, 0); return c; })();
+  const blued = new THREE.MeshPhysicalMaterial({ color: 0x23262b, metalness: 1, roughness: 0.3, roughnessMap: tex(smudge, false, [2, 2]),
+    anisotropy: 0.7, clearcoat: 0.45, clearcoatRoughness: 0.12, envMapIntensity: 1.0 });   // шлифовка вдоль детали                                              // вороненая сталь
+  const bluedTurned = blued.clone(); bluedTurned.roughnessMap = tex(smudge, false, [1, 3]); bluedTurned.anisotropy = 0.25; bluedTurned.roughness = 0.38;      // токарные детали: кольцевые риски
+  const polished = new THREE.MeshPhysicalMaterial({ color: 0x9fa4ab, metalness: 1, roughness: 0.14, clearcoat: 0.3, clearcoatRoughness: 0.05 }); // полированная сталь
   const enamel = new THREE.MeshPhysicalMaterial({ color: 0xd8242b, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.04 }); // эмаль
   const RED = new THREE.Color(0xd8242b), GREEN = new THREE.Color(0x21b45f);
 
@@ -134,9 +147,15 @@ async function boot() {
   const path = [...curl(-1).reverse(), ...wing.slice().reverse().map(([x, y]) => [-x, y]), [0, -0.02], ...wing, ...curl(1)]
     .map(([x, y]) => new THREE.Vector3(x, y, 0));
   const rod = new THREE.CatmullRomCurve3(path, false, 'centripetal');
-  beam.add(new THREE.Mesh(new THREE.TubeGeometry(rod, 600, 0.078, 24, false), blued));
-  [path[0], path[path.length - 1]].forEach((p) => { const b = new THREE.Mesh(new THREE.SphereGeometry(0.078, 24, 16), blued); b.position.copy(p); beam.add(b); });
-  const hub = new THREE.Mesh(new THREE.SphereGeometry(0.115, 40, 24), bluedTurned); beam.add(hub);
+  // толще всего у оси, где нагрузка, к концам и завиткам плавно тоньше
+  const SEG = 600, RAD = 24, beamGeo = new THREE.TubeGeometry(rod, SEG, 1, RAD, false), pos = beamGeo.attributes.position, cen = new THREE.Vector3(), v = new THREE.Vector3();
+  const thick = (t) => 0.06 - 0.035 * Math.pow(Math.abs(t - 0.5) * 2, 0.9);
+  for (let i = 0; i <= SEG; i++) { const t = i / SEG; rod.getPointAt(t, cen); const r = thick(t);
+    for (let j = 0; j <= RAD; j++) { const k = i * (RAD + 1) + j; v.fromBufferAttribute(pos, k).sub(cen).multiplyScalar(r).add(cen); pos.setXYZ(k, v.x, v.y, v.z); } }
+  pos.needsUpdate = true; beamGeo.computeVertexNormals();
+  beam.add(new THREE.Mesh(beamGeo, blued));
+  [path[0], path[path.length - 1]].forEach((p) => { const b = new THREE.Mesh(new THREE.SphereGeometry(thick(0), 24, 16), blued); b.position.copy(p); beam.add(b); });
+  const hub = new THREE.Mesh(new THREE.SphereGeometry(0.095, 40, 24), bluedTurned); beam.add(hub);
   // медальон-указатель на шейке под осью: стальной обод и эмаль
   const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.2, 16), blued); neck.position.y = -0.2; beam.add(neck);
   const medal = new THREE.Mesh(new THREE.CylinderGeometry(0.135, 0.135, 0.05, 64), polished); medal.rotation.x = Math.PI / 2; medal.position.y = -0.4; beam.add(medal);
@@ -203,7 +222,7 @@ async function boot() {
   const WS = 0.78;
   const wGeo = new THREE.LatheGeometry([[0, 0], [0.27, 0], [0.29, 0.02], [0.29, 0.24], [0.27, 0.27], [0.2, 0.29], [0.1, 0.31], [0.085, 0.36],
     [0.11, 0.39], [0.12, 0.43], [0.1, 0.46], [0.05, 0.48], [0, 0.48]].map(([x, y]) => new THREE.Vector2(x * WS, y * WS)), 72);
-  const weightMat = new THREE.MeshStandardMaterial({ color: 0xa4a9b0, metalness: 1, roughness: 0.24, roughnessMap: tex(brush, false, [1, 6]), envMapIntensity: 1.4 });
+  const weightMat = new THREE.MeshPhysicalMaterial({ color: 0x8e939a, metalness: 1, roughness: 0.34, roughnessMap: tex(smudge, false, [1, 3]), anisotropy: 0.4, anisotropyRotation: Math.PI / 2 });
   function engraving(text) {
     const W = 1024, H = 128, c = cv(W, H), x = c.getContext('2d');
     let fs = 78; x.letterSpacing = '4px';
