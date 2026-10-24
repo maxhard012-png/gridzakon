@@ -104,3 +104,6 @@ dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16
 .revmore .ar {color:var(--mute)}
 .revmore:hover {border-color:var(--red);background:#e3262d1f}
 @media(prefers-reduced-motion:reduce){.scales.is-level .sc-state{animation:none}}
+
+/* ссылки внутри текста «Полезного» — тем же кеглем, что и текст */
+.useful-item li .link,.useful-item p .link {font:inherit;color:var(--fg)}
