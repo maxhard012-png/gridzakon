@@ -120,7 +120,7 @@ dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16
 @media(max-width:700px){.sc-view{margin:0 -16px;height:340px}.sc-state{left:16px}}
 
 /* Весы — история по прокрутке: блок закреплён, сцена и подписи меняются по ходу листания */
-.scales {height:340vh;margin:28px 0 8px;position:relative}
+.scales {height:220vh;margin:28px 0 8px;position:relative}
 .sc-pin {position:sticky;top:72px;height:calc(100vh - 92px);height:calc(100svh - 92px);display:flex;flex-direction:column;justify-content:center;gap:16px}
 .sc-pin .sc-view {height:min(60vh,520px)!important;flex:none}
 .sc-cap {min-height:126px}
@@ -135,7 +135,7 @@ dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16
 .sc-bar i {position:absolute;inset:0;background:var(--red);transform-origin:left;transform:scaleX(0);transition:background .5s}
 .scales.is-level .sc-bar i {background:#21b45f}
 @media(max-width:700px){
-  .scales {height:300vh}
+  .scales {height:200vh}
   .sc-pin {top:76px;height:calc(100vh - 176px);height:calc(100svh - 176px);gap:10px}
   .sc-pin .sc-view {height:min(46vh,360px)!important;margin:0 -16px}
   .sc-cap {min-height:112px}

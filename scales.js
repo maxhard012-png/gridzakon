@@ -224,7 +224,7 @@ async function boot() {
   // ---------- сценарий по прокрутке: эмоции падают, гири выравнивают ----------
   const BR = [[0.06, 0.17], [0.17, 0.28], [0.28, 0.39]], WG = [[0.5, 0.62], [0.62, 0.74], [0.74, 0.86]];
   const STAGES = [
-    [0, '', 'Как я работаю', 'Листай — покажу на весах.', ''],
+    [0, '', 'Как я работаю', 'Смотри на весы.', ''],
     [0.06, '01', 'Непонимание', 'Что происходит и что теперь делать — непонятно.', 'tilt'],
     [0.17, '02', 'Неопределённость', 'Чем всё закончится, никто не говорит.', 'tilt'],
     [0.28, '03', 'Страх', 'Страшно сделать хуже. Чаша уходит вниз.', 'tilt'],
@@ -250,18 +250,24 @@ async function boot() {
   const inOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   const MAX = 0.3, K = 0.1;
   let theta = 0, thetaV = 0, lastV = 0, running = false, visible = true, idle = 0;
-  let pTarget = still ? 1 : 0, ps = pTarget, camX = 0, mx = 0, my = 0, smx = 0, smy = 0;
+  let pTarget = still ? 1 : 0, ps = pTarget, scrollP = pTarget, tProg = 0, autoOn = false, camX = 0, mx = 0, my = 0, smx = 0, smy = 0;
   const Z = new THREE.Vector3(0, 0, 1), tmp = new THREE.Vector3(), tmp2 = new THREE.Vector3();
   function hang(s, out) { return out.set(s * HALF * Math.cos(theta), PIVOT_Y + s * HALF * Math.sin(theta), 0); }
   function panWorld(pan, local, out) { return out.copy(local).applyAxisAngle(Z, pan.phi).add(hang(pan.s, tmp)); }
 
   function progress() {
     const r = stage.getBoundingClientRect(), pin = stage.querySelector('.sc-pin').offsetHeight, run = r.height - pin;
-    pTarget = still ? 1 : clamp01((parseFloat(getComputedStyle(stage.querySelector('.sc-pin')).top) - r.top) / Math.max(1, run));
+    scrollP = still ? 1 : clamp01((parseFloat(getComputedStyle(stage.querySelector('.sc-pin')).top) - r.top) / Math.max(1, run));
+    // ушли выше блока — в следующий раз история проиграется заново
+    if (r.top > innerHeight && autoOn) { autoOn = false; tProg = 0; }
+    pTarget = Math.max(scrollP, tProg);
     wake();
   }
 
   function step(dt) {
+    // история идёт сама (~11 с), прокрутка может её ускорить
+    if (autoOn && tProg < 1) tProg = Math.min(1, tProg + dt / 11);
+    pTarget = Math.max(scrollP, tProg);
     ps += (pTarget - ps) * Math.min(1, dt * 7);
     if (Math.abs(pTarget - ps) < 0.0004) ps = pTarget;
     caption(ps); bar.style.transform = `scaleX(${ps})`;
@@ -298,7 +304,7 @@ async function boot() {
     camX += (focus - camX) * Math.min(1, dt * 2.5); smx += (mx - smx) * Math.min(1, dt * 3); smy += (my - smy) * Math.min(1, dt * 3);
     frameCam();
     const moving = Math.abs(thetaV) + Math.abs(target - theta) + pans.reduce((a, p) => a + Math.abs(p.phiV) + Math.abs(p.phi), 0) > 0.002
-      || ps !== pTarget || Math.abs(red.intensity - imb * 10) > 0.05 || Math.abs(camX - focus) > 0.003 || Math.abs(smx - mx) + Math.abs(smy - my) > 0.003;
+      || ps !== pTarget || (autoOn && tProg < 1) || Math.abs(red.intensity - imb * 10) > 0.05 || Math.abs(camX - focus) > 0.003 || Math.abs(smx - mx) + Math.abs(smy - my) > 0.003;
     idle = moving ? 0 : idle + dt;
   }
 
@@ -331,6 +337,8 @@ async function boot() {
   });
   view.addEventListener('pointerleave', () => { mx = my = 0; wake(); });
   new IntersectionObserver((e) => { visible = e[e.length - 1].isIntersecting; if (visible) { progress(); wake(); } }, { threshold: 0 }).observe(stage);
+  // автозапуск: как только сцена почти целиком на экране
+  new IntersectionObserver((e) => { if (e[e.length - 1].isIntersecting && !autoOn) { autoOn = true; wake(); } }, { threshold: 0.6 }).observe(view);
 
   pans.forEach((p) => hang(p.s, p.g.position));
   stage.classList.add('is-ready');
