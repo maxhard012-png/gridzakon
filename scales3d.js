@@ -31,6 +31,7 @@ async function boot() {
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; renderer.shadowMap.autoUpdate = false;
   renderer.toneMapping = THREE.NoToneMapping; // фирменные цвета без киношной обработки: красный остаётся #e3262d
   const ANISO = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
@@ -48,7 +49,8 @@ async function boot() {
 
   // свет студийный: ключ сверху-спереди-слева, заполняющий справа, два контровых сзади — металл читается по краям
   scene.add(new THREE.HemisphereLight(0xffffff, 0x101114, 0.9));
-  const key = new THREE.SpotLight(0xffffff, 55, 20, 0.6, 0.9, 1.5); key.position.set(-2.5, 8, 5); key.target.position.set(0, 2.4, 0); scene.add(key, key.target);
+  const key = new THREE.SpotLight(0xffffff, 55, 20, 0.6, 0.9, 1.5); key.position.set(-2.5, 8, 5); key.target.position.set(0, 2.4, 0);
+  key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.camera.near = 4; key.shadow.camera.far = 16; key.shadow.bias = -0.0004; key.shadow.normalBias = 0.02; key.shadow.radius = 5; key.shadow.blurSamples = 16; scene.add(key, key.target);
   const fill = new THREE.DirectionalLight(0xffffff, 0.7); fill.position.set(5, 2, 4); scene.add(fill);
   const rimL = new THREE.DirectionalLight(0xffffff, 3.2); rimL.position.set(-4, 5, -6); scene.add(rimL);
   const rimR = new THREE.DirectionalLight(0xffffff, 2.6); rimR.position.set(5, 4, -5); scene.add(rimR);
@@ -220,22 +222,30 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
     return tex(c, true);
   }
   const FLOOR = -BAIL_H + 0.025, BH = 0.26;
+  function contact(w, d, pill) {
+    const W = 512, H = Math.round(W * d / w * 1.25), c = cv(W, H), x = c.getContext('2d');
+    x.filter = `blur(${Math.round(H * 0.12)}px)`; x.fillStyle = '#000'; const px = W * 0.1, py = H * 0.2;
+    x.beginPath(); x.roundRect(px, py, W - px * 2, H - py * 2, pill ? (H - py * 2) / 2 : H * 0.06); x.fill();
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w * 1.2, d * 1.5), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false, opacity: 0 }));
+    m.rotation.x = -Math.PI / 2; return m;
+  }
   // пирамидой: широкий снизу, узкий сверху — бруски помещаются внутри треугольника цепей
   const PROBLEMS = [['НЕОПРЕДЕЛЁННОСТЬ', 1.16, 0.02, -0.04], ['НЕПОНИМАНИЕ', 0.9, -0.02, 0.05], ['СТРАХ', 0.6, 0.01, 0.07]];
-  const redMat = triplanar(new THREE.MeshStandardMaterial({ color: 0xe3262d, roughness: 0.75, metalness: 0 }), { rough: PL.rough, normal: PL.normal }, 5, 0.45);
+  const redMat = triplanar(new THREE.MeshPhysicalMaterial({ color: 0xe3262d, roughness: 0.62, metalness: 0, sheen: 0.4, sheenRoughness: 0.6, sheenColor: 0xff8a8f }), { rough: PL.rough, normal: PL.normal }, 5, 0.45);
   const problems = PROBLEMS.map(([t, w, dx, rot], i) => {
     const d = 0.3, m = new THREE.Group();
     m.add(new THREE.Mesh(new RoundedBoxGeometry(w, BH, d, 4, 0.03), redMat));
     const face = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.05, BH - 0.05), new THREE.MeshBasicMaterial({ map: plate(t, w - 0.05, BH - 0.05, '#ffffff'), transparent: true, polygonOffset: true, polygonOffsetFactor: -2 }));
     face.position.z = d / 2 + 0.001; m.add(face);
+    const cs = contact(w, d); cs.position.y = -BH / 2 + 0.004; m.add(cs);
     m.visible = false; scene.add(m);
-    return { m, off: new THREE.Vector3(dx, FLOOR + BH / 2 + i * (BH + 0.008), 0.04), rot, landed: false,
+    return { m, cs, off: new THREE.Vector3(dx, FLOOR + BH / 2 + i * (BH + 0.008), 0.04), rot, landed: false,
       spin: new THREE.Euler(Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6) };
   });
 
   // ---------- гири: объёмные белые кнопки сайта — главный акцент, пирамидой внутри цепей ----------
   const WH = 0.28, WD = 0.24;
-  const whiteMat = triplanar(new THREE.MeshStandardMaterial({ color: 0xdedcd7, roughness: 0.6, metalness: 0 }), { rough: PL.rough, normal: PL.normal }, 5, 0.3);
+  const whiteMat = triplanar(new THREE.MeshPhysicalMaterial({ color: 0xdedcd7, roughness: 0.55, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.18 }), { rough: PL.rough, normal: PL.normal }, 5, 0.3);
   const weights = [['Консультация', 1.24, 0.0, -0.03], ['Договор', 0.94, 0.02, 0.04], ['Суд', 0.68, -0.01, -0.04]].map(([t, w, dx, rot], i) => {
     const m = new THREE.Group();
     // пилюля: плоский фасад (как у кнопки), скруглённые торцы, мягкая фаска по контуру
@@ -243,8 +253,9 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
     m.add(new THREE.Mesh(extrude(st, WD - 0.06, 0.03), whiteMat));
     const fw = w - WH * 0.55, face = new THREE.Mesh(new THREE.PlaneGeometry(fw, WH * 0.8), new THREE.MeshBasicMaterial({ map: button(t, fw, WH * 0.8), transparent: true, polygonOffset: true, polygonOffsetFactor: -2 }));
     face.position.z = WD / 2 + 0.001; m.add(face);
+    const cs = contact(w, WD, true); cs.position.y = -WH / 2 - 0.026; m.add(cs);
     m.rotation.y = rot; m.visible = false; scene.add(m);
-    return { m, off: new THREE.Vector3(dx, FLOOR + WH / 2 + 0.03 + i * (WH + 0.075), 0.04), landed: false };
+    return { m, cs, off: new THREE.Vector3(dx, FLOOR + WH / 2 + 0.03 + i * (WH + 0.075), 0.04), landed: false };
   });
 
   // ---------- сценарий: эмоции пачкой, пауза, гири пачкой ----------
@@ -293,6 +304,7 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
     o.m.position.copy(land); o.m.position.y += (1 - bounce(t)) * 1.1 + zf * 0.5; o.m.position.z += zf * 2.2;
     const k = 1 - inOut(t);
     if (upright) o.m.rotation.z = pan.phi; else o.m.rotation.set(o.spin.x * k, o.rot + o.spin.y * k, o.spin.z * k + pan.phi);
+    o.cs.material.opacity = 0.88 * clamp01((t - 0.85) / 0.15);
     const now = t >= 1; if (now && !o.landed) { thetaV += kick; pan.phiV += (Math.random() - 0.5) * 0.8; } o.landed = now; return now ? 1 : 0;
   }
 
@@ -334,6 +346,7 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
   function frame(t) {
     const dt = Math.min(0.05, (t - (prev || t)) / 1000); prev = t;
     step(dt);
+    renderer.shadowMap.needsUpdate = true;
     renderer.render(scene, camera);
     if (visible && idle < 0.6) requestAnimationFrame(frame); else { running = false; prev = 0; }
   }
@@ -345,7 +358,7 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
     renderer.setSize(w, h, false); camera.aspect = w / h; narrow = w < 560;
     const tan = 2 * Math.tan(THREE.MathUtils.degToRad(15));
     fit = Math.max(4.1 / tan, (narrow ? 5.6 : 5.3) / (tan * camera.aspect));
-    camera.updateProjectionMatrix(); frameCam(); renderer.render(scene, camera); progress();
+    camera.updateProjectionMatrix(); frameCam(); renderer.shadowMap.needsUpdate = true; renderer.render(scene, camera); progress();
   }
   new ResizeObserver(resize).observe(view);
   addEventListener('scroll', progress, { passive: true });
@@ -356,6 +369,7 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
   new IntersectionObserver((e) => { visible = e[e.length - 1].isIntersecting; if (visible) { progress(); wake(); } }, { threshold: 0 }).observe(stage);
   new IntersectionObserver((e) => { if (e[e.length - 1].isIntersecting && !autoOn) { autoOn = true; wake(); } }, { threshold: 0.6 }).observe(view);
 
+  scene.traverse((o) => { if (o.isMesh && !o.material.isMeshBasicMaterial) { o.castShadow = true; o.receiveShadow = true; } });
   pans.forEach((p) => hang(p.s, p.g.position));
   stage.classList.add('is-ready');
   resize(); progress(); caption(ps); wake();
