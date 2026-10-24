@@ -84,13 +84,14 @@ async function boot() {
   function tag(text, w, h, bg, fg) {
     const c = document.createElement('canvas'); c.width = 512; c.height = Math.round(512 * h / w);
     const x = c.getContext('2d'); x.fillStyle = bg; x.fillRect(0, 0, c.width, c.height);
-    x.fillStyle = fg; x.font = `400 ${Math.round(c.height * 0.66)}px Oswald, "Arial Narrow", sans-serif`; x.letterSpacing = '4px';
+    x.fillStyle = fg; x.letterSpacing = '3px'; let fs = Math.round(c.height * 0.6);
+    do { x.font = `400 ${fs}px Oswald, "Arial Narrow", sans-serif`; } while (x.measureText(text).width > c.width * 0.88 && --fs > 10);
     x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, c.width / 2, c.height * 0.54);
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
   }
-  const PROBLEMS = [['ДОЛГ', 0.96, 0.38, 0.52, 0xe3262d, '#e3262d', '#fff', [-0.02, 0.26, 0.02], 0.05],
-                    ['ДТП', 0.78, 0.34, 0.46, 0xf1efe9, '#f1efe9', '#0c0d0f', [0.04, 0.62, -0.02], -0.1],
-                    ['ОБМАН', 0.88, 0.32, 0.42, 0xe3262d, '#e3262d', '#fff', [-0.05, 0.95, 0.03], 0.12]];
+  const PROBLEMS = [['НЕПОНИМАНИЕ', 1.36, 0.36, 0.5, 0xe3262d, '#e3262d', '#fff', [-0.02, 0.2, 0.02], 0.04],
+                    ['НЕОПРЕДЕЛЁННОСТЬ', 1.5, 0.36, 0.46, 0xf1efe9, '#f1efe9', '#0c0d0f', [0.03, 0.58, -0.02], -0.06],
+                    ['СТРАХ', 0.9, 0.36, 0.44, 0xe3262d, '#e3262d', '#fff', [-0.04, 0.96, 0.03], 0.1]];
   const problems = PROBLEMS.map(([t, w, h, d, col, bg, fg, off, rot]) => {
     const m = new THREE.Group();
     m.add(cast(new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, 0.04), new THREE.MeshStandardMaterial({ color: col, roughness: 0.55, metalness: 0.05 }))));
@@ -120,11 +121,11 @@ async function boot() {
 
   function setUI() {
     const l = onL(), r = onR(), level = l > 0 && r >= l;
-    chip.textContent = l === 0 ? 'Весы' : level ? 'Равновесие' : 'Перевес';
+    chip.textContent = l === 0 ? 'Весы' : level ? 'Проблема решена' : 'Перевес';
     stage.classList.toggle('is-level', level); stage.classList.toggle('is-tilt', l > 0 && !level);
-    fact.textContent = l === 0 ? 'Проблемы приходят без предупреждения'
-      : level ? 'Проблема под контролем до того, как стала бедой'
-      : r === 0 ? 'Проблемы тянут чашу вниз. Положи гирю' : 'Ещё ' + (l - r) + ' — и весы выровняются';
+    fact.textContent = l === 0 ? 'Проблема приходит без предупреждения'
+      : level ? 'Непонимание, неопределённость и страх больше не тянут вниз'
+      : r === 0 ? 'Непонимание, неопределённость и страх тянут чашу вниз. Положи гирю' : 'Ещё ' + (l - r) + ' — и весы выровняются';
     btns.forEach((b, i) => { b.disabled = weights[i].state !== 'shelf' || l === 0; });
     again.hidden = !level;
   }

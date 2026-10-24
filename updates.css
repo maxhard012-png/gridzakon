@@ -87,7 +87,9 @@ dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16
 .scales.is-ready canvas {opacity:1}
 .sc-state {position:absolute;left:14px;top:14px;font:400 13px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;padding:7px 10px;border-radius:6px;background:#ffffff14;color:var(--fg);transition:background .4s,color .4s}
 .scales.is-tilt .sc-state {background:var(--red);color:#fff}
-.scales.is-level .sc-state {background:#f1efe9;color:#0c0d0f}
+.scales.is-level .sc-state {background:#21b45f;color:#fff;box-shadow:0 0 0 1px #3ee08155,0 0 22px #21b45f99;animation:scok .9s cubic-bezier(.2,.7,.1,1)}
+@keyframes scok {0%{transform:scale(.9);box-shadow:0 0 0 0 #21b45f00}45%{transform:scale(1.06);box-shadow:0 0 0 8px #21b45f40,0 0 34px #21b45fcc}100%{transform:none}}
+.scales.is-level .sc-view {background:radial-gradient(60% 70% at 52% 18%,#ffffff12,transparent 70%),radial-gradient(55% 45% at 70% 95%,rgba(33,180,95,.16),transparent 70%),#0f1013}
 .sc-fact {margin:12px 0 10px;color:var(--mute);font-size:14px;min-height:1.5em}
 .sc-btns {display:flex;flex-wrap:wrap;gap:8px}
 .sc-btns button {min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 14px var(--f-head);cursor:pointer;transition:background .2s,border-color .2s,opacity .2s}
@@ -95,3 +97,10 @@ dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16
 .sc-btns button:disabled {opacity:.35;cursor:default}
 .sc-btns .sc-again {background:#f1efe9;color:#0c0d0f;border-color:transparent}
 .scales[hidden] {display:none}
+
+/* Отзывы: ссылка на все отзывы в Instagram */
+.revmore {display:inline-flex;align-items:center;gap:10px;margin-top:18px;min-height:48px;padding:0 20px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 14px var(--f-head);text-decoration:none;transition:border-color .2s,background .2s}
+.revmore svg {width:18px;height:18px}
+.revmore .ar {color:var(--mute)}
+.revmore:hover {border-color:var(--red);background:#e3262d1f}
+@media(prefers-reduced-motion:reduce){.scales.is-level .sc-state{animation:none}}

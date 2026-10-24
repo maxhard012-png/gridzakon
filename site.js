@@ -72,7 +72,6 @@ document.querySelectorAll('#revs [data-r]').forEach((button,i)=>button.setAttrib
 
   const documents = (window.GRIDZAKON_DOCUMENTS || []).filter(doc => doc.title && doc.url && /^(https:\/\/|assets\/documents\/)/.test(doc.url));
   if (documents.length) {
-    $('documentsIntro').textContent = 'Документы в Word для вашей ситуации.';
     documents.forEach(doc => {
       const a = document.createElement('a');
       a.className = 'document-link'; a.textContent = doc.title + ' ↓'; a.href = doc.url;
