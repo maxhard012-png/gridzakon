@@ -83,10 +83,10 @@ async function boot() {
 
   // ---------- материалы: три и только три ----------
   const brush = brushed(512, 512);
-  const blued = new THREE.MeshPhysicalMaterial({ color: 0x4b5059, metalness: 0.55, roughness: 0.36, roughnessMap: tex(brush, false, [1.5, 1.5]),
+  const blued = new THREE.MeshPhysicalMaterial({ color: 0x30343a, metalness: 0.6, roughness: 0.34, roughnessMap: tex(brush, false, [1.5, 1.5]),
     clearcoat: 0.6, clearcoatRoughness: 0.1, envMapIntensity: 1.5 });                                              // вороненая сталь
   const bluedTurned = blued.clone(); bluedTurned.roughnessMap = tex(brush, false, [1, 6]);      // токарные детали: кольцевые риски
-  const polished = new THREE.MeshStandardMaterial({ color: 0xdfe3e7, metalness: 1, roughness: 0.1, envMapIntensity: 1.4 }); // полированная сталь
+  const polished = new THREE.MeshStandardMaterial({ color: 0x9da2aa, metalness: 1, roughness: 0.16, envMapIntensity: 1.2 }); // полированная сталь
   const enamel = new THREE.MeshPhysicalMaterial({ color: 0xd8242b, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.04 }); // эмаль
   const RED = new THREE.Color(0xd8242b), GREEN = new THREE.Color(0x21b45f);
 
@@ -109,10 +109,10 @@ async function boot() {
   const poly = (pts) => { const s = new THREE.Shape(); s.moveTo(...pts[0]); pts.slice(1).forEach((p) => s.lineTo(...p)); s.closePath(); return s; };
 
   // ---------- подвес и вилка (неподвижны): всё круглое ----------
-  const PIVOT_Y = 3.15, HALF = 2.0, BAIL_H = 2.0, PR = 0.97, HANG = 0.23;
+  const PIVOT_Y = 3.15, HALF = 1.6, BAIL_H = 1.6, PR = 0.85, HANG = 0.23;
   const top = new THREE.Group(); top.position.y = PIVOT_Y; scene.add(top);
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.042, 24, 64), blued); ring.position.y = 1.1; top.add(ring);
-  const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.042, 0.62, 32), bluedTurned); stem.position.y = 0.63; top.add(stem);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.042, 24, 64), blued); ring.position.y = 0.86; top.add(ring);
+  const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.042, 0.4, 32), bluedTurned); stem.position.y = 0.52; top.add(stem);
   const knob = new THREE.Mesh(new THREE.SphereGeometry(0.065, 32, 20), polished); knob.position.y = 0.33; top.add(knob);
   // скоба-дуга над коромыслом и две круглые щеки, между ними ось
   const yoke = new THREE.Mesh(new THREE.TorusGeometry(0.135, 0.032, 16, 40, Math.PI), blued); yoke.rotation.y = Math.PI / 2; yoke.position.y = 0.17; top.add(yoke);
@@ -126,11 +126,11 @@ async function boot() {
   // ---------- коромысло: волна из круглого прутка, круглые завитки на концах ----------
   const beam = new THREE.Group(); beam.position.y = PIVOT_Y; scene.add(beam);
   const curl = (s) => { // спираль от конца коромысла вверх и внутрь
-    const C = [s * 2.2, 0.16], a0 = Math.atan2(-0.26, -0.2 * s), pts = [];
-    for (let i = 1; i <= 46; i++) { const k = i / 46, a = a0 + s * k * Math.PI * 2.3, r = 0.33 * (1 - 0.74 * k); pts.push([C[0] + Math.cos(a) * r, C[1] + Math.sin(a) * r]); }
+    const C = [s * (HALF + 0.17), 0.13], a0 = Math.atan2(-0.23, -0.17 * s), pts = [];
+    for (let i = 1; i <= 46; i++) { const k = i / 46, a = a0 + s * k * Math.PI * 2.3, r = 0.285 * (1 - 0.74 * k); pts.push([C[0] + Math.cos(a) * r, C[1] + Math.sin(a) * r]); }
     return pts;
   };
-  const wing = [[0.42, 0.05], [0.95, 0.14], [1.5, 0.05], [2.0, -0.1]];
+  const wing = [[0.34, 0.05], [0.76, 0.13], [1.2, 0.05], [1.6, -0.1]];
   const path = [...curl(-1).reverse(), ...wing.slice().reverse().map(([x, y]) => [-x, y]), [0, -0.02], ...wing, ...curl(1)]
     .map(([x, y]) => new THREE.Vector3(x, y, 0));
   const rod = new THREE.CatmullRomCurve3(path, false, 'centripetal');
@@ -146,10 +146,10 @@ async function boot() {
   [-1, 1].forEach((s) => { const eye = new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.02, 16, 40), polished); eye.rotation.y = Math.PI / 2; eye.position.set(s * HALF, -0.155, 0); beam.add(eye); });
 
   // ---------- чаши на цепях: две по бокам и одна сзади, сходятся к кольцу под проушиной ----------
-  const panGeo = new THREE.LatheGeometry([[0, 0.025], [0.72, 0.025], [0.9, 0.07], [0.965, 0.13], [0.985, 0.17], [0.97, 0.18], [0.95, 0.15], [0.88, 0.05], [0.7, 0], [0, 0]]
+  const panGeo = new THREE.LatheGeometry([[0, 0.025], [0.62, 0.025], [0.78, 0.065], [0.845, 0.12], [0.865, 0.16], [0.85, 0.17], [0.83, 0.14], [0.77, 0.045], [0.6, 0], [0, 0]]
     .map(([x, y]) => new THREE.Vector2(x, y)), 96);
   const linkGeo = new THREE.TorusGeometry(0.03, 0.0095, 10, 20); linkGeo.scale(1, 1.5, 1);
-  const TOP = new THREE.Vector3(0, -0.07, 0), rimY = -BAIL_H + 0.17;
+  const TOP = new THREE.Vector3(0, -0.07, 0), rimY = -BAIL_H + 0.16;
   const ANCH = [new THREE.Vector3(-PR + 0.02, rimY, 0), new THREE.Vector3(PR - 0.02, rimY, 0), new THREE.Vector3(0, rimY, -PR + 0.02)];
   const pans = [-1, 1].map((s) => {
     const g = new THREE.Group(); scene.add(g);
@@ -184,11 +184,11 @@ async function boot() {
     x.globalCompositeOperation = 'soft-light'; x.globalAlpha = 0.35; x.drawImage(noise(256, 256, 8, 4), 0, 0); return c;
   }
   const pGrain = noise(256, 256, 64, 2), pNormal = tex(normalFrom(pGrain, 1.4), false, [2, 1]), pRough = tex(pGrain, false, [2, 1]);
-  const FLOOR = -BAIL_H + 0.025, BH = 0.3;
+  const FLOOR = -BAIL_H + 0.025, BH = 0.24;
   // пирамидой: широкий снизу, узкий сверху — бруски помещаются внутри треугольника цепей
-  const PROBLEMS = [['НЕОПРЕДЕЛЁННОСТЬ', 1.42, '#e8e3d8', '#17181c', 0.02, -0.04], ['НЕПОНИМАНИЕ', 1.16, '#c8232a', '#f2ede4', -0.02, 0.05], ['СТРАХ', 0.8, '#c8232a', '#f2ede4', 0.01, 0.07]];
+  const PROBLEMS = [['НЕОПРЕДЕЛЁННОСТЬ', 1.14, '#e8e3d8', '#17181c', 0.02, -0.04], ['НЕПОНИМАНИЕ', 0.92, '#c8232a', '#f2ede4', -0.02, 0.05], ['СТРАХ', 0.64, '#c8232a', '#f2ede4', 0.01, 0.07]];
   const problems = PROBLEMS.map(([t, w, col, ink, dx, rot], i) => {
-    const d = 0.34, m = new THREE.Group();
+    const d = 0.28, m = new THREE.Group();
     m.add(new THREE.Mesh(new RoundedBoxGeometry(w, BH, d, 4, 0.035), new THREE.MeshPhysicalMaterial({
       map: tex(paint(col), true), roughness: 0.6, roughnessMap: pRough, normalMap: pNormal, normalScale: new THREE.Vector2(0.3, 0.3), clearcoat: 0.3, clearcoatRoughness: 0.45 })));
     const L = label(t, w - 0.06, BH - 0.06, ink);
@@ -200,10 +200,10 @@ async function boot() {
   });
 
   // ---------- гири: точёная сталь с гравировкой ----------
-  const WS = 0.95;
+  const WS = 0.78;
   const wGeo = new THREE.LatheGeometry([[0, 0], [0.27, 0], [0.29, 0.02], [0.29, 0.24], [0.27, 0.27], [0.2, 0.29], [0.1, 0.31], [0.085, 0.36],
     [0.11, 0.39], [0.12, 0.43], [0.1, 0.46], [0.05, 0.48], [0, 0.48]].map(([x, y]) => new THREE.Vector2(x * WS, y * WS)), 72);
-  const weightMat = new THREE.MeshStandardMaterial({ color: 0xe1e4e8, metalness: 1, roughness: 0.24, roughnessMap: tex(brush, false, [1, 6]), envMapIntensity: 1.4 });
+  const weightMat = new THREE.MeshStandardMaterial({ color: 0xa4a9b0, metalness: 1, roughness: 0.24, roughnessMap: tex(brush, false, [1, 6]), envMapIntensity: 1.4 });
   function engraving(text) {
     const W = 1024, H = 128, c = cv(W, H), x = c.getContext('2d');
     let fs = 78; x.letterSpacing = '4px';
@@ -211,11 +211,11 @@ async function boot() {
     x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = 'rgba(24,25,28,.9)'; x.fillText(text, W / 2, H * 0.54);
     const hgt = cv(W, H), hx = hgt.getContext('2d'); hx.fillStyle = '#fff'; hx.fillRect(0, 0, W, H); hx.filter = 'blur(1px)';
     hx.letterSpacing = '4px'; hx.font = x.font; hx.textAlign = 'center'; hx.textBaseline = 'middle'; hx.fillStyle = '#000'; hx.fillText(text, W / 2, H * 0.54);
-    const m = new THREE.Mesh(new THREE.CylinderGeometry(0.29 * WS + 0.002, 0.29 * WS + 0.002, 0.15, 72, 1, true),
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(0.29 * WS + 0.002, 0.29 * WS + 0.002, 0.15 * WS, 72, 1, true),
       new THREE.MeshStandardMaterial({ map: tex(c, true), normalMap: tex(normalFrom(hgt, 3)), transparent: true, metalness: 0.6, roughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2 }));
     m.position.y = 0.13 * WS; m.rotation.y = Math.PI; return m;
   }
-  const SLOT = [[-0.3, 0.16], [0.3, 0.16], [0, -0.26]];
+  const SLOT = [[-0.25, 0.13], [0.25, 0.13], [0, -0.21]];
   const weights = ['КОНСУЛЬТАЦИЯ', 'ДОГОВОР', 'СУД'].map((name, i) => {
     const m = new THREE.Group(); m.add(new THREE.Mesh(wGeo, weightMat)); m.add(engraving(name)); m.rotation.y = [-0.15, 0.12, 0][i]; m.visible = false; scene.add(m);
     return { m, off: new THREE.Vector3(SLOT[i][0], FLOOR, SLOT[i][1]), landed: false };
@@ -302,8 +302,8 @@ async function boot() {
 
   let fit = 10, prev = 0, narrow = false;
   function frameCam() {
-    camera.position.set(smx * 0.45, 3.2 + smy * 0.25, fit);
-    camera.lookAt(0, 2.45, 0);
+    camera.position.set(smx * 0.4, 3.3 + smy * 0.22, fit);
+    camera.lookAt(0, 2.6, 0);
   }
   function frame(t) {
     const dt = Math.min(0.05, (t - (prev || t)) / 1000); prev = t;
@@ -318,7 +318,7 @@ async function boot() {
     const w = view.clientWidth, h = view.clientHeight; if (!w || !h) return;
     renderer.setSize(w, h, false); camera.aspect = w / h; narrow = w < 560;
     const tan = 2 * Math.tan(THREE.MathUtils.degToRad(15));
-    fit = Math.max(4.9 / tan, (narrow ? 7.0 : 6.6) / (tan * camera.aspect));
+    fit = Math.max(4.1 / tan, (narrow ? 5.6 : 5.3) / (tan * camera.aspect));
     camera.updateProjectionMatrix(); frameCam(); renderer.render(scene, camera); progress();
   }
   new ResizeObserver(resize).observe(view);
