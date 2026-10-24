@@ -21,7 +21,7 @@ async function boot() {
   const { RoundedBoxGeometry } = await import('three/addons/geometries/RoundedBoxGeometry.js');
   const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
   // кириллица у Google Fonts — отдельный файл: просим шрифт сразу с русскими буквами
-  try { await Promise.race([document.fonts.load('400 40px Oswald', 'НЕПОНИМАНИЕ СТРАХ ЁЙ'), new Promise((r) => setTimeout(r, 2500))]); } catch (e) {}
+  try { await Promise.race([Promise.all([document.fonts.load('400 40px Oswald', 'НЕПОНИМАНИЕ СТРАХ ЁЙ'), document.fonts.load('600 40px "Golos Text"', 'Консультация Договор Суд')]), new Promise((r) => setTimeout(r, 2500))]); } catch (e) {}
 
   const canvas = stage.querySelector('canvas');
   const chip = stage.querySelector('.sc-state');
@@ -30,8 +30,7 @@ async function boot() {
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.1;
+  renderer.toneMapping = THREE.NoToneMapping; // фирменные цвета без киношной обработки: красный остаётся #e3262d
   const ANISO = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
   const scene = new THREE.Scene();
@@ -52,11 +51,11 @@ async function boot() {
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
 
   // свет студийный: ключ сверху-спереди-слева, заполняющий справа, два контровых сзади — металл читается по краям
-  scene.add(new THREE.HemisphereLight(0xf2efe8, 0x1a1b1e, 0.75));
-  const key = new THREE.SpotLight(0xfff6ea, 95, 20, 0.6, 0.9, 1.5); key.position.set(-2.5, 8, 5); key.target.position.set(0, 2.4, 0); scene.add(key, key.target);
-  const fill = new THREE.DirectionalLight(0xffffff, 1.1); fill.position.set(5, 2, 4); scene.add(fill);
-  const rimL = new THREE.DirectionalLight(0xdfe6ff, 1.4); rimL.position.set(-4, 5, -6); scene.add(rimL);
-  const rimR = new THREE.DirectionalLight(0xffffff, 1.1); rimR.position.set(5, 4, -5); scene.add(rimR);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x101114, 0.9));
+  const key = new THREE.SpotLight(0xffffff, 55, 20, 0.6, 0.9, 1.5); key.position.set(-2.5, 8, 5); key.target.position.set(0, 2.4, 0); scene.add(key, key.target);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.7); fill.position.set(5, 2, 4); scene.add(fill);
+  const rimL = new THREE.DirectionalLight(0xffffff, 3.2); rimL.position.set(-4, 5, -6); scene.add(rimL);
+  const rimR = new THREE.DirectionalLight(0xffffff, 2.6); rimR.position.set(5, 4, -5); scene.add(rimR);
   const red = new THREE.PointLight(0xe3262d, 0, 6, 1.8); red.position.set(-2.4, 1.2, 1.4); scene.add(red);
 
   // ---------- процедурные карты ----------
@@ -96,9 +95,9 @@ async function boot() {
   const brush = brushed(512, 512);
   const smudge = (() => { const c = cv(512, 512), x = c.getContext('2d'); x.drawImage(brush, 0, 0); x.globalCompositeOperation = 'overlay'; x.globalAlpha = 0.6;
     x.drawImage(noise(512, 512, 6, 4), 0, 0); return c; })();
-  const blued = new THREE.MeshStandardMaterial({ color: 0x2c2f35, metalness: 0.3, roughness: 0.6, roughnessMap: tex(smudge, false, [2, 2]) }); // матовый графит
+  const blued = new THREE.MeshStandardMaterial({ color: 0x1a1b1e, metalness: 0.35, roughness: 0.45, roughnessMap: tex(smudge, false, [2, 2]) }); // чёрный, как фон сайта
   const bluedTurned = blued.clone(); bluedTurned.roughnessMap = tex(smudge, false, [1, 3]); bluedTurned.roughness = 0.6;      // токарные детали: кольцевые риски
-  const polished = new THREE.MeshStandardMaterial({ color: 0x5b5f66, metalness: 0.45, roughness: 0.45 }); // матовая сталь фурнитуры
+  const polished = new THREE.MeshStandardMaterial({ color: 0x2b2d31, metalness: 0.55, roughness: 0.35 }); // фурнитура в тон
   const enamel = new THREE.MeshPhysicalMaterial({ color: 0xd8242b, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.04 }); // эмаль
   const RED = new THREE.Color(0xd8242b), GREEN = new THREE.Color(0x21b45f);
 
@@ -184,50 +183,51 @@ async function boot() {
     return { s, g, phi: 0, phiV: 0 };
   });
 
-  // ---------- эмоции: окрашенные бруски с выдавленной надписью ----------
-  function label(text, w, h, ink) {
-    const W = 768, Hh = Math.round(W * h / w), c = cv(W, Hh), x = c.getContext('2d');
-    x.letterSpacing = '5px'; let fs = Math.round(Hh * 0.56);
-    do { x.font = `400 ${fs}px Oswald, "Arial Narrow", sans-serif`; } while (x.measureText(text).width > W * 0.86 && --fs > 12);
-    x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = ink; x.fillText(text, W / 2, Hh * 0.54);
-    x.globalCompositeOperation = 'destination-out';
-    for (let i = 0; i < 500; i++) { x.globalAlpha = Math.random() * 0.45; x.beginPath(); x.arc(Math.random() * W, Math.random() * Hh, Math.random() * 2, 0, 7); x.fill(); }
-    x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
-    const hgt = cv(W, Hh), hx = hgt.getContext('2d'); hx.fillStyle = '#fff'; hx.fillRect(0, 0, W, Hh); hx.filter = 'blur(1.5px)';
-    hx.letterSpacing = '5px'; hx.font = x.font; hx.textAlign = 'center'; hx.textBaseline = 'middle'; hx.fillStyle = '#000'; hx.fillText(text, W / 2, Hh * 0.54);
-    return { map: tex(c, true), normal: tex(normalFrom(hgt, 4)) };
+  // ---------- эмоции: красные бруски с крупным белым текстом, как обложки рилсов ----------
+  function plate(text, w, h, ink) {
+    const W = 1024, Hh = Math.round(W * h / w), c = cv(W, Hh), x = c.getContext('2d');
+    x.letterSpacing = '4px'; let fs = Math.round(Hh * 0.74);
+    do { x.font = `400 ${fs}px Oswald, "Arial Narrow", sans-serif`; } while (x.measureText(text).width > W * 0.9 && --fs > 12);
+    x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = ink; x.fillText(text, W / 2, Hh * 0.55);
+    return tex(c, true);
   }
-  function paint(hex) {
-    const c = cv(256, 256), x = c.getContext('2d'); x.fillStyle = hex; x.fillRect(0, 0, 256, 256);
-    x.globalCompositeOperation = 'soft-light'; x.globalAlpha = 0.35; x.drawImage(noise(256, 256, 8, 4), 0, 0); return c;
+  // гиря-кнопка как кнопки сайта: белая пилюля, тёмный текст, чёрный кружок с плюсом справа
+  function button(text, w, h) {
+    const W = 1024, Hh = Math.round(W * h / w), c = cv(W, Hh), x = c.getContext('2d'), r = Hh * 0.36, cx = W - r - Hh * 0.1;
+    let fs = Math.round(Hh * 0.52);
+    do { x.font = `600 ${fs}px "Golos Text", system-ui, sans-serif`; } while (x.measureText(text).width > cx - r - Hh * 0.25 && --fs > 12);
+    x.textAlign = 'left'; x.textBaseline = 'middle'; x.fillStyle = '#0c0d0f'; x.fillText(text, Hh * 0.08, Hh * 0.54);
+    x.fillStyle = '#0c0d0f'; x.beginPath(); x.arc(cx, Hh / 2, r, 0, 7); x.fill();
+    x.strokeStyle = '#f1f1ee'; x.lineWidth = Hh * 0.07; x.lineCap = 'round'; x.beginPath();
+    x.moveTo(cx - r * 0.42, Hh / 2); x.lineTo(cx + r * 0.42, Hh / 2); x.moveTo(cx, Hh / 2 - r * 0.42); x.lineTo(cx, Hh / 2 + r * 0.42); x.stroke();
+    return tex(c, true);
   }
-  const pGrain = noise(256, 256, 64, 2), pNormal = tex(normalFrom(pGrain, 1.4), false, [2, 1]), pRough = tex(pGrain, false, [2, 1]);
-  const FLOOR = -BAIL_H + 0.025, BH = 0.24;
+  const FLOOR = -BAIL_H + 0.025, BH = 0.26;
   // пирамидой: широкий снизу, узкий сверху — бруски помещаются внутри треугольника цепей
-  const PROBLEMS = [['НЕОПРЕДЕЛЁННОСТЬ', 1.14, '#e8e3d8', '#17181c', 0.02, -0.04], ['НЕПОНИМАНИЕ', 0.92, '#c8232a', '#f2ede4', -0.02, 0.05], ['СТРАХ', 0.64, '#c8232a', '#f2ede4', 0.01, 0.07]];
-  const problems = PROBLEMS.map(([t, w, col, ink, dx, rot], i) => {
-    const d = 0.28, m = new THREE.Group();
-    m.add(new THREE.Mesh(new RoundedBoxGeometry(w, BH, d, 4, 0.035), new THREE.MeshPhysicalMaterial({
-      map: tex(paint(col), true), roughness: 0.6, roughnessMap: pRough, normalMap: pNormal, normalScale: new THREE.Vector2(0.3, 0.3), clearcoat: 0.3, clearcoatRoughness: 0.45 })));
-    const L = label(t, w - 0.06, BH - 0.06, ink);
-    const face = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.06, BH - 0.06), new THREE.MeshStandardMaterial({ map: L.map, normalMap: L.normal, transparent: true, roughness: 0.75, polygonOffset: true, polygonOffsetFactor: -2 }));
+  const PROBLEMS = [['НЕОПРЕДЕЛЁННОСТЬ', 1.16, 0.02, -0.04], ['НЕПОНИМАНИЕ', 0.9, -0.02, 0.05], ['СТРАХ', 0.6, 0.01, 0.07]];
+  const redMat = new THREE.MeshStandardMaterial({ color: 0xe3262d, roughness: 0.5, metalness: 0 });
+  const problems = PROBLEMS.map(([t, w, dx, rot], i) => {
+    const d = 0.3, m = new THREE.Group();
+    m.add(new THREE.Mesh(new RoundedBoxGeometry(w, BH, d, 4, 0.03), redMat));
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.05, BH - 0.05), new THREE.MeshBasicMaterial({ map: plate(t, w - 0.05, BH - 0.05, '#ffffff'), transparent: true, polygonOffset: true, polygonOffsetFactor: -2 }));
     face.position.z = d / 2 + 0.001; m.add(face);
     m.visible = false; scene.add(m);
     return { m, off: new THREE.Vector3(dx, FLOOR + BH / 2 + i * (BH + 0.008), 0.04), rot, landed: false,
       spin: new THREE.Euler(Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6) };
   });
 
-  // ---------- гири: крупные белые бруски из эмали — главный акцент, пирамидой внутри цепей ----------
-  const WH = 0.3, WD = 0.34;
-  const weights = [['КОНСУЛЬТАЦИЯ', 1.16, 0.0, -0.02], ['ДОГОВОР', 0.84, 0.02, 0.04], ['СУД', 0.5, -0.01, -0.05]].map(([t, w, dx, rot], i) => {
+  // ---------- гири: объёмные белые кнопки сайта — главный акцент, пирамидой внутри цепей ----------
+  const WH = 0.28, WD = 0.24;
+  const whiteMat = new THREE.MeshStandardMaterial({ color: 0xd8d7d2, roughness: 0.42, metalness: 0 }); // под светом даёт белый с мягкой тенью, без пересвета
+  const weights = [['Консультация', 1.24, 0.0, -0.03], ['Договор', 0.94, 0.02, 0.04], ['Суд', 0.68, -0.01, -0.04]].map(([t, w, dx, rot], i) => {
     const m = new THREE.Group();
-    m.add(new THREE.Mesh(new RoundedBoxGeometry(w, WH, WD, 5, 0.045), new THREE.MeshPhysicalMaterial({
-      map: tex(paint('#f6f4ef'), true), roughness: 0.3, clearcoat: 0.9, clearcoatRoughness: 0.12 })));
-    const L = label(t, w - 0.07, WH - 0.07, '#0c0d0f');
-    const face = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.07, WH - 0.07), new THREE.MeshStandardMaterial({ map: L.map, normalMap: L.normal, transparent: true, roughness: 0.6, polygonOffset: true, polygonOffsetFactor: -2 }));
+    // пилюля: плоский фасад (как у кнопки), скруглённые торцы, мягкая фаска по контуру
+    const r = WH / 2, st = new THREE.Shape(); st.absarc(-w / 2 + r, 0, r, Math.PI / 2, Math.PI * 1.5, false); st.absarc(w / 2 - r, 0, r, -Math.PI / 2, Math.PI / 2, false); st.closePath();
+    m.add(new THREE.Mesh(extrude(st, WD - 0.06, 0.03), whiteMat));
+    const fw = w - WH * 0.55, face = new THREE.Mesh(new THREE.PlaneGeometry(fw, WH * 0.8), new THREE.MeshBasicMaterial({ map: button(t, fw, WH * 0.8), transparent: true, polygonOffset: true, polygonOffsetFactor: -2 }));
     face.position.z = WD / 2 + 0.001; m.add(face);
     m.rotation.y = rot; m.visible = false; scene.add(m);
-    return { m, off: new THREE.Vector3(dx, FLOOR + WH / 2 + i * (WH + 0.008), 0.04), landed: false };
+    return { m, off: new THREE.Vector3(dx, FLOOR + WH / 2 + 0.03 + i * (WH + 0.075), 0.04), landed: false };
   });
 
   // ---------- сценарий: эмоции пачкой, пауза, гири пачкой ----------
