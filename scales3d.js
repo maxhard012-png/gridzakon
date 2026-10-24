@@ -4,7 +4,7 @@
 // коромысло — на оси; груз стоит пирамидой внутри треугольника цепей и их не пересекает.
 // Материалы: вороненая сталь (корпус), полированная сталь (ось, звенья, штифты), красная эмаль (щиток-указатель).
 const stage = document.getElementById('scales');
-if (stage && window.SC_VARIANT === 'A') {
+if (stage) {
   const io = new IntersectionObserver((e) => {
     if (!e.some((x) => x.isIntersecting)) return;
     io.disconnect();
@@ -40,10 +40,8 @@ async function boot() {
   // своя студия для отражений: тёмная комната, софтбокс сверху, световые полосы по бокам и сзади —
   // на тёмном металле они дают чёткие длинные блики вместо ровной серой заливки
   // окружение — фотостудия ferndale_studio_11 (Poly Haven, CC0): софтбоксы и световые трубки дают чистые блики
-  try {
-    const hdr = await new RGBELoader().loadAsync('assets/3d/studio.hdr');
-    scene.environment = pmrem.fromEquirectangular(hdr).texture; hdr.dispose();
-  } catch (e) { scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; }
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; // пока грузится студия
+  new RGBELoader().loadAsync('assets/3d/studio.hdr').then((hdr) => { scene.environment = pmrem.fromEquirectangular(hdr).texture; hdr.dispose(); wake(); }).catch(() => {});
   scene.environmentIntensity = 0.75;
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
 

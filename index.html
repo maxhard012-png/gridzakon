@@ -18,10 +18,172 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='16' fill='%23e3262d'/%3E%3Ctext x='16' y='21' font-family='Arial' font-weight='700' font-size='14' fill='%23ffffff' text-anchor='middle'%3EАГ%3C/text%3E%3C/svg%3E">
 <title>Алексей Гридасов, юрист | GridZakon</title>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"LegalService","name":"Алексей Гридасов, юрист | GridZakon","description":"Договоры, суды и консультации простым языком. Москва и область, онлайн по всей России.","areaServed":["Москва","Московская область","Россия"],"founder":{"@type":"Person","name":"Алексей Гридасов","jobTitle":"Юрист"},"sameAs":["https://t.me/gridzakon","https://instagram.com/gridzakon","https://www.tiktok.com/@gridzakon","https://www.youtube.com/@gridzakon"]}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://i.ytimg.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400&family=Montserrat:wght@500&family=JetBrains+Mono:wght@400;500&family=Golos+Text:wght@400;500;600;700&display=swap">
+<link rel="preload" href="assets/fonts/oswald-cyrillic-e0d2d5.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/golos-text-cyrillic-f57bdd.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Golos Text 400 cyrillic */
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(assets/fonts/golos-text-cyrillic-f57bdd.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* Golos Text 400 latin */
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(assets/fonts/golos-text-latin-0defa2.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Golos Text 500 cyrillic */
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(assets/fonts/golos-text-cyrillic-f57bdd.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* Golos Text 500 latin */
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(assets/fonts/golos-text-latin-0defa2.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Golos Text 600 cyrillic */
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(assets/fonts/golos-text-cyrillic-f57bdd.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* Golos Text 600 latin */
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(assets/fonts/golos-text-latin-0defa2.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Golos Text 700 cyrillic */
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(assets/fonts/golos-text-cyrillic-f57bdd.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* Golos Text 700 latin */
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(assets/fonts/golos-text-latin-0defa2.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* JetBrains Mono 400 cyrillic */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(assets/fonts/jetbrains-mono-cyrillic-b1b041.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* JetBrains Mono 400 latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(assets/fonts/jetbrains-mono-latin-480c06.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* JetBrains Mono 500 cyrillic */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(assets/fonts/jetbrains-mono-cyrillic-b1b041.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* JetBrains Mono 500 latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(assets/fonts/jetbrains-mono-latin-480c06.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Montserrat 500 cyrillic */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(assets/fonts/montserrat-cyrillic-8ec998.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* Montserrat 500 latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(assets/fonts/montserrat-latin-3d397d.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Oswald 200 cyrillic */
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url(assets/fonts/oswald-cyrillic-e0d2d5.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* Oswald 200 latin */
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url(assets/fonts/oswald-latin-db1aaf.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Oswald 400 cyrillic */
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(assets/fonts/oswald-cyrillic-e0d2d5.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* Oswald 400 latin */
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(assets/fonts/oswald-latin-db1aaf.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
 <style>
 /* Layout: 7 блоков с разной формой. Тёмный первый экран (аватар + лента видео), полоса СМИ, светлый блок «Обо мне» с большим фото, сетка услуг, кейсы, договоры, вопросы и финальный призыв */
 :root{
@@ -624,11 +786,21 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 .hero .main>*:nth-child(4){animation-delay:.18s}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
-<link rel="stylesheet" href="updates.css?v=202610241954">
-<script>window.SC_VARIANT=(function(){try{var q=new URLSearchParams(location.search).get('sc');if(q)localStorage.setItem('scv',q.toUpperCase());return (q||localStorage.getItem('scv')||'A').toUpperCase()}catch(e){return 'A'}})();</script>
+<link rel="stylesheet" href="updates.css?v=202610242010">
 <script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js","three/addons/":"./vendor/three/addons/"}}</script>
+<style>
+#boot{position:fixed;inset:0;z-index:999;background:#0c0d0f;display:grid;place-content:center;justify-items:center;gap:18px;transition:opacity .5s ease,visibility .5s}
+#boot b{font:400 34px/1 Oswald,"Arial Narrow",sans-serif;letter-spacing:.03em;color:#f1f1ee}#boot b span{color:#e3262d}
+#boot i{display:block;width:120px;height:2px;background:#25282c;position:relative;overflow:hidden}
+#boot i::after{content:"";position:absolute;inset:0;background:#e3262d;transform:translateX(-100%);animation:bootbar 1.1s cubic-bezier(.6,0,.2,1) infinite}
+@keyframes bootbar{to{transform:translateX(100%)}}
+html.ready #boot{opacity:0;visibility:hidden}
+@media(prefers-reduced-motion:reduce){#boot i::after{animation:none;transform:none}}
+</style>
 </head>
 <body>
+<div id="boot" aria-hidden="true"><b>GRID<span>ZAKON</span></b><i></i></div>
+<script>(function(){var d=document.documentElement,go=function(){d.classList.add("ready")};Promise.race([Promise.all([new Promise(function(r){document.readyState!=="loading"?r():addEventListener("DOMContentLoaded",r)}),document.fonts?document.fonts.ready:0]),new Promise(function(r){setTimeout(r,1600)})]).then(go)})()</script>
 
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -685,7 +857,6 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
         <div class="sc-view"><div class="sc-gword" aria-hidden="true"></div><canvas aria-hidden="true"></canvas><span class="sc-state">Весы</span></div>
         <div class="sc-cap in" aria-live="polite"><p class="sc-idx"></p><h3 class="sc-title">Как я работаю</h3><p class="sc-text">Смотри на весы.</p></div>
         <div class="sc-bar" aria-hidden="true"><i></i></div>
-        <div class="sc-pick" role="group" aria-label="Вариант оформления весов"><span>Вариант</span><button type="button" data-sc="A">A · 3D-знак</button><button type="button" data-sc="D">D · Знак</button><button type="button" data-sc="B">B · Объём</button><button type="button" data-sc="C">C · Типографика</button></div>
       </div>
     </div>
     <div class="reasons">
@@ -774,7 +945,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
    <div class="brand" id="brand" aria-label="Алексей в соцсетях"></div>
 
    <div class="rail-body" id="railBody">
-     <div class="slide opening-slide">   <section id="press" aria-labelledby="mediaTitle"><div class="small-heading"><h2 id="mediaTitle">В СМИ</h2><span>Россия 1 · Вести</span></div><div class="press-grid"><button class="press-card" type="button" data-gallery="press" data-index="0" aria-label="Смотреть сюжет «Вести — Москва», 09.09.2026"><span class="press-image"><img src="assets/press/press-1.jpg" width="960" height="540" alt="" loading="lazy" decoding="async"><span class="play-icon" aria-hidden="true"><svg><use href="#i-play"/></svg></span></span><b>Вести — Москва</b><span>09.09.2026</span></button><button class="press-card" type="button" data-gallery="press" data-index="1" aria-label="Смотреть сюжет «Вести — Москва», 27.07.2026"><span class="press-image"><img src="assets/press/press-2.jpg" width="960" height="540" alt="" loading="lazy" decoding="async"><span class="play-icon" aria-hidden="true"><svg><use href="#i-play"/></svg></span></span><b>Вести — Москва</b><span>27.07.2026</span></button><button class="press-card" type="button" data-gallery="press" data-index="2" aria-label="Смотреть сюжет «Вести — Москва», 16.07.2026"><span class="press-image"><img src="assets/press/press-3.jpg" width="960" height="540" alt="" loading="lazy" decoding="async"><span class="play-icon" aria-hidden="true"><svg><use href="#i-play"/></svg></span></span><b>Вести — Москва</b><span>16.07.2026</span></button></div></section><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
+     <div class="slide opening-slide">   <section id="press" aria-labelledby="mediaTitle"><div class="small-heading"><h2 id="mediaTitle">В СМИ</h2><span>Россия 1 · Вести</span></div><div class="press-grid"><button class="press-card" type="button" data-gallery="press" data-index="0" aria-label="Смотреть сюжет «Вести — Москва», 09.09.2026"><span class="press-image"><img src="assets/press/press-1.webp" width="960" height="540" alt="" loading="lazy" decoding="async"><span class="play-icon" aria-hidden="true"><svg><use href="#i-play"/></svg></span></span><b>Вести — Москва</b><span>09.09.2026</span></button><button class="press-card" type="button" data-gallery="press" data-index="1" aria-label="Смотреть сюжет «Вести — Москва», 27.07.2026"><span class="press-image"><img src="assets/press/press-2.webp" width="960" height="540" alt="" loading="lazy" decoding="async"><span class="play-icon" aria-hidden="true"><svg><use href="#i-play"/></svg></span></span><b>Вести — Москва</b><span>27.07.2026</span></button><button class="press-card" type="button" data-gallery="press" data-index="2" aria-label="Смотреть сюжет «Вести — Москва», 16.07.2026"><span class="press-image"><img src="assets/press/press-3.webp" width="960" height="540" alt="" loading="lazy" decoding="async"><span class="play-icon" aria-hidden="true"><svg><use href="#i-play"/></svg></span></span><b>Вести — Москва</b><span>16.07.2026</span></button></div></section><div class="feed"><div class="col" id="colA"></div><div class="col b" id="colB"></div></div></div>
    </div>
  </aside>
 </main>
@@ -930,7 +1101,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
     media:[],
     // Ролики: [название (*слово* = красная плашка), площадка, просмотры, ID на YouTube, своя ссылка, свой mp4, своя обложка, лайки, точное число просмотров, точное число лайков (для живых счётчиков)]
     // По ID с YouTube обложка, ссылка и плеер подставляются сами. Цифры сняты с YouTube 2 октября 2026.
-    reels:[["Опасные *фразы*", "Instagram", "", "", "https://www.instagram.com/reel/DYB-5M3syB_/", "", "assets/reels/DYB-5M3syB_.jpg", "", 0, 0], ["Полиция просит *телефон*", "Instagram", "", "", "https://www.instagram.com/reel/DSKoEPrDORg/", "", "assets/reels/DSKoEPrDORg.jpg", "", 0, 0], ["Знай свои *права*", "Instagram", "", "", "https://www.instagram.com/reel/DRe178VEd8r/", "", "assets/reels/DRe178VEd8r.jpg", "", 0, 0], ["Осторожно с *разговорами*", "Instagram", "", "", "https://www.instagram.com/reel/DYHO8LnsR_X/", "", "assets/reels/DYHO8LnsR_X.jpg", "", 0, 0]],
+    reels:[["Опасные *фразы*", "Instagram", "", "", "https://www.instagram.com/reel/DYB-5M3syB_/", "", "assets/reels/DYB-5M3syB_.webp", "", 0, 0], ["Полиция просит *телефон*", "Instagram", "", "", "https://www.instagram.com/reel/DSKoEPrDORg/", "", "assets/reels/DSKoEPrDORg.webp", "", 0, 0], ["Знай свои *права*", "Instagram", "", "", "https://www.instagram.com/reel/DRe178VEd8r/", "", "assets/reels/DRe178VEd8r.webp", "", 0, 0], ["Осторожно с *разговорами*", "Instagram", "", "", "https://www.instagram.com/reel/DYHO8LnsR_X/", "", "assets/reels/DYHO8LnsR_X.webp", "", 0, 0]],
     // Какой ролик (номер в списке выше, с нуля) стоит справа у каждого раздела. Раздела нет в списке = лента
     // Каталог шаблонов: [название, пояснение, цена (0 = бесплатно), раздел]. Цены пока примерные
     templates:[],
@@ -969,7 +1140,7 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
   $('colA').innerHTML=col(0,half);$('colB').innerHTML=col(half,R.length);
   // отзывы показываем, только когда есть настоящие скриншоты или видео
   if(V.some(function(v){return v[1]||v[2]})){$('revwrap').hidden=false;
-    $('revs').innerHTML=V.map(function(v,i){return v[1]||v[2]?tile('','data-r="'+i+'"',v[2].replace('/reviews/s/','/reviews/t/'),v[1]?'Видео-отзыв':'Отзыв',v[0],v[1]?PLAY:''):''}).join('')}
+    $('revs').innerHTML=V.map(function(v,i){return v[1]||v[2]?tile('','data-r="'+i+'"',v[2].replace('/reviews/s/','/reviews/t/').replace(/\.jpg$/,'.webp'),v[1]?'Видео-отзыв':'Отзыв',v[0],v[1]?PLAY:''):''}).join('')}
   // обложка не загрузилась: показываем текстовую
   document.querySelectorAll('.reel img').forEach(function(im){im.addEventListener('error',function(){im.parentNode.classList.remove('has-img');im.remove()});
     function ok(){im.classList.add('ok')}
@@ -1231,11 +1402,9 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 </script>
 
 <dialog id="gallery" aria-labelledby="galleryTitle"><div class="gallery-shell"><div class="gallery-top"><div><span id="galleryCount" class="label" aria-live="polite"></span><h2 id="galleryTitle"></h2></div><button id="galleryClose" type="button" aria-label="Закрыть просмотр">×</button></div><div id="galleryStage"></div><div class="gallery-bottom"><button id="galleryPrev" type="button" aria-label="Предыдущий материал"><svg class="ar-l" aria-hidden="true"><use href="#i-arr"/></svg></button><a id="galleryOriginal" target="_blank" rel="noopener">Открыть оригинал ↗</a><button id="galleryNext" type="button" aria-label="Следующий материал"><svg class="ar-r" aria-hidden="true"><use href="#i-arr"/></svg></button></div></div></dialog>
-<script id="galleryData" type="application/json">{"case-0": [{"src": "assets/cases/case-debt.jpg", "label": "Долг вернули с процентами: отзыв клиента"}], "case-1": [{"src": "assets/cases/case-rent.jpg", "label": "Возврат за аварийную квартиру: история клиентки"}], "case-2": [{"src": "assets/cases/case-2-refund.jpg", "label": "Возврат денег за обучение: отзыв клиента"}], "case-3": [{"src": "assets/videos/case-3.mp4", "poster": "assets/cases/case-3-poster.jpg", "label": "Клиентка о досудебной претензии", "video": true}], "reviews": [{"src": "assets/videos/client-review.mp4", "poster": "assets/reviews/s/video-review.jpg", "label": "Видеоотзыв клиента", "video": true}, {"src": "assets/reviews/s/review-01.jpg", "label": "Отзыв клиента — скриншот 1"}, {"src": "assets/reviews/s/review-02.jpg", "label": "Отзыв клиента — скриншот 2"}, {"src": "assets/reviews/s/review-03.jpg", "label": "Отзыв клиента — скриншот 3"}, {"src": "assets/reviews/s/review-04.jpg", "label": "Отзыв клиента — скриншот 4"}, {"src": "assets/reviews/s/review-05.jpg", "label": "Отзыв клиента — скриншот 5"}, {"src": "assets/reviews/s/review-06.jpg", "label": "Отзыв клиента — скриншот 6"}, {"src": "assets/reviews/s/review-07.jpg", "label": "Отзыв клиента — скриншот 7"}, {"src": "assets/reviews/s/review-08.jpg", "label": "Отзыв клиента — скриншот 8"}, {"src": "assets/reviews/s/review-09.jpg", "label": "Отзыв клиента — скриншот 9"}, {"src": "assets/reviews/s/review-10.jpg", "label": "Отзыв клиента — скриншот 10"}, {"src": "assets/reviews/s/review-11.jpg", "label": "Отзыв клиента — скриншот 11"}, {"src": "assets/reviews/s/review-12.jpg", "label": "Отзыв клиента — скриншот 12"}, {"src": "assets/reviews/s/review-13.jpg", "label": "Отзыв клиента — скриншот 13"}, {"src": "assets/reviews/s/review-14.jpg", "label": "Отзыв клиента — скриншот 14"}, {"src": "assets/reviews/s/review-15.jpg", "label": "Отзыв клиента — скриншот 15"}, {"src": "assets/reviews/s/review-16.jpg", "label": "Отзыв клиента — скриншот 16"}, {"src": "assets/reviews/s/review-17.jpg", "label": "Отзыв клиента — скриншот 17"}, {"src": "assets/reviews/s/review-18.jpg", "label": "Отзыв клиента — скриншот 18"}, {"src": "assets/reviews/s/review-19.jpg", "label": "Отзыв клиента — скриншот 19"}], "press": [{"src": "assets/press/press-1.mp4", "poster": "assets/press/press-1.jpg", "video": true, "href": "https://smotrim.ru/brand/5403#playing_video=6074096", "label": "Вести — Москва, 09.09.2026"}, {"src": "assets/press/press-2.mp4", "poster": "assets/press/press-2.jpg", "video": true, "href": "https://smotrim.ru/video/6051419", "label": "Вести — Москва, 27.07.2026"}, {"src": "assets/press/press-3.mp4", "poster": "assets/press/press-3.jpg", "video": true, "href": "https://smotrim.ru/brand/5403#playing_video=6046737", "label": "Вести — Москва, 16.07.2026"}]}</script>
-<script defer src="documents.js?v=202610241954"></script>
-<script defer src="site.js?v=202610241954"></script>
-<script type="module" src="scales.js?v=202610241954"></script>
-<script type="module" src="scales3d.js?v=202610241954"></script>
-<script>document.querySelectorAll('.sc-pick [data-sc]').forEach(function(b){b.classList.toggle('on',b.dataset.sc===window.SC_VARIANT);b.addEventListener('click',function(){try{localStorage.setItem('scv',b.dataset.sc)}catch(e){}location.href=location.pathname+'?sc='+b.dataset.sc+'#approach'})})</script>
+<script id="galleryData" type="application/json">{"case-0": [{"src": "assets/cases/case-debt.jpg", "label": "Долг вернули с процентами: отзыв клиента"}], "case-1": [{"src": "assets/cases/case-rent.jpg", "label": "Возврат за аварийную квартиру: история клиентки"}], "case-2": [{"src": "assets/cases/case-2-refund.jpg", "label": "Возврат денег за обучение: отзыв клиента"}], "case-3": [{"src": "assets/videos/case-3.mp4", "poster": "assets/cases/case-3-poster.jpg", "label": "Клиентка о досудебной претензии", "video": true}], "reviews": [{"src": "assets/videos/client-review.mp4", "poster": "assets/reviews/s/video-review.jpg", "label": "Видеоотзыв клиента", "video": true}, {"src": "assets/reviews/s/review-01.jpg", "label": "Отзыв клиента — скриншот 1"}, {"src": "assets/reviews/s/review-02.jpg", "label": "Отзыв клиента — скриншот 2"}, {"src": "assets/reviews/s/review-03.jpg", "label": "Отзыв клиента — скриншот 3"}, {"src": "assets/reviews/s/review-04.jpg", "label": "Отзыв клиента — скриншот 4"}, {"src": "assets/reviews/s/review-05.jpg", "label": "Отзыв клиента — скриншот 5"}, {"src": "assets/reviews/s/review-06.jpg", "label": "Отзыв клиента — скриншот 6"}, {"src": "assets/reviews/s/review-07.jpg", "label": "Отзыв клиента — скриншот 7"}, {"src": "assets/reviews/s/review-08.jpg", "label": "Отзыв клиента — скриншот 8"}, {"src": "assets/reviews/s/review-09.jpg", "label": "Отзыв клиента — скриншот 9"}, {"src": "assets/reviews/s/review-10.jpg", "label": "Отзыв клиента — скриншот 10"}, {"src": "assets/reviews/s/review-11.jpg", "label": "Отзыв клиента — скриншот 11"}, {"src": "assets/reviews/s/review-12.jpg", "label": "Отзыв клиента — скриншот 12"}, {"src": "assets/reviews/s/review-13.jpg", "label": "Отзыв клиента — скриншот 13"}, {"src": "assets/reviews/s/review-14.jpg", "label": "Отзыв клиента — скриншот 14"}, {"src": "assets/reviews/s/review-15.jpg", "label": "Отзыв клиента — скриншот 15"}, {"src": "assets/reviews/s/review-16.jpg", "label": "Отзыв клиента — скриншот 16"}, {"src": "assets/reviews/s/review-17.jpg", "label": "Отзыв клиента — скриншот 17"}, {"src": "assets/reviews/s/review-18.jpg", "label": "Отзыв клиента — скриншот 18"}, {"src": "assets/reviews/s/review-19.jpg", "label": "Отзыв клиента — скриншот 19"}], "press": [{"src": "assets/press/press-1.mp4", "poster": "assets/press/press-1.webp", "video": true, "href": "https://smotrim.ru/brand/5403#playing_video=6074096", "label": "Вести — Москва, 09.09.2026"}, {"src": "assets/press/press-2.mp4", "poster": "assets/press/press-2.webp", "video": true, "href": "https://smotrim.ru/video/6051419", "label": "Вести — Москва, 27.07.2026"}, {"src": "assets/press/press-3.mp4", "poster": "assets/press/press-3.webp", "video": true, "href": "https://smotrim.ru/brand/5403#playing_video=6046737", "label": "Вести — Москва, 16.07.2026"}]}</script>
+<script defer src="documents.js?v=202610242010"></script>
+<script defer src="site.js?v=202610242010"></script>
+<script type="module" src="scales3d.js?v=202610242010"></script>
 </body>
 </html>
