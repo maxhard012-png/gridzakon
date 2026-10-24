@@ -786,7 +786,204 @@ label.f input,label.f textarea,label.f select{font:500 16px var(--f-body);color:
 .hero .main>*:nth-child(4){animation-delay:.18s}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
-<link rel="stylesheet" href="updates.css?v=202610242010">
+<style>/* правки оформления (бывший updates.css) */
+.press-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.press-card { min-width:0; text-decoration:none; }
+.press-image { display:block; position:relative; overflow:hidden; aspect-ratio:16/9; border-radius:8px; background:var(--surface); }
+.press-image img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .25s; }
+.play-icon { position:absolute; inset:0; display:grid; place-items:center; color:white; font-size:18px; background:#0003; }
+.press-card>b { display:block; font-size:12px; font-weight:500; margin-top:8px; }
+dialog#gallery { border:1px solid var(--line); border-radius:16px; padding:0; background:var(--bg); color:var(--fg); width:min(900px,calc(100% - 24px)); max-width:none; max-height:calc(100dvh - 24px); }
+#gallery::backdrop { background:#000d; }
+.gallery-shell { display:flex; flex-direction:column; max-height:calc(100dvh - 26px); }
+.gallery-top { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:16px 20px; border-bottom:1px solid var(--line); flex-shrink:0; }
+.gallery-top h2 { font:500 15px/1.4 var(--f-head); text-transform:none; margin-top:4px; }
+.gallery-top button,.gallery-bottom button { flex:none; width:44px; height:44px; border:1px solid var(--line); border-radius:50%; background:var(--surface); color:var(--fg); cursor:pointer; font-size:24px; }
+#galleryStage { min-height:0; display:flex; align-items:center; justify-content:center; overflow:auto; background:#08090a; padding:8px; }
+#galleryStage img,#galleryStage video { display:block; max-width:100%; max-height:calc(100dvh - 200px); object-fit:contain; width:auto; height:auto; }
+#galleryStage video { min-height:260px; }
+.gallery-bottom { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 20px; border-top:1px solid var(--line); flex-shrink:0; }
+.gallery-bottom a { font-size:14px; text-underline-offset:4px; margin-inline:auto; }
+
+/* The original grid, type scale, spacing and scroll choreography live in index.html. */
+#approach .reasons {grid-template-columns:repeat(2,minmax(0,1fr))}
+#press {margin:0;padding:0;flex-shrink:0}
+#press .small-heading {display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#press .small-heading h2 {font-size:22px;margin:0}
+#press .small-heading>span {font-size:11px;color:var(--mute)}
+.rail .side-head,.rail .brand {flex-shrink:0}
+.rail-body {min-height:0}
+.soc-row a[aria-label="Telegram"] {background:#229ed9;color:white;border-color:#229ed9}
+.soc-row a[aria-label="Instagram"] {background:linear-gradient(35deg,#f9a13d,#dd286a,#824bc4);color:white;border-color:#c63c8a}
+.soc-row a[aria-label="YouTube"] {background:#e3262d;color:white;border-color:#e3262d}
+.soc-row a[aria-label="TikTok"] {color:#25f4ee;border-color:#fe2c55}
+.useful-grid {margin-top:40px}
+.useful-item .in {padding:0 0 28px}
+.useful-item .in>p {margin-top:0}
+.useful-item .in>ul {margin-top:0;padding-left:20px}
+
+.useful-item p,.useful-item ul {color:var(--mute);line-height:1.7}
+.useful-item li {margin-bottom:12px}
+.document-link {display:block;margin-top:16px}
+.case-media {margin-top:24px;justify-self:start}
+.review-view img {object-fit:contain!important}
+.review-view .cover,.review-view .pf {display:none}
+.revs .reel img {object-fit:contain}
+.revs .reel .cover {display:none}
+.revs .reel::after {background:none}
+.svc h3 {overflow-wrap:anywhere}
+[data-ghost]::before {max-width:100%;left:0}
+@media(max-width:360px){.hero h1{font-size:30vw}.svc h3{font-size:26px}.brand span{font-size:10px;gap:4px}.brand{gap:8px}}
+@media(max-width:1000px){#press{margin-bottom:24px}.rail{gap:16px}}
+@media(max-width:700px){#approach .reasons{grid-template-columns:1fr}}
+@media(max-width:500px){.press-grid{gap:8px}.press-card>b{font-size:10px}.gallery-top,.gallery-bottom{padding:12px;gap:8px}}
+
+
+/* The press strip belongs to the opening reel scene, not the persistent rail. */
+.opening-slide {flex-direction:column;gap:20px;justify-content:flex-start}
+.opening-slide #press {width:100%}
+.opening-slide .feed {position:relative;inset:auto;flex:1;width:100%;min-height:0}
+.press-card>span:last-child {font:400 11px/1.5 var(--f-mono);color:var(--mute)}
+.press-image {border-radius:var(--r,18px);border:1px solid var(--line)}
+.press-card:hover .play-icon {background:#0005}
+.press-card:focus-visible {outline:2px solid var(--red-hi);outline-offset:4px}
+@media(max-width:1000px){.opening-slide .feed{position:static;width:auto;min-height:initial}}
+/* Case materials use the same dark stage and circular controls as the reel viewer. */
+dialog#gallery {width:min(480px,calc(100% - 24px));border:0;background:transparent;border-radius:0}
+.gallery-top,.gallery-bottom {padding:12px 0;border:0}
+#galleryStage {border:1px solid var(--line);border-radius:24px;padding:0;background:var(--surface)}
+.gallery-top button,.gallery-bottom button {background:transparent}
+
+/* СМИ: карточки открывают сюжет прямо на сайте */
+.press-card {display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;font:inherit;cursor:pointer}
+.press-card .play-icon svg {width:30px;height:30px;padding:9px 8px 9px 10px;border-radius:50%;background:#0c0d0fb3;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-sizing:border-box;transition:transform .25s,background .25s}
+.press-card:hover .play-icon svg {transform:scale(1.08);background:var(--red)}
+.press-card:hover .press-image img {transform:scale(1.04)}
+dialog#gallery.wide {width:min(960px,calc(100% - 24px))}
+dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16/9;background:#000}
+/* стрелки одной иконкой, левая — зеркальная */
+.circ svg,#galleryPrev svg,#galleryNext svg {width:18px;height:18px;display:block}
+.ar-l {transform:scaleX(-1)}
+/* отзывы: обрезанные истории со скруглением */
+#revs .reel img {object-position:center top}
+
+/* Весы в блоке «Мой принцип работы» */
+.scales {margin:28px 0 8px}
+.sc-view {position:relative;height:clamp(300px,34vw,420px);border-radius:var(--r,18px);overflow:hidden;
+  background:radial-gradient(60% 70% at 52% 18%,#ffffff12,transparent 70%),radial-gradient(50% 40% at 22% 92%,rgba(227,38,45,.0),transparent 70%),#0f1013;border:1px solid var(--line);transition:background .8s}
+.scales.is-tilt .sc-view {background:radial-gradient(60% 70% at 52% 18%,#ffffff12,transparent 70%),radial-gradient(50% 40% at 22% 92%,rgba(227,38,45,.22),transparent 70%),#0f1013}
+.sc-view canvas {position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .6s;touch-action:pan-y}
+.scales.is-ready canvas {opacity:1}
+.sc-state {position:absolute;left:14px;top:14px;font:400 13px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;padding:7px 10px;border-radius:6px;background:#ffffff14;color:var(--fg);transition:background .4s,color .4s}
+.scales.is-tilt .sc-state {background:var(--red);color:#fff}
+.scales.is-level .sc-state {background:#21b45f;color:#fff;box-shadow:0 0 0 1px #3ee08155,0 0 22px #21b45f99;animation:scok .9s cubic-bezier(.2,.7,.1,1)}
+@keyframes scok {0%{transform:scale(.9);box-shadow:0 0 0 0 #21b45f00}45%{transform:scale(1.06);box-shadow:0 0 0 8px #21b45f40,0 0 34px #21b45fcc}100%{transform:none}}
+.scales.is-level .sc-view {background:radial-gradient(60% 70% at 52% 18%,#ffffff12,transparent 70%),radial-gradient(55% 45% at 70% 95%,rgba(33,180,95,.16),transparent 70%),#0f1013}
+.sc-fact {margin:12px 0 10px;color:var(--mute);font-size:14px;min-height:1.5em}
+.sc-btns {display:flex;flex-wrap:wrap;gap:8px}
+.sc-btns button {min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 14px var(--f-head);cursor:pointer;transition:background .2s,border-color .2s,opacity .2s}
+.sc-btns button:not(:disabled):hover {border-color:var(--red);background:#e3262d1f}
+.sc-btns button:disabled {opacity:.35;cursor:default}
+.sc-btns .sc-again {background:#f1efe9;color:#0c0d0f;border-color:transparent}
+.scales[hidden] {display:none}
+
+/* Отзывы: ссылка на все отзывы в Instagram */
+.revmore {display:inline-flex;align-items:center;gap:10px;margin-top:18px;min-height:48px;padding:0 20px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 14px var(--f-head);text-decoration:none;transition:border-color .2s,background .2s}
+.revmore svg {width:18px;height:18px}
+.revmore .ar {color:var(--mute)}
+.revmore:hover {border-color:var(--red);background:#e3262d1f}
+@media(prefers-reduced-motion:reduce){.scales.is-level .sc-state{animation:none}}
+
+/* ссылки внутри текста «Полезного» — тем же кеглем, что и текст */
+.useful-item li .link,.useful-item p .link {font:inherit;color:var(--fg)}
+
+/* Весы без рамки: сцена стоит прямо на фоне страницы */
+.sc-view {border:0;border-radius:0;overflow:visible;background:none!important;height:clamp(340px,40vw,480px)}
+.sc-view::before,.sc-view::after {content:"";position:absolute;inset:-8% -6%;pointer-events:none;opacity:0;transition:opacity .9s}
+.sc-view::before {background:radial-gradient(38% 42% at 24% 72%,rgba(227,38,45,.11),transparent 72%)}
+.sc-view::after {background:radial-gradient(40% 42% at 72% 70%,rgba(33,180,95,.16),transparent 72%)}
+.scales.is-tilt .sc-view::before,.scales.is-level .sc-view::after {opacity:1}
+.sc-view canvas {z-index:1}
+.sc-state {left:0;top:4px;z-index:2;border-radius:4px;font:400 14px/1 var(--f-disp);letter-spacing:.2em;padding:8px 11px 7px}
+.sc-fact {margin-top:4px}
+@media(max-width:700px){.sc-view{margin:0 -16px;height:340px}.sc-state{left:16px}}
+
+/* Весы — история по прокрутке: блок закреплён, сцена и подписи меняются по ходу листания */
+.scales {height:170vh;margin:28px 0 8px;position:relative}
+.sc-pin {position:sticky;top:72px;height:calc(100vh - 92px);height:calc(100svh - 92px);display:flex;flex-direction:column;justify-content:center;gap:16px}
+.sc-pin .sc-view {height:min(60vh,520px)!important;flex:none}
+.sc-cap {min-height:126px}
+.sc-cap .sc-idx {font:500 13px/1 var(--f-mono);letter-spacing:.14em;color:var(--red);margin:0 0 10px;min-height:13px;transition:color .5s}
+.sc-cap .sc-title {font:400 clamp(30px,3.6vw,46px)/1 var(--f-disp);text-transform:uppercase;letter-spacing:.01em;margin:0}
+.sc-cap .sc-text {color:var(--mute);font-size:15px;line-height:1.55;margin:10px 0 0;max-width:38ch}
+.sc-cap.in>* {animation:capin .55s cubic-bezier(.2,.7,.1,1) both}
+.sc-cap.in .sc-title {animation-delay:.04s}.sc-cap.in .sc-text {animation-delay:.09s}
+@keyframes capin {from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.scales.is-level .sc-idx {color:#21b45f}
+.sc-bar {height:2px;background:var(--line);position:relative;overflow:hidden;border-radius:2px}
+.sc-bar i {position:absolute;inset:0;background:var(--red);transform-origin:left;transform:scaleX(0);transition:background .5s}
+.scales.is-level .sc-bar i {background:#21b45f}
+@media(max-width:700px){
+  .scales {height:160vh}
+  .sc-pin {top:76px;height:calc(100vh - 176px);height:calc(100svh - 176px);gap:10px}
+  .sc-pin .sc-view {height:min(46vh,360px)!important;margin:0 -16px}
+  .sc-cap {min-height:112px}
+  .sc-cap .sc-title {font-size:30px}
+  .sc-cap .sc-text {font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){.scales{height:auto}.sc-pin{position:static;height:auto}.sc-cap.in>*{animation:none}}
+
+/* Весы в графике сайта: SVG, цвета и шрифты из палитры сайта */
+.sc-svg {position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:1}
+.sc-ink {fill:var(--fg)}
+.sc-floor {stroke:var(--line);stroke-width:1}
+.sc-chain {stroke:rgba(241,241,238,.4);stroke-width:1.5}
+.sc-pan {fill:none;stroke:var(--fg);stroke-width:7;stroke-linecap:round}
+.sc-pivot {fill:var(--red);transition:fill .5s}
+.scales.is-level .sc-pivot {fill:#21b45f}
+.sc-hole {fill:var(--bg)}
+.sc-ghost {font:400 150px var(--f-disp);text-transform:uppercase;fill:none;stroke:rgba(241,241,238,.1);stroke-width:1;transition:stroke .6s}
+.scales.is-tilt .sc-ghost {stroke:rgba(227,38,45,.32)}
+.scales.is-level .sc-ghost {stroke:rgba(33,180,95,.38)}
+.sc-item.red .sc-body {fill:var(--red)}
+.sc-item.white .sc-body {fill:#f1efe9}
+.sc-item.pill .sc-body {fill:var(--fg)}
+.sc-item.red .sc-lbl,.sc-item.white .sc-lbl {font:400 18px var(--f-cover);letter-spacing:.14em;text-transform:uppercase}
+.sc-item.red .sc-lbl {fill:#fff}
+.sc-item.white .sc-lbl {fill:#0c0d0f}
+.sc-item.pill .sc-lbl {font:600 16px var(--f-head);letter-spacing:-.01em;fill:var(--bg)}
+.sc-dot {fill:var(--bg)}
+.sc-plus {stroke:var(--fg);stroke-width:1.8;stroke-linecap:round;fill:none}
+.sc-view::before,.sc-view::after {inset:-4% -2%}
+
+/* контурное слово за весами — как у заголовков разделов */
+.sc-gword {position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);z-index:0;pointer-events:none;white-space:nowrap;
+  font:400 clamp(96px,17vw,180px)/1 var(--f-disp);text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(241,241,238,.1);transition:-webkit-text-stroke-color .6s}
+.scales.is-tilt .sc-gword {-webkit-text-stroke-color:rgba(227,38,45,.34)}
+.scales.is-level .sc-gword {-webkit-text-stroke-color:rgba(33,180,95,.4)}
+.sc-view canvas {z-index:1}
+/* вариант B: бруски и гири с торцом */
+.v-b .sc-item.red .sc-side {fill:#8f1217}
+.v-b .sc-item.white .sc-side {fill:#a7a399}
+.v-b .sc-item.pill .sc-side {fill:#8f918e}
+.v-b .sc-item.white .sc-body {fill:#f3f1ea}
+/* вариант C: типографика */
+.sc-word {font-family:var(--f-disp);font-weight:400;text-transform:uppercase;letter-spacing:.02em;fill:var(--fg)}
+.sc-word.thin {font-weight:200}
+.sc-word.red {fill:var(--red)}
+.sc-redbar {fill:var(--red)}
+.v-c .sc-pivot {fill:var(--fg)}
+.v-c.is-level .sc-pivot {fill:#21b45f}
+.v-c .sc-chain {stroke:rgba(241,241,238,.35);stroke-width:1}
+.sc-pan.thin {stroke-width:3}
+/* временный переключатель вариантов */
+.sc-pick {display:flex;flex-wrap:wrap;align-items:center;gap:6px;font:500 12px var(--f-mono);color:var(--mute)}
+.sc-pick span {margin-right:4px;letter-spacing:.1em;text-transform:uppercase}
+.sc-pick button {min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--fg);font:inherit;cursor:pointer}
+.sc-pick button.on {background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.sc-word {paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
+.v-d .sc-gword {top:66%}
+</style>
 <script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js","three/addons/":"./vendor/three/addons/"}}</script>
 <style>
 #boot{position:fixed;inset:0;z-index:999;background:#0c0d0f;display:grid;place-content:center;justify-items:center;gap:18px;transition:opacity .5s ease,visibility .5s}
@@ -1403,8 +1600,8 @@ html.ready #boot{opacity:0;visibility:hidden}
 
 <dialog id="gallery" aria-labelledby="galleryTitle"><div class="gallery-shell"><div class="gallery-top"><div><span id="galleryCount" class="label" aria-live="polite"></span><h2 id="galleryTitle"></h2></div><button id="galleryClose" type="button" aria-label="Закрыть просмотр">×</button></div><div id="galleryStage"></div><div class="gallery-bottom"><button id="galleryPrev" type="button" aria-label="Предыдущий материал"><svg class="ar-l" aria-hidden="true"><use href="#i-arr"/></svg></button><a id="galleryOriginal" target="_blank" rel="noopener">Открыть оригинал ↗</a><button id="galleryNext" type="button" aria-label="Следующий материал"><svg class="ar-r" aria-hidden="true"><use href="#i-arr"/></svg></button></div></div></dialog>
 <script id="galleryData" type="application/json">{"case-0": [{"src": "assets/cases/case-debt.jpg", "label": "Долг вернули с процентами: отзыв клиента"}], "case-1": [{"src": "assets/cases/case-rent.jpg", "label": "Возврат за аварийную квартиру: история клиентки"}], "case-2": [{"src": "assets/cases/case-2-refund.jpg", "label": "Возврат денег за обучение: отзыв клиента"}], "case-3": [{"src": "assets/videos/case-3.mp4", "poster": "assets/cases/case-3-poster.jpg", "label": "Клиентка о досудебной претензии", "video": true}], "reviews": [{"src": "assets/videos/client-review.mp4", "poster": "assets/reviews/s/video-review.jpg", "label": "Видеоотзыв клиента", "video": true}, {"src": "assets/reviews/s/review-01.jpg", "label": "Отзыв клиента — скриншот 1"}, {"src": "assets/reviews/s/review-02.jpg", "label": "Отзыв клиента — скриншот 2"}, {"src": "assets/reviews/s/review-03.jpg", "label": "Отзыв клиента — скриншот 3"}, {"src": "assets/reviews/s/review-04.jpg", "label": "Отзыв клиента — скриншот 4"}, {"src": "assets/reviews/s/review-05.jpg", "label": "Отзыв клиента — скриншот 5"}, {"src": "assets/reviews/s/review-06.jpg", "label": "Отзыв клиента — скриншот 6"}, {"src": "assets/reviews/s/review-07.jpg", "label": "Отзыв клиента — скриншот 7"}, {"src": "assets/reviews/s/review-08.jpg", "label": "Отзыв клиента — скриншот 8"}, {"src": "assets/reviews/s/review-09.jpg", "label": "Отзыв клиента — скриншот 9"}, {"src": "assets/reviews/s/review-10.jpg", "label": "Отзыв клиента — скриншот 10"}, {"src": "assets/reviews/s/review-11.jpg", "label": "Отзыв клиента — скриншот 11"}, {"src": "assets/reviews/s/review-12.jpg", "label": "Отзыв клиента — скриншот 12"}, {"src": "assets/reviews/s/review-13.jpg", "label": "Отзыв клиента — скриншот 13"}, {"src": "assets/reviews/s/review-14.jpg", "label": "Отзыв клиента — скриншот 14"}, {"src": "assets/reviews/s/review-15.jpg", "label": "Отзыв клиента — скриншот 15"}, {"src": "assets/reviews/s/review-16.jpg", "label": "Отзыв клиента — скриншот 16"}, {"src": "assets/reviews/s/review-17.jpg", "label": "Отзыв клиента — скриншот 17"}, {"src": "assets/reviews/s/review-18.jpg", "label": "Отзыв клиента — скриншот 18"}, {"src": "assets/reviews/s/review-19.jpg", "label": "Отзыв клиента — скриншот 19"}], "press": [{"src": "assets/press/press-1.mp4", "poster": "assets/press/press-1.webp", "video": true, "href": "https://smotrim.ru/brand/5403#playing_video=6074096", "label": "Вести — Москва, 09.09.2026"}, {"src": "assets/press/press-2.mp4", "poster": "assets/press/press-2.webp", "video": true, "href": "https://smotrim.ru/video/6051419", "label": "Вести — Москва, 27.07.2026"}, {"src": "assets/press/press-3.mp4", "poster": "assets/press/press-3.webp", "video": true, "href": "https://smotrim.ru/brand/5403#playing_video=6046737", "label": "Вести — Москва, 16.07.2026"}]}</script>
-<script defer src="documents.js?v=202610242010"></script>
-<script defer src="site.js?v=202610242010"></script>
-<script type="module" src="scales3d.js?v=202610242010"></script>
+<script defer src="documents.js?v=202610242013"></script>
+<script defer src="site.js?v=202610242013"></script>
+<script type="module" src="scales3d.js?v=202610242013"></script>
 </body>
 </html>
