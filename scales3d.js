@@ -47,16 +47,16 @@ async function boot() {
   panel(10, 0.8, 2.2, 0, 4, -8, [0, 2, 0]);      // контровая полоса сзади
   panel(8, 3, 0.18, 0, 2, 9, [0, 2, 0]);         // слабый фронтальный отсвет
   panel(30, 30, 0.03, 0, -4, 0, [0, 0, 0]);      // пол
-  scene.environment = pmrem.fromScene(studio, 0.02).texture;
-  scene.environmentIntensity = 1.0;
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; // мягкий рассеянный свет для матовых деталей
+  scene.environmentIntensity = 0.85;
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
 
   // свет студийный: ключ сверху-спереди-слева, заполняющий справа, два контровых сзади — металл читается по краям
-  scene.add(new THREE.HemisphereLight(0xc8ced8, 0x0c0d0f, 0.25));
-  const key = new THREE.SpotLight(0xffffff, 80, 20, 0.6, 0.9, 1.5); key.position.set(-2.5, 8, 5); key.target.position.set(0, 2.4, 0); scene.add(key, key.target);
-  const fill = new THREE.DirectionalLight(0xffffff, 0.6); fill.position.set(5, 2, 4); scene.add(fill);
-  const rimL = new THREE.DirectionalLight(0xdfe6ff, 2.6); rimL.position.set(-4, 5, -6); scene.add(rimL);
-  const rimR = new THREE.DirectionalLight(0xffffff, 2.0); rimR.position.set(5, 4, -5); scene.add(rimR);
+  scene.add(new THREE.HemisphereLight(0xf2efe8, 0x1a1b1e, 0.75));
+  const key = new THREE.SpotLight(0xfff6ea, 95, 20, 0.6, 0.9, 1.5); key.position.set(-2.5, 8, 5); key.target.position.set(0, 2.4, 0); scene.add(key, key.target);
+  const fill = new THREE.DirectionalLight(0xffffff, 1.1); fill.position.set(5, 2, 4); scene.add(fill);
+  const rimL = new THREE.DirectionalLight(0xdfe6ff, 1.4); rimL.position.set(-4, 5, -6); scene.add(rimL);
+  const rimR = new THREE.DirectionalLight(0xffffff, 1.1); rimR.position.set(5, 4, -5); scene.add(rimR);
   const red = new THREE.PointLight(0xe3262d, 0, 6, 1.8); red.position.set(-2.4, 1.2, 1.4); scene.add(red);
 
   // ---------- процедурные карты ----------
@@ -96,10 +96,9 @@ async function boot() {
   const brush = brushed(512, 512);
   const smudge = (() => { const c = cv(512, 512), x = c.getContext('2d'); x.drawImage(brush, 0, 0); x.globalCompositeOperation = 'overlay'; x.globalAlpha = 0.6;
     x.drawImage(noise(512, 512, 6, 4), 0, 0); return c; })();
-  const blued = new THREE.MeshPhysicalMaterial({ color: 0x23262b, metalness: 1, roughness: 0.3, roughnessMap: tex(smudge, false, [2, 2]),
-    anisotropy: 0.7, clearcoat: 0.45, clearcoatRoughness: 0.12, envMapIntensity: 1.0 });   // шлифовка вдоль детали                                              // вороненая сталь
-  const bluedTurned = blued.clone(); bluedTurned.roughnessMap = tex(smudge, false, [1, 3]); bluedTurned.anisotropy = 0.25; bluedTurned.roughness = 0.38;      // токарные детали: кольцевые риски
-  const polished = new THREE.MeshPhysicalMaterial({ color: 0x9fa4ab, metalness: 1, roughness: 0.14, clearcoat: 0.3, clearcoatRoughness: 0.05 }); // полированная сталь
+  const blued = new THREE.MeshStandardMaterial({ color: 0x2c2f35, metalness: 0.3, roughness: 0.6, roughnessMap: tex(smudge, false, [2, 2]) }); // матовый графит
+  const bluedTurned = blued.clone(); bluedTurned.roughnessMap = tex(smudge, false, [1, 3]); bluedTurned.roughness = 0.6;      // токарные детали: кольцевые риски
+  const polished = new THREE.MeshStandardMaterial({ color: 0x5b5f66, metalness: 0.45, roughness: 0.45 }); // матовая сталь фурнитуры
   const enamel = new THREE.MeshPhysicalMaterial({ color: 0xd8242b, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.04 }); // эмаль
   const RED = new THREE.Color(0xd8242b), GREEN = new THREE.Color(0x21b45f);
 
@@ -218,26 +217,17 @@ async function boot() {
       spin: new THREE.Euler(Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6) };
   });
 
-  // ---------- гири: точёная сталь с гравировкой ----------
-  const WS = 0.78;
-  const wGeo = new THREE.LatheGeometry([[0, 0], [0.27, 0], [0.29, 0.02], [0.29, 0.24], [0.27, 0.27], [0.2, 0.29], [0.1, 0.31], [0.085, 0.36],
-    [0.11, 0.39], [0.12, 0.43], [0.1, 0.46], [0.05, 0.48], [0, 0.48]].map(([x, y]) => new THREE.Vector2(x * WS, y * WS)), 72);
-  const weightMat = new THREE.MeshPhysicalMaterial({ color: 0x8e939a, metalness: 1, roughness: 0.34, roughnessMap: tex(smudge, false, [1, 3]), anisotropy: 0.4, anisotropyRotation: Math.PI / 2 });
-  function engraving(text) {
-    const W = 1024, H = 128, c = cv(W, H), x = c.getContext('2d');
-    let fs = 78; x.letterSpacing = '4px';
-    do { x.font = `400 ${fs}px Oswald, "Arial Narrow", sans-serif`; } while (x.measureText(text).width > W * 0.42 && --fs > 20);
-    x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = 'rgba(24,25,28,.9)'; x.fillText(text, W / 2, H * 0.54);
-    const hgt = cv(W, H), hx = hgt.getContext('2d'); hx.fillStyle = '#fff'; hx.fillRect(0, 0, W, H); hx.filter = 'blur(1px)';
-    hx.letterSpacing = '4px'; hx.font = x.font; hx.textAlign = 'center'; hx.textBaseline = 'middle'; hx.fillStyle = '#000'; hx.fillText(text, W / 2, H * 0.54);
-    const m = new THREE.Mesh(new THREE.CylinderGeometry(0.29 * WS + 0.002, 0.29 * WS + 0.002, 0.15 * WS, 72, 1, true),
-      new THREE.MeshStandardMaterial({ map: tex(c, true), normalMap: tex(normalFrom(hgt, 3)), transparent: true, metalness: 0.6, roughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2 }));
-    m.position.y = 0.13 * WS; m.rotation.y = Math.PI; return m;
-  }
-  const SLOT = [[-0.25, 0.13], [0.25, 0.13], [0, -0.21]];
-  const weights = ['КОНСУЛЬТАЦИЯ', 'ДОГОВОР', 'СУД'].map((name, i) => {
-    const m = new THREE.Group(); m.add(new THREE.Mesh(wGeo, weightMat)); m.add(engraving(name)); m.rotation.y = [-0.15, 0.12, 0][i]; m.visible = false; scene.add(m);
-    return { m, off: new THREE.Vector3(SLOT[i][0], FLOOR, SLOT[i][1]), landed: false };
+  // ---------- гири: крупные белые бруски из эмали — главный акцент, пирамидой внутри цепей ----------
+  const WH = 0.3, WD = 0.34;
+  const weights = [['КОНСУЛЬТАЦИЯ', 1.16, 0.0, -0.02], ['ДОГОВОР', 0.84, 0.02, 0.04], ['СУД', 0.5, -0.01, -0.05]].map(([t, w, dx, rot], i) => {
+    const m = new THREE.Group();
+    m.add(new THREE.Mesh(new RoundedBoxGeometry(w, WH, WD, 5, 0.045), new THREE.MeshPhysicalMaterial({
+      map: tex(paint('#f6f4ef'), true), roughness: 0.3, clearcoat: 0.9, clearcoatRoughness: 0.12 })));
+    const L = label(t, w - 0.07, WH - 0.07, '#0c0d0f');
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.07, WH - 0.07), new THREE.MeshStandardMaterial({ map: L.map, normalMap: L.normal, transparent: true, roughness: 0.6, polygonOffset: true, polygonOffsetFactor: -2 }));
+    face.position.z = WD / 2 + 0.001; m.add(face);
+    m.rotation.y = rot; m.visible = false; scene.add(m);
+    return { m, off: new THREE.Vector3(dx, FLOOR + WH / 2 + i * (WH + 0.008), 0.04), landed: false };
   });
 
   // ---------- сценарий: эмоции пачкой, пауза, гири пачкой ----------
@@ -309,13 +299,13 @@ async function boot() {
       hang(p.s, p.g.position); p.g.rotation.z = p.phi;
     });
     const imb = Math.max(0, L - R) / 3, lv = clamp01((ps - 0.58) / 0.08);
-    red.intensity += (imb * 8 - red.intensity) * Math.min(1, dt * 4);
+    red.intensity += (imb * 3 - red.intensity) * Math.min(1, dt * 4);
     enamel.color.lerpColors(RED, GREEN, lv);
     key.intensity = 70 + 25 * lv;
     smx += (mx - smx) * Math.min(1, dt * 3); smy += (my - smy) * Math.min(1, dt * 3);
     frameCam();
     const moving = Math.abs(thetaV) + Math.abs(target - theta) + pans.reduce((a, p) => a + Math.abs(p.phiV) + Math.abs(p.phi), 0) > 0.002
-      || ps !== pTarget || (autoOn && tProg < 1) || Math.abs(red.intensity - imb * 8) > 0.05 || Math.abs(smx - mx) + Math.abs(smy - my) > 0.003;
+      || ps !== pTarget || (autoOn && tProg < 1) || Math.abs(red.intensity - imb * 3) > 0.05 || Math.abs(smx - mx) + Math.abs(smy - my) > 0.003;
     idle = moving ? 0 : idle + dt;
   }
 
