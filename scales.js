@@ -69,17 +69,6 @@ async function boot() {
     }
     x.globalAlpha = 0.25; x.drawImage(noise(w, h, 16, 3), 0, 0); x.globalAlpha = 1; return c;
   }
-  function marble(w, h) {
-    const c = cv(w, h), x = c.getContext('2d'); x.fillStyle = '#121316'; x.fillRect(0, 0, w, h);
-    x.globalCompositeOperation = 'screen'; x.globalAlpha = 0.18; x.drawImage(noise(w, h, 6, 5, 40), 0, 0);
-    x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
-    const vein = (blur, a, lw) => { x.filter = `blur(${blur}px)`;
-      for (let i = 0; i < 9; i++) { x.strokeStyle = `rgba(190,196,206,${a * (0.4 + Math.random() * 0.6)})`; x.lineWidth = lw * (0.5 + Math.random());
-        x.beginPath(); let px = Math.random() * w, py = -10; x.moveTo(px, py);
-        while (py < h + 10) { const nx = px + (Math.random() - 0.45) * 90, ny = py + 30 + Math.random() * 60; x.quadraticCurveTo(px + (Math.random() - 0.5) * 80, (py + ny) / 2, nx, ny); px = nx; py = ny; }
-        x.stroke(); } x.filter = 'none'; };
-    vein(6, 0.18, 6); vein(1, 0.35, 1.2); return c;
-  }
   function normalFrom(src, strength) {
     const w = src.width, h = src.height, s = src.getContext('2d').getImageData(0, 0, w, h).data, c = cv(w, h), x = c.getContext('2d'), img = x.createImageData(w, h), d = img.data;
     const H = (i, j) => s[(((j + h) % h) * w + ((i + w) % w)) * 4] / 255;
@@ -101,9 +90,6 @@ async function boot() {
   const polished = new THREE.MeshStandardMaterial({ color: 0xd4d8de, metalness: 1, roughness: 0.14 });
   const lacquer = new THREE.MeshPhysicalMaterial({ color: 0x0a0a0c, metalness: 0.1, roughness: 0.42, clearcoat: 1, clearcoatRoughness: 0.08,
     roughnessMap: tex(grain, false, [2, 4]) });
-  const mTex = marble(512, 256);
-  const stone = new THREE.MeshPhysicalMaterial({ map: tex(mTex, true), roughness: 0.32, clearcoat: 0.7, clearcoatRoughness: 0.12,
-    normalMap: tex(normalFrom(mTex, 2)), normalScale: new THREE.Vector2(0.25, 0.25) });
   const redLac = new THREE.MeshPhysicalMaterial({ color: 0xd8242b, roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.1 });
 
   // мягкие контактные тени: без краёв на фоне страницы
@@ -112,52 +98,53 @@ async function boot() {
     x.fillStyle = g; x.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); })();
   const shadow = (w, d, o) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshBasicMaterial({ map: blob, transparent: true, depthWrite: false, opacity: o }));
     m.rotation.x = -Math.PI / 2; m.position.y = 0.002; scene.add(m); return m; };
-  shadow(2.8, 1.6, 0.95);
+  shadow(1.9, 1.3, 0.95);
   const cast = (m) => m;
 
-  // ---------- стойка: мраморное основание, лаковая колонна, стальная фурнитура ----------
-  const PIVOT_Y = 3.0, HALF = 2.0, CHAIN = 1.8, PAN_R = 0.9;
+  // ---------- весы без подставки: толстый сатиновый чёрный металл, красная ось, стальная фурнитура ----------
+  const PIVOT_Y = 3.0, HALF = 2.0, CHAIN = 1.8, PAN_R = 0.95;
+  const satin = new THREE.MeshPhysicalMaterial({ color: 0x17181c, metalness: 0.55, roughness: 0.42, roughnessMap: tex(brV, false, [3, 1]),
+    clearcoat: 0.6, clearcoatRoughness: 0.22 });
+  const satinR = satin.clone(); satinR.roughnessMap = tex(brH, false, [1, 1]); satinR.side = THREE.DoubleSide;
   const base = new THREE.Group(); scene.add(base);
-  const slab = new THREE.Mesh(new RoundedBoxGeometry(1.8, 0.14, 1.05, 4, 0.04), stone); slab.position.y = 0.07; base.add(slab);
-  const slab2 = new THREE.Mesh(new RoundedBoxGeometry(1.0, 0.1, 0.62, 4, 0.03), stone); slab2.position.y = 0.19; base.add(slab2);
   const lathe = (pts, seg, mat) => new THREE.Mesh(new THREE.LatheGeometry(pts.map(([a, b]) => new THREE.Vector2(a, b)), seg), mat);
-  const foot = lathe([[0, 0], [0.3, 0], [0.3, 0.03], [0.24, 0.07], [0.13, 0.12], [0.1, 0.2], [0, 0.2]], 48, steelH); foot.position.y = 0.24; base.add(foot);
-  const col = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.085, PIVOT_Y - 0.52, 32), lacquer); col.position.y = 0.44 + (PIVOT_Y - 0.52) / 2; base.add(col);
-  [0.62, 1.6, 2.35].forEach((y, i) => { const r = new THREE.Mesh(new THREE.TorusGeometry(i ? 0.074 : 0.095, i ? 0.014 : 0.02, 12, 40), polished); r.rotation.x = Math.PI / 2; r.position.y = y; base.add(r); });
-  const cap = lathe([[0, 0], [0.065, 0], [0.11, 0.1], [0.12, 0.14], [0, 0.14]], 40, steelH); cap.position.y = PIVOT_Y - 0.22; base.add(cap);
-  const tip = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.3, 24), redLac); tip.position.y = PIVOT_Y + 0.3; base.add(tip);
-  const tipBall = new THREE.Mesh(new THREE.SphereGeometry(0.05, 24, 16), polished); tipBall.position.y = PIVOT_Y + 0.15; base.add(tipBall);
+  // массивная круглая ножка — часть самих весов
+  const foot = lathe([[0, 0], [0.62, 0], [0.66, 0.03], [0.66, 0.09], [0.6, 0.13], [0.34, 0.2], [0.2, 0.3], [0.17, 0.42], [0, 0.42]], 72, satinR); base.add(foot);
+  const trim = new THREE.Mesh(new THREE.TorusGeometry(0.645, 0.022, 12, 72), polished); trim.rotation.x = Math.PI / 2; trim.position.y = 0.09; base.add(trim);
+  const col = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.15, PIVOT_Y - 0.5, 48), satin); col.position.y = 0.4 + (PIVOT_Y - 0.5) / 2; base.add(col);
+  [0.5, 2.55].forEach((y) => { const r = new THREE.Mesh(new THREE.TorusGeometry(y < 1 ? 0.16 : 0.125, 0.028, 14, 48), polished); r.rotation.x = Math.PI / 2; r.position.y = y; base.add(r); });
+  const cap = lathe([[0, 0], [0.12, 0], [0.2, 0.12], [0.21, 0.18], [0, 0.18]], 48, satinR); cap.position.y = PIVOT_Y - 0.3; base.add(cap);
+  const tip = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.34, 32), satin); tip.position.y = PIVOT_Y + 0.38; base.add(tip);
 
-  // ---------- коромысло: сужается к концам, ушки на концах ----------
+  // ---------- коромысло: толстое, сужается к концам ----------
   const beam = new THREE.Group(); beam.position.y = PIVOT_Y; scene.add(beam);
   [-1, 1].forEach((s) => {
-    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.05, HALF, 28), steelV); arm.rotation.z = s * Math.PI / 2; arm.position.x = s * HALF / 2; beam.add(arm);
-    const eye = new THREE.Mesh(new THREE.TorusGeometry(0.04, 0.011, 10, 28), polished); eye.position.set(s * HALF, -0.03, 0); beam.add(eye);
+    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.1, HALF, 40), satin); arm.rotation.z = s * Math.PI / 2; arm.position.x = s * HALF / 2; beam.add(arm);
+    const end = new THREE.Mesh(new THREE.SphereGeometry(0.075, 28, 18), polished); end.position.x = s * HALF; beam.add(end);
+    const eye = new THREE.Mesh(new THREE.TorusGeometry(0.055, 0.02, 12, 28), polished); eye.position.set(s * HALF, -0.1, 0); beam.add(eye);
   });
-  const hub = new THREE.Mesh(new THREE.SphereGeometry(0.085, 32, 20), polished); beam.add(hub);
-  const axle = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.26, 20), polished); axle.rotation.x = Math.PI / 2; beam.add(axle);
-  const needle = new THREE.Mesh(new THREE.ConeGeometry(0.014, 0.5, 12), polished); needle.rotation.z = Math.PI; needle.position.set(0, -0.32, 0.09); beam.add(needle);
+  const hub = new THREE.Mesh(new THREE.SphereGeometry(0.18, 40, 24), redLac); beam.add(hub);
+  const needle = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.6, 16), polished); needle.rotation.z = Math.PI; needle.position.set(0, -0.42, 0.17); beam.add(needle);
 
-  // ---------- чаши: радиальная шлифовка, цепи из звеньев только сзади, чтобы груз их не пересекал ----------
-  const bowlGeo = new THREE.LatheGeometry([[0, 0], [0.55, 0.012], [0.74, 0.05], [0.86, 0.12], [PAN_R, 0.16]].map(([x, y]) => new THREE.Vector2(x, y)), 72);
-  const linkGeo = new THREE.TorusGeometry(0.02, 0.0055, 6, 14); linkGeo.scale(1, 1.6, 1);
-  const TOP = new THREE.Vector3(0, -0.16, 0);
-  const ANCH = [200, 270, 340].map((a) => new THREE.Vector3(Math.cos(a * Math.PI / 180) * (PAN_R - 0.03), -CHAIN + 0.15, Math.sin(a * Math.PI / 180) * (PAN_R - 0.03)));
+  // ---------- чаши: массивные, цепи из крупных звеньев только сзади, чтобы груз их не пересекал ----------
+  const bowlGeo = new THREE.LatheGeometry([[0, 0.05], [0.7, 0.06], [0.86, 0.12], [PAN_R, 0.2], [PAN_R + 0.03, 0.2], [PAN_R - 0.02, 0.08], [0.78, 0.0], [0, 0.0]]
+    .map(([x, y]) => new THREE.Vector2(x, y)).reverse(), 80);
+  const linkGeo = new THREE.TorusGeometry(0.034, 0.011, 8, 16); linkGeo.scale(1, 1.5, 1);
+  const TOP = new THREE.Vector3(0, -0.24, 0);
+  const ANCH = [200, 270, 340].map((a) => new THREE.Vector3(Math.cos(a * Math.PI / 180) * (PAN_R - 0.04), -CHAIN + 0.2, Math.sin(a * Math.PI / 180) * (PAN_R - 0.04)));
   const pans = [-1, 1].map((s) => {
     const g = new THREE.Group(); scene.add(g);
-    const bowl = new THREE.Mesh(bowlGeo, steelR); bowl.position.y = -CHAIN; g.add(bowl);
-    const lip = new THREE.Mesh(new THREE.TorusGeometry(PAN_R, 0.02, 10, 72), polished); lip.rotation.x = Math.PI / 2; lip.position.y = -CHAIN + 0.16; g.add(lip);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.035, 0.009, 8, 24), polished); ring.position.y = -0.08; g.add(ring);
-    const sHook = new THREE.Mesh(new THREE.TorusGeometry(0.03, 0.008, 8, 20), polished); sHook.rotation.y = Math.PI / 2; sHook.position.y = -0.13; g.add(sHook);
-    // звенья цепей одним InstancedMesh
-    const step = 0.052, list = [];
+    const bowl = new THREE.Mesh(bowlGeo, satinR); bowl.position.y = -CHAIN; g.add(bowl);
+    const lip = new THREE.Mesh(new THREE.TorusGeometry(PAN_R + 0.015, 0.035, 14, 80), polished); lip.rotation.x = Math.PI / 2; lip.position.y = -CHAIN + 0.2; g.add(lip);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.02, 10, 28), polished); ring.rotation.y = Math.PI / 2; ring.position.y = -0.18; g.add(ring);
+    const step = 0.074, list = [];
     ANCH.forEach((b) => { const dir = b.clone().sub(TOP), len = dir.length(); dir.normalize(); const n = Math.floor(len / step);
       for (let k = 0; k < n; k++) list.push([TOP.clone().addScaledVector(dir, (k + 0.5) * step), dir, k]); });
     const links = new THREE.InstancedMesh(linkGeo, polished, list.length);
     const q = new THREE.Quaternion(), q2 = new THREE.Quaternion(), M = new THREE.Matrix4(), one = new THREE.Vector3(1, 1, 1), Y = new THREE.Vector3(0, 1, 0);
     list.forEach(([p, dir, k], i) => { q.setFromUnitVectors(Y, dir); q2.setFromAxisAngle(dir, (k % 2) * Math.PI / 2); M.compose(p, q2.multiply(q), one); links.setMatrixAt(i, M); });
     g.add(links);
-    return { s, g, phi: 0, phiV: 0, load: [], sh: shadow(2.0, 1.1, 0.5) };
+    return { s, g, phi: 0, phiV: 0, load: [], sh: shadow(2.1, 1.2, 0.5) };
   });
 
   // ---------- эмоции: окрашенные бруски с зерном краски и выдавленной надписью ----------
@@ -180,9 +167,9 @@ async function boot() {
     x.globalCompositeOperation = 'soft-light'; x.globalAlpha = 0.5; x.drawImage(noise(256, 256, 8, 5), 0, 0); return c;
   }
   const pGrain = noise(256, 256, 64, 2), pNormal = tex(normalFrom(pGrain, 1.6), false, [2, 1]), pRough = tex(pGrain, false, [2, 1]);
-  const PROBLEMS = [['НЕПОНИМАНИЕ', 1.28, 0.3, 0.34, '#c8232a', '#f2ede4', [-0.02, 0.21, 0.12], 0.05],
-                    ['НЕОПРЕДЕЛЁННОСТЬ', 1.42, 0.3, 0.34, '#e8e3d8', '#17181c', [0.03, 0.52, 0.12], -0.05],
-                    ['СТРАХ', 0.82, 0.3, 0.34, '#c8232a', '#f2ede4', [-0.04, 0.83, 0.12], 0.08]];
+  const PROBLEMS = [['НЕПОНИМАНИЕ', 1.28, 0.3, 0.34, '#c8232a', '#f2ede4', [-0.02, 0.25, 0.12], 0.05],
+                    ['НЕОПРЕДЕЛЁННОСТЬ', 1.42, 0.3, 0.34, '#e8e3d8', '#17181c', [0.03, 0.56, 0.12], -0.05],
+                    ['СТРАХ', 0.82, 0.3, 0.34, '#c8232a', '#f2ede4', [-0.04, 0.87, 0.12], 0.08]];
   const problems = PROBLEMS.map(([t, w, h, d, col, ink, off, rot]) => {
     const m = new THREE.Group();
     m.add(new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 4, 0.035), new THREE.MeshPhysicalMaterial({
@@ -213,26 +200,21 @@ async function boot() {
   }
   const W_NAMES = ['КОНСУЛЬТАЦИЯ', 'ДОГОВОР', 'СУД'];
   const SHELF = [new THREE.Vector3(1.3, 0, 1.45), new THREE.Vector3(1.88, 0, 1.35), new THREE.Vector3(2.46, 0, 1.25)];
-  const SLOT = [[-0.27, 0.14], [0.27, 0.14], [0, -0.18]];
+  const SLOT = [[-0.31, 0.17], [0.31, 0.17], [0, -0.36]];
   const weights = SHELF.map((p, i) => {
     const m = new THREE.Group(); m.add(new THREE.Mesh(wGeo, steelH)); m.add(band(W_NAMES[i])); m.position.copy(p); m.rotation.y = -0.25 + i * 0.12; scene.add(m);
     const sh = shadow(0.8, 0.55, 0.75); sh.position.set(p.x, 0.003, p.z);
-    return { m, i, home: p.clone(), sh, off: new THREE.Vector3(SLOT[i][0], -CHAIN + 0.03, SLOT[i][1]), landed: false };
+    return { m, i, home: p.clone(), sh, off: new THREE.Vector3(SLOT[i][0], -CHAIN + 0.065, SLOT[i][1]), landed: false };
   });
   problems.forEach((p) => { p.spin = new THREE.Euler(Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6); p.landed = false; });
 
   // ---------- сценарий по прокрутке: эмоции падают, гири выравнивают ----------
-  const BR = [[0.06, 0.17], [0.17, 0.28], [0.28, 0.39]], WG = [[0.5, 0.62], [0.62, 0.74], [0.74, 0.86]];
+  const BR = [[0.05, 0.13], [0.09, 0.17], [0.13, 0.21]], WG = [[0.4, 0.49], [0.44, 0.53], [0.48, 0.57]];
   const STAGES = [
     [0, '', 'Как я работаю', 'Смотри на весы.', ''],
-    [0.06, '01', 'Непонимание', 'Что происходит и что теперь делать — непонятно.', 'tilt'],
-    [0.17, '02', 'Неопределённость', 'Чем всё закончится, никто не говорит.', 'tilt'],
-    [0.28, '03', 'Страх', 'Страшно сделать хуже. Чаша уходит вниз.', 'tilt'],
-    [0.44, '→', 'Здесь подключаюсь я', 'На другую чашу кладу то, что работает.', 'tilt'],
-    [0.5, '+', 'Консультация', 'Разбираю ситуацию и объясняю простыми словами, что делать.', 'tilt'],
-    [0.62, '+', 'Договор', 'Составляю и проверяю документы, фиксирую условия.', 'tilt'],
-    [0.74, '+', 'Суд', 'Представляю в суде и до суда — до результата.', 'tilt'],
-    [0.88, '✓', 'Проблема решена', 'Непонимание, неопределённость и страх больше не тянут вниз.', 'level']];
+    [0.05, '01', 'Перевес', 'Непонимание, неопределённость и страх тянут чашу вниз.', 'tilt'],
+    [0.38, '02', 'Подключаюсь я', 'Консультация, договор, суд — на другую чашу.', 'tilt'],
+    [0.6, '✓', 'Проблема решена', 'Непонимание, неопределённость и страх больше не тянут вниз.', 'level']];
   const capEl = stage.querySelector('.sc-cap'), cIdx = capEl.querySelector('.sc-idx'), cTitle = capEl.querySelector('.sc-title'), cText = capEl.querySelector('.sc-text');
   const bar = stage.querySelector('.sc-bar i');
   let shown = -1;
@@ -266,7 +248,7 @@ async function boot() {
 
   function step(dt) {
     // история идёт сама (~11 с), прокрутка может её ускорить
-    if (autoOn && tProg < 1) tProg = Math.min(1, tProg + dt / 11);
+    if (autoOn && tProg < 1) tProg = Math.min(1, tProg + dt / 6);
     pTarget = Math.max(scrollP, tProg);
     ps += (pTarget - ps) * Math.min(1, dt * 7);
     if (Math.abs(pTarget - ps) < 0.0004) ps = pTarget;
@@ -275,7 +257,7 @@ async function boot() {
     problems.forEach((p, i) => {
       const t = clamp01((ps - BR[i][0]) / (BR[i][1] - BR[i][0])), land = panWorld(pans[0], p.off, tmp2);
       p.m.visible = t > 0;
-      p.m.position.copy(land); p.m.position.y += (1 - bounce(t)) * 2.6;
+      p.m.position.copy(land); p.m.position.y += (1 - bounce(t)) * 2.2;
       const k = 1 - inOut(t); p.m.rotation.set(p.spin.x * k, p.rot + p.spin.y * k, p.spin.z * k + pans[0].phi);
       const now = t >= 1; if (now && !p.landed) { thetaV += 0.55; pans[0].phiV += (Math.random() - 0.5) * 0.8; } p.landed = now; if (now) L++;
     });
@@ -296,11 +278,11 @@ async function boot() {
       const hy = p.g.position.y - CHAIN; p.sh.position.x = p.g.position.x; p.sh.material.opacity = THREE.MathUtils.clamp(0.75 - hy * 0.38, 0.12, 0.6); p.sh.scale.setScalar(0.8 + hy * 0.25);
     });
     // свет: тревожный при перевесе, ровный и яркий в конце
-    const imb = Math.max(0, L - R) / 3, lv = clamp01((ps - 0.86) / 0.08);
+    const imb = Math.max(0, L - R) / 3, lv = clamp01((ps - 0.58) / 0.08);
     red.intensity += (imb * 10 - red.intensity) * Math.min(1, dt * 4);
     spot.intensity = 52 + 38 * lv;
     // камера ведёт к чаше, где происходит действие, и чуть следует за курсором
-    const focus = ps < 0.45 ? -0.5 * clamp01(ps / 0.08) : ps < 0.88 ? 0.5 : 0.5 * (1 - lv);
+    const focus = ps < 0.33 ? -0.45 * clamp01(ps / 0.06) : ps < 0.6 ? 0.45 : 0.45 * (1 - lv);
     camX += (focus - camX) * Math.min(1, dt * 2.5); smx += (mx - smx) * Math.min(1, dt * 3); smy += (my - smy) * Math.min(1, dt * 3);
     frameCam();
     const moving = Math.abs(thetaV) + Math.abs(target - theta) + pans.reduce((a, p) => a + Math.abs(p.phiV) + Math.abs(p.phi), 0) > 0.002
