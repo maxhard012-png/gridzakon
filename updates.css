@@ -107,3 +107,14 @@ dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16
 
 /* ссылки внутри текста «Полезного» — тем же кеглем, что и текст */
 .useful-item li .link,.useful-item p .link {font:inherit;color:var(--fg)}
+
+/* Весы без рамки: сцена стоит прямо на фоне страницы */
+.sc-view {border:0;border-radius:0;overflow:visible;background:none!important;height:clamp(340px,40vw,480px)}
+.sc-view::before,.sc-view::after {content:"";position:absolute;inset:-8% -6%;pointer-events:none;opacity:0;transition:opacity .9s}
+.sc-view::before {background:radial-gradient(38% 42% at 24% 72%,rgba(227,38,45,.24),transparent 72%)}
+.sc-view::after {background:radial-gradient(40% 42% at 72% 70%,rgba(33,180,95,.16),transparent 72%)}
+.scales.is-tilt .sc-view::before,.scales.is-level .sc-view::after {opacity:1}
+.sc-view canvas {z-index:1}
+.sc-state {left:0;top:4px;z-index:2;border-radius:4px;font:400 14px/1 var(--f-disp);letter-spacing:.2em;padding:8px 11px 7px}
+.sc-fact {margin-top:4px}
+@media(max-width:700px){.sc-view{margin:0 -16px;height:340px}.sc-state{left:16px}}

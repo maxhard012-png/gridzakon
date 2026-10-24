@@ -25,8 +25,6 @@ async function boot() {
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
@@ -36,18 +34,29 @@ async function boot() {
 
   // свет: конус сверху, как прожектор, и красная подсветка перевеса
   scene.add(new THREE.HemisphereLight(0x9aa0aa, 0x0c0d0f, 0.25));
-  const spot = new THREE.SpotLight(0xfff1dc, 60, 16, 0.42, 0.75, 1.6);
+  const spot = new THREE.SpotLight(0xffffff, 55, 16, 0.5, 0.85, 1.6);
   spot.position.set(0.3, 9, 1.4); spot.target.position.set(0, 1.4, 0);
-  spot.castShadow = true; spot.shadow.mapSize.set(1024, 1024); spot.shadow.bias = -0.0004; spot.shadow.radius = 4;
   scene.add(spot, spot.target);
+  // контровой свет: силуэт графита читается на тёмном фоне страницы
+  const rim = new THREE.DirectionalLight(0xffffff, 2.2); rim.position.set(-3, 5, -6); scene.add(rim);
+  const rim2 = new THREE.DirectionalLight(0xffffff, 1.2); rim2.position.set(4, 3, -5); scene.add(rim2);
   const red = new THREE.PointLight(0xe3262d, 0, 7, 1.8); red.position.set(-2.4, 0.6, 1.6); scene.add(red);
-  const floor = new THREE.Mesh(new THREE.CircleGeometry(4.2, 64), new THREE.ShadowMaterial({ opacity: 0.55 }));
-  floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+  // мягкие контактные тени вместо жёсткой карты теней: без краёв на фоне страницы
+  const blob = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
+    const g = x.createRadialGradient(64, 64, 0, 64, 64, 64); g.addColorStop(0, 'rgba(0,0,0,.85)'); g.addColorStop(0.55, 'rgba(0,0,0,.35)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); })();
+  const shadow = (w, d, o) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshBasicMaterial({ map: blob, transparent: true, depthWrite: false, opacity: o }));
+    m.rotation.x = -Math.PI / 2; m.position.y = 0.002; scene.add(m); return m; };
+  shadow(2.4, 1.3, 0.9);
 
-  const brass = new THREE.MeshStandardMaterial({ color: 0xc9a46a, metalness: 1, roughness: 0.32 });
-  const darkBrass = new THREE.MeshStandardMaterial({ color: 0x8c6c3e, metalness: 1, roughness: 0.42 });
+  // палитра сайта: графит, красный акцент, белый
+  const brass = new THREE.MeshStandardMaterial({ color: 0x2c2f35, metalness: 1, roughness: 0.24 });
+  const redLac = new THREE.MeshStandardMaterial({ color: 0xe3262d, metalness: 0.15, roughness: 0.32 });
+  const ceramic = new THREE.MeshStandardMaterial({ color: 0xf1efe9, metalness: 0, roughness: 0.42 });
+  const darkBrass = new THREE.MeshStandardMaterial({ color: 0x9aa0a8, metalness: 1, roughness: 0.32 });
   const lacquer = new THREE.MeshStandardMaterial({ color: 0x111215, metalness: 0.2, roughness: 0.28 });
-  const cast = (m) => { m.castShadow = true; m.receiveShadow = true; return m; };
+  const cast = (m) => m;
+  const steel = new THREE.MeshStandardMaterial({ color: 0x80858e, metalness: 1, roughness: 0.3 });
 
   // стойка
   const PIVOT_Y = 2.75, HALF = 1.9, CHAIN = 1.45, PAN_R = 0.62;
@@ -55,29 +64,29 @@ async function boot() {
   base.add(cast(new THREE.Mesh(new RoundedBoxGeometry(1.5, 0.16, 0.9, 3, 0.05), lacquer))).position.y = 0.08;
   const plinth = cast(new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.36, 0.14, 40), brass)); plinth.position.y = 0.23; base.add(plinth);
   const col = cast(new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.09, PIVOT_Y - 0.3, 24), lacquer)); col.position.y = 0.3 + (PIVOT_Y - 0.3) / 2; base.add(col);
-  [0.9, 1.9].forEach((y) => { const r = cast(new THREE.Mesh(new THREE.TorusGeometry(0.085, 0.022, 10, 32), brass)); r.rotation.x = Math.PI / 2; r.position.y = y; base.add(r); });
-  const knob = cast(new THREE.Mesh(new THREE.SphereGeometry(0.13, 28, 18), brass)); knob.position.y = PIVOT_Y + 0.02; base.add(knob);
-  const tip = cast(new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.28, 20), brass)); tip.position.y = PIVOT_Y + 0.26; base.add(tip);
+  [0.9, 1.9].forEach((y) => { const r = cast(new THREE.Mesh(new THREE.TorusGeometry(0.085, 0.022, 10, 32), redLac)); r.rotation.x = Math.PI / 2; r.position.y = y; base.add(r); });
+  const knob = cast(new THREE.Mesh(new THREE.SphereGeometry(0.13, 28, 18), redLac)); knob.position.y = PIVOT_Y + 0.02; base.add(knob);
+  const tip = cast(new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.28, 20), redLac)); tip.position.y = PIVOT_Y + 0.26; base.add(tip);
 
   // коромысло
   const beam = new THREE.Group(); beam.position.y = PIVOT_Y; scene.add(beam);
   beam.add(cast(new THREE.Mesh(new RoundedBoxGeometry(HALF * 2 + 0.1, 0.07, 0.07, 2, 0.025), brass)));
-  const needle = cast(new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.55, 0.025), darkBrass)); needle.position.y = -0.3; beam.add(needle);
-  [-1, 1].forEach((s) => { const e = cast(new THREE.Mesh(new THREE.SphereGeometry(0.06, 20, 14), brass)); e.position.x = s * HALF; beam.add(e); });
+  const needle = cast(new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.55, 0.025), redLac)); needle.position.y = -0.3; beam.add(needle);
+  [-1, 1].forEach((s) => { const e = cast(new THREE.Mesh(new THREE.SphereGeometry(0.06, 20, 14), redLac)); e.position.x = s * HALF; beam.add(e); });
 
   // чаши на трёх цепях
   const bowlGeo = new THREE.LatheGeometry([[0, 0], [0.42, 0.015], [0.56, 0.06], [PAN_R, 0.13], [PAN_R + 0.02, 0.14]].map(([x, y]) => new THREE.Vector2(x, y)), 48);
   const pans = [-1, 1].map((s) => {
     const g = new THREE.Group(); scene.add(g);
-    const bowl = cast(new THREE.Mesh(bowlGeo, brass)); bowl.material = brass.clone(); bowl.material.side = THREE.DoubleSide; bowl.position.y = -CHAIN; g.add(bowl);
-    const rim = cast(new THREE.Mesh(new THREE.TorusGeometry(PAN_R + 0.02, 0.016, 8, 48), brass)); rim.rotation.x = Math.PI / 2; rim.position.y = -CHAIN + 0.14; g.add(rim);
+    const bowl = cast(new THREE.Mesh(bowlGeo, steel)); bowl.material = steel.clone(); bowl.material.side = THREE.DoubleSide; bowl.position.y = -CHAIN; g.add(bowl);
+    const rim = cast(new THREE.Mesh(new THREE.TorusGeometry(PAN_R + 0.02, 0.016, 8, 48), redLac)); rim.rotation.x = Math.PI / 2; rim.position.y = -CHAIN + 0.14; g.add(rim);
     [0, 2.094, 4.189].forEach((a) => {
       const top = new THREE.Vector3(0, -0.04, 0), bot = new THREE.Vector3(Math.cos(a + 1.57) * (PAN_R - 0.02), -CHAIN + 0.14, Math.sin(a + 1.57) * (PAN_R - 0.02));
       const len = top.distanceTo(bot), c = cast(new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, len, 6), darkBrass));
       c.position.copy(top).add(bot).multiplyScalar(0.5); c.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), bot.clone().sub(top).normalize()); g.add(c);
     });
     const hook = cast(new THREE.Mesh(new THREE.TorusGeometry(0.05, 0.012, 8, 20), brass)); g.add(hook);
-    return { s, g, phi: 0, phiV: 0, load: [] };
+    return { s, g, phi: 0, phiV: 0, load: [], sh: shadow(1.6, 0.9, 0.55) };
   });
 
   // проблемы: красные «дела» с подписью
@@ -106,8 +115,9 @@ async function boot() {
   const SHELF = [new THREE.Vector3(1.55, 0, 1.15), new THREE.Vector3(2.05, 0, 1.05), new THREE.Vector3(2.55, 0, 0.95)];
   const SLOT = [[-0.2, 0.06], [0.2, 0.06], [0, -0.22]];
   const weights = SHELF.map((p, i) => {
-    const m = cast(new THREE.Mesh(wGeo, i === 1 ? darkBrass : brass)); m.position.copy(p); scene.add(m);
-    return { m, i, state: 'shelf', home: p.clone() };
+    const m = cast(new THREE.Mesh(wGeo, ceramic)); m.position.copy(p); scene.add(m);
+    const sh = shadow(0.7, 0.45, 0.7); sh.position.set(p.x, 0.003, p.z);
+    return { m, i, state: 'shelf', home: p.clone(), sh };
   });
 
   // физика коромысла
@@ -187,7 +197,9 @@ async function boot() {
     pans.forEach((p) => {
       p.phiV += (-p.phi * 22 - p.phiV * 2.6 - acc * 0.02 * p.s) * dt; p.phi += p.phiV * dt;
       hang(p.s, p.g.position); p.g.rotation.z = p.phi;
+      const hy = p.g.position.y - CHAIN; p.sh.position.x = p.g.position.x; p.sh.material.opacity = THREE.MathUtils.clamp(0.75 - hy * 0.38, 0.12, 0.6); p.sh.scale.setScalar(0.8 + hy * 0.25);
     });
+    weights.forEach((w) => { w.sh.visible = w.state === 'shelf'; });
     const imb = Math.max(0, onL() - onR()) / 3;
     red.intensity += (imb * 9 - red.intensity) * Math.min(1, dt * 4);
     const moving = Math.abs(thetaV) + Math.abs(target - theta) + pans.reduce((a, p) => a + Math.abs(p.phiV) + Math.abs(p.phi), 0) > 0.002
@@ -209,7 +221,7 @@ async function boot() {
     const w = stage.querySelector('.sc-view').clientWidth, h = stage.querySelector('.sc-view').clientHeight;
     renderer.setSize(w, h, false); camera.aspect = w / h;
     const need = 5.95, fit = Math.max(9.6, need / (2 * Math.tan(THREE.MathUtils.degToRad(15)) * camera.aspect));
-    camera.position.set(0.25, 2.3, fit); camera.lookAt(0.25, 1.45, 0); camera.updateProjectionMatrix();
+    camera.position.set(0.12, 2.3, fit); camera.lookAt(0.12, 1.5, 0); camera.updateProjectionMatrix();
     renderer.render(scene, camera);
   }
   new ResizeObserver(resize).observe(stage);
