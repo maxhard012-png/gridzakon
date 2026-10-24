@@ -166,3 +166,30 @@ dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16
 .sc-dot {fill:var(--bg)}
 .sc-plus {stroke:var(--fg);stroke-width:1.8;stroke-linecap:round;fill:none}
 .sc-view::before,.sc-view::after {inset:-4% -2%}
+
+/* контурное слово за весами — как у заголовков разделов */
+.sc-gword {position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);z-index:0;pointer-events:none;white-space:nowrap;
+  font:400 clamp(96px,17vw,180px)/1 var(--f-disp);text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(241,241,238,.1);transition:-webkit-text-stroke-color .6s}
+.scales.is-tilt .sc-gword {-webkit-text-stroke-color:rgba(227,38,45,.34)}
+.scales.is-level .sc-gword {-webkit-text-stroke-color:rgba(33,180,95,.4)}
+.sc-view canvas {z-index:1}
+/* вариант B: бруски и гири с торцом */
+.v-b .sc-item.red .sc-side {fill:#8f1217}
+.v-b .sc-item.white .sc-side {fill:#a7a399}
+.v-b .sc-item.pill .sc-side {fill:#8f918e}
+.v-b .sc-item.white .sc-body {fill:#f3f1ea}
+/* вариант C: типографика */
+.sc-word {font-family:var(--f-disp);font-weight:400;text-transform:uppercase;letter-spacing:.02em;fill:var(--fg)}
+.sc-word.thin {font-weight:200}
+.sc-word.red {fill:var(--red)}
+.sc-redbar {fill:var(--red)}
+.v-c .sc-pivot {fill:var(--fg)}
+.v-c.is-level .sc-pivot {fill:#21b45f}
+.v-c .sc-chain {stroke:rgba(241,241,238,.35);stroke-width:1}
+.sc-pan.thin {stroke-width:3}
+/* временный переключатель вариантов */
+.sc-pick {display:flex;flex-wrap:wrap;align-items:center;gap:6px;font:500 12px var(--f-mono);color:var(--mute)}
+.sc-pick span {margin-right:4px;letter-spacing:.1em;text-transform:uppercase}
+.sc-pick button {min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--fg);font:inherit;cursor:pointer}
+.sc-pick button.on {background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.sc-word {paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
