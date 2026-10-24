@@ -1,13 +1,16 @@
-// Вариант A (3D) сцены «Весы» в блоке «Мой принцип работы»: история по прокрутке — эмоции падают на левую чашу,
-// гири (консультация, договор, суд) выравнивают весы. Three.js грузится, только когда блок рядом.
+// Сцена «Весы» (3D) в блоке «Мой принцип работы». Форма — гербовый знак: весы висят на кольце-ромбе.
+// Механика: кольцо → стержень → вилка из двух щёк → стальная ось → коромысло (одна деталь с завитками на концах)
+// → проушина на конце → звено → жёсткая дуга-подвес → штифты на ободе чаши. Чаша качается маятником на звене,
+// коромысло — на оси, груз лежит внутри дуги и её не пересекает.
+// Материалы: вороненая сталь (корпус), полированная сталь (ось, звенья, штифты), красная эмаль (щиток-указатель).
 const stage = document.getElementById('scales');
 if (stage && window.SC_VARIANT === 'A') {
   const io = new IntersectionObserver((e) => {
     if (!e.some((x) => x.isIntersecting)) return;
     io.disconnect();
-    // 3D запускаем только после загрузки страницы и в свободную минуту, чтобы не тормозить первый экран
+    // 3D запускаем после загрузки страницы и в свободную минуту, чтобы не тормозить первый экран
     const idle = (f) => (window.requestIdleCallback ? requestIdleCallback(f, { timeout: 1500 }) : setTimeout(f, 200));
-    const go = () => idle(() => boot().catch(() => { stage.hidden = true; }));
+    const go = () => idle(() => boot().catch((err) => { console.error(err); stage.hidden = true; }));
     if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
   }, { rootMargin: '150px 0px' });
   io.observe(stage);
@@ -23,29 +26,29 @@ async function boot() {
   const canvas = stage.querySelector('canvas');
   const chip = stage.querySelector('.sc-state');
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  stage.classList.add('v-a');
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
+  renderer.toneMappingExposure = 1.05;
   const ANISO = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.75;
+  scene.environmentIntensity = 1.0;
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
 
-  // свет: мягкий ключ сверху-спереди, два контровых, красная подсветка перевеса
-  scene.add(new THREE.HemisphereLight(0xb8bec8, 0x0c0d0f, 0.2));
-  const spot = new THREE.SpotLight(0xffffff, 70, 18, 0.55, 0.9, 1.6);
-  spot.position.set(0.6, 9, 3.2); spot.target.position.set(0, 1.5, 0);
-  scene.add(spot, spot.target);
-  const rim = new THREE.DirectionalLight(0xdfe6ff, 2.4); rim.position.set(-3, 5, -6); scene.add(rim);
-  const rim2 = new THREE.DirectionalLight(0xffffff, 1.3); rim2.position.set(4, 3, -5); scene.add(rim2);
-  const red = new THREE.PointLight(0xe3262d, 0, 7, 1.8); red.position.set(-2.5, 0.7, 1.6); scene.add(red);
+  // свет студийный: ключ сверху-спереди-слева, заполняющий справа, два контровых сзади — металл читается по краям
+  scene.add(new THREE.HemisphereLight(0xc8ced8, 0x0c0d0f, 0.25));
+  const key = new THREE.SpotLight(0xffffff, 80, 20, 0.6, 0.9, 1.5); key.position.set(-2.5, 8, 5); key.target.position.set(0, 2.4, 0); scene.add(key, key.target);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.6); fill.position.set(5, 2, 4); scene.add(fill);
+  const rimL = new THREE.DirectionalLight(0xdfe6ff, 2.6); rimL.position.set(-4, 5, -6); scene.add(rimL);
+  const rimR = new THREE.DirectionalLight(0xffffff, 2.0); rimR.position.set(5, 4, -5); scene.add(rimR);
+  const red = new THREE.PointLight(0xe3262d, 0, 6, 1.8); red.position.set(-2.4, 1.2, 1.4); scene.add(red);
 
-  // ---------- процедурные фактуры: шум, шлифовка, мрамор, рельеф ----------
+  // ---------- процедурные карты ----------
   const cv = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
   function noise(w, h, cells, oct, base = 128) {
     const c = cv(w, h), x = c.getContext('2d'); x.fillStyle = `rgb(${base},${base},${base})`; x.fillRect(0, 0, w, h);
@@ -57,17 +60,14 @@ async function boot() {
     }
     x.globalAlpha = 1; return c;
   }
-  function brushed(w, h, vertical, radial) {
-    const c = cv(w, h), x = c.getContext('2d'); x.fillStyle = '#7a7a7a'; x.fillRect(0, 0, w, h);
-    for (let i = 0; i < 2600; i++) {
-      const v = 90 + Math.random() * 90 | 0; x.strokeStyle = `rgba(${v},${v},${v},${0.08 + Math.random() * 0.16})`; x.lineWidth = Math.random() * 1.6 + 0.3;
-      x.beginPath();
-      if (radial) { const r = Math.random() * w / 2; x.arc(w / 2, h / 2, r, 0, Math.PI * 2); }
-      else if (vertical) { const p = Math.random() * w, l = Math.random() * h; const y0 = Math.random() * h; x.moveTo(p, y0); x.lineTo(p, y0 + l); }
-      else { const p = Math.random() * h, l = Math.random() * w; const x0 = Math.random() * w; x.moveTo(x0, p); x.lineTo(x0 + l, p); }
-      x.stroke();
+  // тонкая шлифовка одного направления — одна карта на весь корпус, чтобы металл был единым
+  function brushed(w, h) {
+    const c = cv(w, h), x = c.getContext('2d'); x.fillStyle = '#808080'; x.fillRect(0, 0, w, h);
+    for (let i = 0; i < 3200; i++) {
+      const v = 100 + Math.random() * 70 | 0; x.strokeStyle = `rgba(${v},${v},${v},${0.06 + Math.random() * 0.12})`; x.lineWidth = Math.random() * 1.2 + 0.3;
+      const p = Math.random() * h, l = Math.random() * w * 0.6, x0 = Math.random() * w; x.beginPath(); x.moveTo(x0, p); x.lineTo(x0 + l, p); x.stroke();
     }
-    x.globalAlpha = 0.25; x.drawImage(noise(w, h, 16, 3), 0, 0); x.globalAlpha = 1; return c;
+    return c;
   }
   function normalFrom(src, strength) {
     const w = src.width, h = src.height, s = src.getContext('2d').getImageData(0, 0, w, h).data, c = cv(w, h), x = c.getContext('2d'), img = x.createImageData(w, h), d = img.data;
@@ -81,134 +81,136 @@ async function boot() {
   const tex = (c, color, rep = [1, 1]) => { const t = new THREE.CanvasTexture(c); if (color) t.colorSpace = THREE.SRGBColorSpace;
     t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); t.anisotropy = ANISO; return t; };
 
-  const brV = brushed(256, 512, true), brH = brushed(512, 256, false);
-  const grain = noise(256, 256, 32, 3);
-  const steelMat = (b, rep) => new THREE.MeshStandardMaterial({ color: 0xc3c8cf, metalness: 1, roughness: 0.55, roughnessMap: tex(b, false, rep), bumpMap: tex(b, false, rep), bumpScale: 0.6 });
-  const steelV = steelMat(brV, [3, 1]);                      // стойка, коромысло: шлифовка вдоль
-  const steelH = steelMat(brH, [1, 1]);                      // гири: шлифовка по кругу
-  const steelR = steelMat(brH, [1, 1]); steelR.side = THREE.DoubleSide; // чаши: концентрическая шлифовка
-  const polished = new THREE.MeshStandardMaterial({ color: 0xd4d8de, metalness: 1, roughness: 0.14 });
-  const lacquer = new THREE.MeshPhysicalMaterial({ color: 0x0a0a0c, metalness: 0.1, roughness: 0.42, clearcoat: 1, clearcoatRoughness: 0.08,
-    roughnessMap: tex(grain, false, [2, 4]) });
-  const redLac = new THREE.MeshPhysicalMaterial({ color: 0xd8242b, roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.1 });
+  // ---------- материалы: три и только три ----------
+  const brush = brushed(512, 512);
+  const blued = new THREE.MeshPhysicalMaterial({ color: 0x4b5059, metalness: 0.55, roughness: 0.36, roughnessMap: tex(brush, false, [1.5, 1.5]),
+    clearcoat: 0.6, clearcoatRoughness: 0.1, envMapIntensity: 1.5 });                                              // вороненая сталь
+  const bluedTurned = blued.clone(); bluedTurned.roughnessMap = tex(brush, false, [1, 6]);      // токарные детали: кольцевые риски
+  const polished = new THREE.MeshStandardMaterial({ color: 0xdfe3e7, metalness: 1, roughness: 0.1, envMapIntensity: 1.4 }); // полированная сталь
+  const enamel = new THREE.MeshPhysicalMaterial({ color: 0xd8242b, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.04 }); // эмаль
+  const RED = new THREE.Color(0xd8242b), GREEN = new THREE.Color(0x21b45f);
 
-  // мягкие контактные тени: без краёв на фоне страницы
-  const blob = (() => { const c = cv(128, 128), x = c.getContext('2d');
-    const g = x.createRadialGradient(64, 64, 0, 64, 64, 64); g.addColorStop(0, 'rgba(0,0,0,.85)'); g.addColorStop(0.55, 'rgba(0,0,0,.35)'); g.addColorStop(1, 'rgba(0,0,0,0)');
-    x.fillStyle = g; x.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); })();
-  const shadow = (w, d, o) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshBasicMaterial({ map: blob, transparent: true, depthWrite: false, opacity: o }));
-    m.rotation.x = -Math.PI / 2; m.position.y = 0.002; scene.add(m); return m; };
-  shadow(1.9, 1.3, 0.95);
-  const cast = (m) => m;
+  // контур из ломаной заданной толщины (стыки срезаны по биссектрисе) → выдавливание с фаской
+  function strip(pts, t) {
+    const n = pts.length, A = [], B = [];
+    const nrm = (a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy); return [-dy / l, dx / l]; };
+    for (let i = 0; i < n; i++) {
+      let m, k = t / 2;
+      if (i === 0) m = nrm(pts[0], pts[1]); else if (i === n - 1) m = nrm(pts[n - 2], pts[n - 1]);
+      else { const a = nrm(pts[i - 1], pts[i]), b = nrm(pts[i], pts[i + 1]); m = [a[0] + b[0], a[1] + b[1]]; const l = Math.hypot(m[0], m[1]); m = [m[0] / l, m[1] / l]; k = (t / 2) / (m[0] * a[0] + m[1] * a[1]); }
+      A.push([pts[i][0] + m[0] * k, pts[i][1] + m[1] * k]); B.push([pts[i][0] - m[0] * k, pts[i][1] - m[1] * k]);
+    }
+    const s = new THREE.Shape(); s.moveTo(...A[0]); A.slice(1).forEach((p) => s.lineTo(...p)); B.reverse().forEach((p) => s.lineTo(...p)); s.closePath(); return s;
+  }
+  function extrude(shape, depth, bevel = 0.018) {
+    const g = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 4, curveSegments: 24 });
+    g.translate(0, 0, -depth / 2); g.computeVertexNormals(); return g;
+  }
+  const poly = (pts) => { const s = new THREE.Shape(); s.moveTo(...pts[0]); pts.slice(1).forEach((p) => s.lineTo(...p)); s.closePath(); return s; };
 
-  // ---------- весы без подставки: толстый сатиновый чёрный металл, красная ось, стальная фурнитура ----------
-  const PIVOT_Y = 3.0, HALF = 2.0, CHAIN = 1.8, PAN_R = 0.95;
-  const satin = new THREE.MeshPhysicalMaterial({ color: 0x17181c, metalness: 0.55, roughness: 0.42, roughnessMap: tex(brV, false, [3, 1]),
-    clearcoat: 0.6, clearcoatRoughness: 0.22 });
-  const satinR = satin.clone(); satinR.roughnessMap = tex(brH, false, [1, 1]); satinR.side = THREE.DoubleSide;
-  const base = new THREE.Group(); scene.add(base);
-  const lathe = (pts, seg, mat) => new THREE.Mesh(new THREE.LatheGeometry(pts.map(([a, b]) => new THREE.Vector2(a, b)), seg), mat);
-  // массивная круглая ножка — часть самих весов
-  const foot = lathe([[0, 0], [0.62, 0], [0.66, 0.03], [0.66, 0.09], [0.6, 0.13], [0.34, 0.2], [0.2, 0.3], [0.17, 0.42], [0, 0.42]], 72, satinR); base.add(foot);
-  const trim = new THREE.Mesh(new THREE.TorusGeometry(0.645, 0.022, 12, 72), polished); trim.rotation.x = Math.PI / 2; trim.position.y = 0.09; base.add(trim);
-  const col = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.15, PIVOT_Y - 0.5, 48), satin); col.position.y = 0.4 + (PIVOT_Y - 0.5) / 2; base.add(col);
-  [0.5, 2.55].forEach((y) => { const r = new THREE.Mesh(new THREE.TorusGeometry(y < 1 ? 0.16 : 0.125, 0.028, 14, 48), polished); r.rotation.x = Math.PI / 2; r.position.y = y; base.add(r); });
-  const cap = lathe([[0, 0], [0.12, 0], [0.2, 0.12], [0.21, 0.18], [0, 0.18]], 48, satinR); cap.position.y = PIVOT_Y - 0.3; base.add(cap);
-  const tip = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.34, 32), satin); tip.position.y = PIVOT_Y + 0.38; base.add(tip);
+  // ---------- подвес и вилка (неподвижны) ----------
+  const PIVOT_Y = 3.15, HALF = 2.0, BAIL_H = 2.0, PR = 0.95, XL = PR + 0.045;
+  const top = new THREE.Group(); top.position.y = PIVOT_Y; scene.add(top);
+  const diamond = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.042, 20, 4), blued); diamond.position.y = 1.13; top.add(diamond);
+  const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.045, 0.52, 32), bluedTurned); stem.position.y = 0.71; top.add(stem);
+  const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.05, 32), polished); collar.position.y = 0.47; top.add(collar);
+  const cheekG = extrude(poly([[-0.3, -0.09], [0.3, -0.09], [0, 0.46]]), 0.035, 0.012);
+  [-1, 1].forEach((z) => { const c = new THREE.Mesh(cheekG, blued); c.position.z = z * 0.118; top.add(c); });
+  const bridge = new THREE.Mesh(new RoundedBoxGeometry(0.12, 0.06, 0.27, 3, 0.02), blued); bridge.position.y = 0.43; top.add(bridge);
+  const axle = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.33, 32), polished); axle.rotation.x = Math.PI / 2; top.add(axle);
+  [-1, 1].forEach((z) => { const n = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.025, 6), polished); n.rotation.x = Math.PI / 2; n.position.z = z * 0.16; top.add(n); }); // гайки оси
 
-  // ---------- коромысло: толстое, сужается к концам ----------
+  // ---------- коромысло: одна деталь — крылья к центру и квадратные завитки на концах ----------
   const beam = new THREE.Group(); beam.position.y = PIVOT_Y; scene.add(beam);
-  [-1, 1].forEach((s) => {
-    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.1, HALF, 40), satin); arm.rotation.z = s * Math.PI / 2; arm.position.x = s * HALF / 2; beam.add(arm);
-    const end = new THREE.Mesh(new THREE.SphereGeometry(0.075, 28, 18), polished); end.position.x = s * HALF; beam.add(end);
-    const eye = new THREE.Mesh(new THREE.TorusGeometry(0.055, 0.02, 12, 28), polished); eye.position.set(s * HALF, -0.1, 0); beam.add(eye);
-  });
-  const hub = new THREE.Mesh(new THREE.SphereGeometry(0.18, 40, 24), redLac); beam.add(hub);
-  const needle = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.6, 16), polished); needle.rotation.z = Math.PI; needle.position.set(0, -0.42, 0.17); beam.add(needle);
+  const side = [[0.92, 0.13], [2.0, -0.1], [2.0, 0.42], [2.42, 0.42], [2.42, 0.0], [2.19, 0.0], [2.19, 0.22]];
+  const line = [...side.slice().reverse().map(([x, y]) => [-x, y]), [0, -0.03], ...side];
+  beam.add(new THREE.Mesh(extrude(strip(line, 0.11), 0.12, 0.02), blued));
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.115, 0.115, 0.17, 40), bluedTurned); hub.rotation.x = Math.PI / 2; beam.add(hub);
+  // щиток-указатель на шейке под осью: стальная рамка и эмалевая вставка
+  const neck = new THREE.Mesh(new RoundedBoxGeometry(0.05, 0.14, 0.05, 2, 0.015), blued); neck.position.y = -0.17; beam.add(neck);
+  const shield = [[-0.15, -0.22], [0.15, -0.22], [0.15, -0.4], [0, -0.56], [-0.15, -0.4]];
+  beam.add(new THREE.Mesh(extrude(poly(shield), 0.05, 0.014), polished));
+  const inset = new THREE.Mesh(extrude(poly(shield.map(([x, y]) => [x * 0.74, -0.37 + (y + 0.37) * 0.74])), 0.02, 0.008), enamel); inset.position.z = 0.035; beam.add(inset);
+  // проушины на концах: кольцо продето сквозь коромысло
+  [-1, 1].forEach((s) => { const eye = new THREE.Mesh(new THREE.TorusGeometry(0.065, 0.018, 16, 40), polished); eye.rotation.y = Math.PI / 2; eye.position.set(s * HALF, -0.13, 0); beam.add(eye); });
 
-  // ---------- чаши: массивные, цепи из крупных звеньев только сзади, чтобы груз их не пересекал ----------
-  const bowlGeo = new THREE.LatheGeometry([[0, 0.05], [0.7, 0.06], [0.86, 0.12], [PAN_R, 0.2], [PAN_R + 0.03, 0.2], [PAN_R - 0.02, 0.08], [0.78, 0.0], [0, 0.0]]
-    .map(([x, y]) => new THREE.Vector2(x, y)).reverse(), 80);
-  const linkGeo = new THREE.TorusGeometry(0.034, 0.011, 8, 16); linkGeo.scale(1, 1.5, 1);
-  const TOP = new THREE.Vector3(0, -0.24, 0);
-  const ANCH = [200, 270, 340].map((a) => new THREE.Vector3(Math.cos(a * Math.PI / 180) * (PAN_R - 0.04), -CHAIN + 0.2, Math.sin(a * Math.PI / 180) * (PAN_R - 0.04)));
+  // ---------- чаши на жёстких дугах ----------
+  const panGeo = new THREE.LatheGeometry([[0, 0.025], [0.72, 0.025], [0.9, 0.07], [0.965, 0.13], [0.985, 0.17], [0.97, 0.18], [0.95, 0.15], [0.88, 0.05], [0.7, 0], [0, 0]]
+    .map(([x, y]) => new THREE.Vector2(x, y)), 96);
+  // дуга: вертикальные ножки до высоты груза, сверху полуэллипс к звену
+  const yv = -0.7, yTop = -0.195, yLug = -BAIL_H + 0.14, bailPts = [];
+  for (let i = 0; i <= 8; i++) bailPts.push(new THREE.Vector3(-XL, yLug + (yv - yLug) * i / 8, 0));
+  for (let i = 1; i < 40; i++) { const a = Math.PI - Math.PI * i / 40; bailPts.push(new THREE.Vector3(XL * Math.cos(a), yv + (yTop - yv) * Math.sin(a), 0)); }
+  for (let i = 0; i <= 8; i++) bailPts.push(new THREE.Vector3(XL, yv + (yLug - yv) * i / 8, 0));
+  const bailGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(bailPts, false, 'centripetal'), 220, 0.032, 16, false);
   const pans = [-1, 1].map((s) => {
     const g = new THREE.Group(); scene.add(g);
-    const bowl = new THREE.Mesh(bowlGeo, satinR); bowl.position.y = -CHAIN; g.add(bowl);
-    const lip = new THREE.Mesh(new THREE.TorusGeometry(PAN_R + 0.015, 0.035, 14, 80), polished); lip.rotation.x = Math.PI / 2; lip.position.y = -CHAIN + 0.2; g.add(lip);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.02, 10, 28), polished); ring.rotation.y = Math.PI / 2; ring.position.y = -0.18; g.add(ring);
-    const step = 0.074, list = [];
-    ANCH.forEach((b) => { const dir = b.clone().sub(TOP), len = dir.length(); dir.normalize(); const n = Math.floor(len / step);
-      for (let k = 0; k < n; k++) list.push([TOP.clone().addScaledVector(dir, (k + 0.5) * step), dir, k]); });
-    const links = new THREE.InstancedMesh(linkGeo, polished, list.length);
-    const q = new THREE.Quaternion(), q2 = new THREE.Quaternion(), M = new THREE.Matrix4(), one = new THREE.Vector3(1, 1, 1), Y = new THREE.Vector3(0, 1, 0);
-    list.forEach(([p, dir, k], i) => { q.setFromUnitVectors(Y, dir); q2.setFromAxisAngle(dir, (k % 2) * Math.PI / 2); M.compose(p, q2.multiply(q), one); links.setMatrixAt(i, M); });
-    g.add(links);
-    return { s, g, phi: 0, phiV: 0, load: [], sh: shadow(2.1, 1.2, 0.5) };
+    const link = new THREE.Mesh(new THREE.TorusGeometry(0.05, 0.016, 14, 32), polished); link.scale.y = 1.25; link.position.y = -0.06; g.add(link);
+    const apex = new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.016, 14, 32), polished); apex.rotation.y = Math.PI / 2; apex.position.y = -0.15; g.add(apex);
+    g.add(new THREE.Mesh(bailGeo, blued));
+    const pan = new THREE.Mesh(panGeo, bluedTurned); pan.position.y = -BAIL_H; g.add(pan);
+    [-1, 1].forEach((k) => {
+      const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.1, 20), polished); pin.rotation.z = Math.PI / 2; pin.position.set(k * (PR + 0.03), yLug, 0); g.add(pin);
+      const lug = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.03, 24), blued); lug.rotation.z = Math.PI / 2; lug.position.set(k * (XL + 0.005), yLug, 0); g.add(lug);
+    });
+    return { s, g, phi: 0, phiV: 0 };
   });
 
-  // ---------- эмоции: окрашенные бруски с зерном краски и выдавленной надписью ----------
+  // ---------- эмоции: окрашенные бруски с выдавленной надписью ----------
   function label(text, w, h, ink) {
     const W = 768, Hh = Math.round(W * h / w), c = cv(W, Hh), x = c.getContext('2d');
     x.letterSpacing = '5px'; let fs = Math.round(Hh * 0.56);
     do { x.font = `400 ${fs}px Oswald, "Arial Narrow", sans-serif`; } while (x.measureText(text).width > W * 0.86 && --fs > 12);
     x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = ink; x.fillText(text, W / 2, Hh * 0.54);
-    // потёртости краски
     x.globalCompositeOperation = 'destination-out';
-    for (let i = 0; i < 600; i++) { x.globalAlpha = Math.random() * 0.5; x.beginPath(); x.arc(Math.random() * W, Math.random() * Hh, Math.random() * 2.2, 0, 7); x.fill(); }
+    for (let i = 0; i < 500; i++) { x.globalAlpha = Math.random() * 0.45; x.beginPath(); x.arc(Math.random() * W, Math.random() * Hh, Math.random() * 2, 0, 7); x.fill(); }
     x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
-    // карта высот: буквы вдавлены в краску
     const hgt = cv(W, Hh), hx = hgt.getContext('2d'); hx.fillStyle = '#fff'; hx.fillRect(0, 0, W, Hh); hx.filter = 'blur(1.5px)';
     hx.letterSpacing = '5px'; hx.font = x.font; hx.textAlign = 'center'; hx.textBaseline = 'middle'; hx.fillStyle = '#000'; hx.fillText(text, W / 2, Hh * 0.54);
     return { map: tex(c, true), normal: tex(normalFrom(hgt, 4)) };
   }
   function paint(hex) {
     const c = cv(256, 256), x = c.getContext('2d'); x.fillStyle = hex; x.fillRect(0, 0, 256, 256);
-    x.globalCompositeOperation = 'soft-light'; x.globalAlpha = 0.5; x.drawImage(noise(256, 256, 8, 5), 0, 0); return c;
+    x.globalCompositeOperation = 'soft-light'; x.globalAlpha = 0.35; x.drawImage(noise(256, 256, 8, 4), 0, 0); return c;
   }
-  const pGrain = noise(256, 256, 64, 2), pNormal = tex(normalFrom(pGrain, 1.6), false, [2, 1]), pRough = tex(pGrain, false, [2, 1]);
-  const PROBLEMS = [['НЕПОНИМАНИЕ', 1.28, 0.3, 0.34, '#c8232a', '#f2ede4', [-0.02, 0.25, 0.12], 0.05],
-                    ['НЕОПРЕДЕЛЁННОСТЬ', 1.42, 0.3, 0.34, '#e8e3d8', '#17181c', [0.03, 0.56, 0.12], -0.05],
-                    ['СТРАХ', 0.82, 0.3, 0.34, '#c8232a', '#f2ede4', [-0.04, 0.87, 0.12], 0.08]];
-  const problems = PROBLEMS.map(([t, w, h, d, col, ink, off, rot]) => {
-    const m = new THREE.Group();
-    m.add(new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 4, 0.035), new THREE.MeshPhysicalMaterial({
-      map: tex(paint(col), true), roughness: 0.62, roughnessMap: pRough, normalMap: pNormal, normalScale: new THREE.Vector2(0.35, 0.35),
-      clearcoat: 0.35, clearcoatRoughness: 0.45 })));
-    const L = label(t, w - 0.06, h - 0.06, ink);
-    const face = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.06, h - 0.06), new THREE.MeshStandardMaterial({ map: L.map, normalMap: L.normal,
-      transparent: true, roughness: 0.75, polygonOffset: true, polygonOffsetFactor: -2 }));
+  const pGrain = noise(256, 256, 64, 2), pNormal = tex(normalFrom(pGrain, 1.4), false, [2, 1]), pRough = tex(pGrain, false, [2, 1]);
+  const FLOOR = -BAIL_H + 0.025, BH = 0.3;
+  const PROBLEMS = [['НЕПОНИМАНИЕ', 1.28, '#c8232a', '#f2ede4', -0.02, 0.05], ['НЕОПРЕДЕЛЁННОСТЬ', 1.42, '#e8e3d8', '#17181c', 0.03, -0.05], ['СТРАХ', 0.82, '#c8232a', '#f2ede4', -0.04, 0.08]];
+  const problems = PROBLEMS.map(([t, w, col, ink, dx, rot], i) => {
+    const d = 0.34, m = new THREE.Group();
+    m.add(new THREE.Mesh(new RoundedBoxGeometry(w, BH, d, 4, 0.035), new THREE.MeshPhysicalMaterial({
+      map: tex(paint(col), true), roughness: 0.6, roughnessMap: pRough, normalMap: pNormal, normalScale: new THREE.Vector2(0.3, 0.3), clearcoat: 0.3, clearcoatRoughness: 0.45 })));
+    const L = label(t, w - 0.06, BH - 0.06, ink);
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.06, BH - 0.06), new THREE.MeshStandardMaterial({ map: L.map, normalMap: L.normal, transparent: true, roughness: 0.75, polygonOffset: true, polygonOffsetFactor: -2 }));
     face.position.z = d / 2 + 0.001; m.add(face);
     m.visible = false; scene.add(m);
-    return { m, off: new THREE.Vector3(off[0], off[1] - CHAIN, off[2]), rot, state: 'wait' };
+    return { m, off: new THREE.Vector3(dx, FLOOR + BH / 2 + i * (BH + 0.008), 0.04), rot, landed: false,
+      spin: new THREE.Euler(Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6) };
   });
 
-  // ---------- гири: шлифованная сталь, полированная головка, выгравированное название ----------
+  // ---------- гири: точёная сталь с гравировкой ----------
   const WS = 0.95;
   const wGeo = new THREE.LatheGeometry([[0, 0], [0.27, 0], [0.29, 0.02], [0.29, 0.24], [0.27, 0.27], [0.2, 0.29], [0.1, 0.31], [0.085, 0.36],
-    [0.11, 0.39], [0.12, 0.43], [0.1, 0.46], [0.05, 0.48], [0, 0.48]].map(([x, y]) => new THREE.Vector2(x * WS, y * WS)), 64);
-  function band(text) {
+    [0.11, 0.39], [0.12, 0.43], [0.1, 0.46], [0.05, 0.48], [0, 0.48]].map(([x, y]) => new THREE.Vector2(x * WS, y * WS)), 72);
+  const weightMat = new THREE.MeshStandardMaterial({ color: 0xe1e4e8, metalness: 1, roughness: 0.24, roughnessMap: tex(brush, false, [1, 6]), envMapIntensity: 1.4 });
+  function engraving(text) {
     const W = 1024, H = 128, c = cv(W, H), x = c.getContext('2d');
     let fs = 78; x.letterSpacing = '4px';
     do { x.font = `400 ${fs}px Oswald, "Arial Narrow", sans-serif`; } while (x.measureText(text).width > W * 0.42 && --fs > 20);
-    x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = 'rgba(20,21,24,.92)'; x.fillText(text, W / 2, H * 0.54);
+    x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = 'rgba(24,25,28,.9)'; x.fillText(text, W / 2, H * 0.54);
     const hgt = cv(W, H), hx = hgt.getContext('2d'); hx.fillStyle = '#fff'; hx.fillRect(0, 0, W, H); hx.filter = 'blur(1px)';
     hx.letterSpacing = '4px'; hx.font = x.font; hx.textAlign = 'center'; hx.textBaseline = 'middle'; hx.fillStyle = '#000'; hx.fillText(text, W / 2, H * 0.54);
-    const m = new THREE.Mesh(new THREE.CylinderGeometry(0.29 * WS + 0.002, 0.29 * WS + 0.002, 0.15, 64, 1, true),
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(0.29 * WS + 0.002, 0.29 * WS + 0.002, 0.15, 72, 1, true),
       new THREE.MeshStandardMaterial({ map: tex(c, true), normalMap: tex(normalFrom(hgt, 3)), transparent: true, metalness: 0.6, roughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2 }));
     m.position.y = 0.13 * WS; m.rotation.y = Math.PI; return m;
   }
-  const W_NAMES = ['КОНСУЛЬТАЦИЯ', 'ДОГОВОР', 'СУД'];
-  const SHELF = [new THREE.Vector3(1.3, 0, 1.45), new THREE.Vector3(1.88, 0, 1.35), new THREE.Vector3(2.46, 0, 1.25)];
-  const SLOT = [[-0.31, 0.17], [0.31, 0.17], [0, -0.36]];
-  const weights = SHELF.map((p, i) => {
-    const m = new THREE.Group(); m.add(new THREE.Mesh(wGeo, steelH)); m.add(band(W_NAMES[i])); m.position.copy(p); m.rotation.y = -0.25 + i * 0.12; scene.add(m);
-    const sh = shadow(0.8, 0.55, 0.75); sh.position.set(p.x, 0.003, p.z);
-    return { m, i, home: p.clone(), sh, off: new THREE.Vector3(SLOT[i][0], -CHAIN + 0.065, SLOT[i][1]), landed: false };
+  const SLOT = [[-0.31, 0.12], [0.31, 0.12], [0, -0.33]];
+  const weights = ['КОНСУЛЬТАЦИЯ', 'ДОГОВОР', 'СУД'].map((name, i) => {
+    const m = new THREE.Group(); m.add(new THREE.Mesh(wGeo, weightMat)); m.add(engraving(name)); m.rotation.y = [-0.15, 0.12, 0][i]; m.visible = false; scene.add(m);
+    return { m, off: new THREE.Vector3(SLOT[i][0], FLOOR, SLOT[i][1]), landed: false };
   });
-  problems.forEach((p) => { p.spin = new THREE.Euler(Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6); p.landed = false; });
 
-  // ---------- сценарий по прокрутке: эмоции падают, гири выравнивают ----------
+  // ---------- сценарий: эмоции пачкой, пауза, гири пачкой ----------
   const BR = [[0.05, 0.13], [0.09, 0.17], [0.13, 0.21]], WG = [[0.4, 0.49], [0.44, 0.53], [0.48, 0.57]];
   const STAGES = [
     [0, '', 'Как я работаю', 'Смотри на весы.', ''],
@@ -216,86 +218,81 @@ async function boot() {
     [0.38, '02', 'Подключаюсь я', 'Консультация, договор, суд — на другую чашу.', 'tilt'],
     [0.6, '✓', 'Проблема решена', 'Непонимание, неопределённость и страх больше не тянут вниз.', 'level']];
   const capEl = stage.querySelector('.sc-cap'), cIdx = capEl.querySelector('.sc-idx'), cTitle = capEl.querySelector('.sc-title'), cText = capEl.querySelector('.sc-text');
-  const bar = stage.querySelector('.sc-bar i');
+  const bar = stage.querySelector('.sc-bar i'), gw = stage.querySelector('.sc-gword');
   let shown = -1;
-  function caption(ps) {
-    let k = 0; STAGES.forEach((s, i) => { if (ps >= s[0]) k = i; });
+  function caption(p) {
+    let k = 0; STAGES.forEach((s, i) => { if (p >= s[0]) k = i; });
     if (k === shown) return; shown = k; const s = STAGES[k];
     capEl.classList.remove('in'); void capEl.offsetWidth;
     cIdx.textContent = s[1]; cTitle.textContent = s[2]; cText.textContent = s[3]; capEl.classList.add('in');
     chip.textContent = s[4] === 'level' ? 'Проблема решена' : k >= 1 ? 'Перевес' : 'Весы';
-    const gw = stage.querySelector('.sc-gword'); if (gw) gw.textContent = s[4] === 'level' ? 'Решено' : k >= 1 ? 'Перевес' : '';
+    if (gw) gw.textContent = s[4] === 'level' ? 'Решено' : k >= 1 ? 'Перевес' : '';
     stage.classList.toggle('is-level', s[4] === 'level'); stage.classList.toggle('is-tilt', s[4] === 'tilt');
   }
 
   const clamp01 = (v) => Math.min(1, Math.max(0, v));
   const bounce = (t) => { const n = 7.5625, d = 2.75; if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75; if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375; return n * (t -= 2.625 / d) * t + 0.984375; };
   const inOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-  const MAX = 0.3, K = 0.1;
+  const MAX = 0.24, K = 0.08;
   let theta = 0, thetaV = 0, lastV = 0, running = false, visible = true, idle = 0;
-  let pTarget = still ? 1 : 0, ps = pTarget, scrollP = pTarget, tProg = 0, autoOn = false, camX = 0, mx = 0, my = 0, smx = 0, smy = 0;
+  let pTarget = still ? 1 : 0, ps = pTarget, scrollP = pTarget, tProg = 0, autoOn = false, mx = 0, my = 0, smx = 0, smy = 0;
   const Z = new THREE.Vector3(0, 0, 1), tmp = new THREE.Vector3(), tmp2 = new THREE.Vector3();
-  function hang(s, out) { return out.set(s * HALF * Math.cos(theta), PIVOT_Y + s * HALF * Math.sin(theta), 0); }
+  // точка подвеса чаши: низ проушины на конце коромысла
+  function hang(s, out) { const c = Math.cos(theta), n = Math.sin(theta); return out.set(s * HALF * c + 0.2 * n, PIVOT_Y + s * HALF * n - 0.2 * c, 0); }
   function panWorld(pan, local, out) { return out.copy(local).applyAxisAngle(Z, pan.phi).add(hang(pan.s, tmp)); }
 
   function progress() {
-    const r = stage.getBoundingClientRect(), pin = stage.querySelector('.sc-pin').offsetHeight, run = r.height - pin;
-    scrollP = still ? 1 : clamp01((parseFloat(getComputedStyle(stage.querySelector('.sc-pin')).top) - r.top) / Math.max(1, run));
-    // ушли выше блока — в следующий раз история проиграется заново
+    const r = stage.getBoundingClientRect(), pin = stage.querySelector('.sc-pin'), run = r.height - pin.offsetHeight;
+    scrollP = still ? 1 : clamp01((parseFloat(getComputedStyle(pin).top) - r.top) / Math.max(1, run));
     if (r.top > innerHeight && autoOn) { autoOn = false; tProg = 0; }
-    pTarget = Math.max(scrollP, tProg);
-    wake();
+    pTarget = Math.max(scrollP, tProg); wake();
+  }
+
+  function drop(o, i, ranges, kick, pan, upright) {
+    const t = clamp01((ps - ranges[i][0]) / (ranges[i][1] - ranges[i][0])), land = panWorld(pan, o.off, tmp2);
+    o.m.visible = t > 0;
+    // груз заносится спереди, под дугой подвеса, и ложится в чашу с отскоком — сквозь дугу ничего не проходит
+    const zf = Math.pow(1 - Math.min(1, t * 1.25), 2);
+    o.m.position.copy(land); o.m.position.y += (1 - bounce(t)) * 1.1 + zf * 0.5; o.m.position.z += zf * 2.2;
+    const k = 1 - inOut(t);
+    if (upright) o.m.rotation.z = pan.phi; else o.m.rotation.set(o.spin.x * k, o.rot + o.spin.y * k, o.spin.z * k + pan.phi);
+    const now = t >= 1; if (now && !o.landed) { thetaV += kick; pan.phiV += (Math.random() - 0.5) * 0.8; } o.landed = now; return now ? 1 : 0;
   }
 
   function step(dt) {
-    // история идёт сама (~11 с), прокрутка может её ускорить
     if (autoOn && tProg < 1) tProg = Math.min(1, tProg + dt / 6);
     pTarget = Math.max(scrollP, tProg);
-    ps += (pTarget - ps) * Math.min(1, dt * 7);
-    if (Math.abs(pTarget - ps) < 0.0004) ps = pTarget;
+    ps += (pTarget - ps) * Math.min(1, dt * 7); if (Math.abs(pTarget - ps) < 0.0004) ps = pTarget;
     caption(ps); bar.style.transform = `scaleX(${ps})`;
     let L = 0, R = 0;
-    problems.forEach((p, i) => {
-      const t = clamp01((ps - BR[i][0]) / (BR[i][1] - BR[i][0])), land = panWorld(pans[0], p.off, tmp2);
-      p.m.visible = t > 0;
-      p.m.position.copy(land); p.m.position.y += (1 - bounce(t)) * 2.2;
-      const k = 1 - inOut(t); p.m.rotation.set(p.spin.x * k, p.rot + p.spin.y * k, p.spin.z * k + pans[0].phi);
-      const now = t >= 1; if (now && !p.landed) { thetaV += 0.55; pans[0].phiV += (Math.random() - 0.5) * 0.8; } p.landed = now; if (now) L++;
-    });
-    weights.forEach((w, i) => {
-      const t = clamp01((ps - WG[i][0]) / (WG[i][1] - WG[i][0])), land = panWorld(pans[1], w.off, tmp2), e = inOut(t);
-      w.m.position.lerpVectors(w.home, land, e); w.m.position.y += Math.sin(Math.PI * t) * 1.3; w.m.rotation.z = pans[1].phi * e;
-      w.sh.visible = t === 0;
-      const now = t >= 1; if (now && !w.landed) { thetaV -= 0.5; pans[1].phiV += (Math.random() - 0.5) * 0.7; } w.landed = now; if (now) R++;
-    });
+    problems.forEach((p, i) => { L += drop(p, i, BR, 0.5, pans[0], false); });
+    weights.forEach((w, i) => { R += drop(w, i, WG, -0.45, pans[1], true); });
+    // коромысло на оси: момент от разницы грузов, демпфирование в подшипнике
     const target = THREE.MathUtils.clamp(K * (L - R), -MAX, MAX);
     thetaV += ((target - theta) * 26 - thetaV * 4.2) * dt; theta += thetaV * dt;
     if (still) { theta = target; thetaV = 0; }
     const acc = (thetaV - lastV) / Math.max(dt, 1e-3); lastV = thetaV;
     beam.rotation.z = theta;
+    // чаши — маятники на звене: гравитация возвращает к вертикали, рывок коромысла раскачивает
     pans.forEach((p) => {
-      p.phiV += (-p.phi * 22 - p.phiV * 2.6 - acc * 0.02 * p.s) * dt; p.phi += p.phiV * dt; if (still) p.phi = p.phiV = 0;
+      p.phiV += (-p.phi * 20 - p.phiV * 2.4 - acc * 0.02 * p.s) * dt; p.phi += p.phiV * dt; if (still) p.phi = p.phiV = 0;
       hang(p.s, p.g.position); p.g.rotation.z = p.phi;
-      const hy = p.g.position.y - CHAIN; p.sh.position.x = p.g.position.x; p.sh.material.opacity = THREE.MathUtils.clamp(0.75 - hy * 0.38, 0.12, 0.6); p.sh.scale.setScalar(0.8 + hy * 0.25);
     });
-    // свет: тревожный при перевесе, ровный и яркий в конце
     const imb = Math.max(0, L - R) / 3, lv = clamp01((ps - 0.58) / 0.08);
-    red.intensity += (imb * 10 - red.intensity) * Math.min(1, dt * 4);
-    spot.intensity = 52 + 38 * lv;
-    // камера ведёт к чаше, где происходит действие, и чуть следует за курсором
-    const focus = ps < 0.33 ? -0.45 * clamp01(ps / 0.06) : ps < 0.6 ? 0.45 : 0.45 * (1 - lv);
-    camX += (focus - camX) * Math.min(1, dt * 2.5); smx += (mx - smx) * Math.min(1, dt * 3); smy += (my - smy) * Math.min(1, dt * 3);
+    red.intensity += (imb * 8 - red.intensity) * Math.min(1, dt * 4);
+    enamel.color.lerpColors(RED, GREEN, lv);
+    key.intensity = 70 + 25 * lv;
+    smx += (mx - smx) * Math.min(1, dt * 3); smy += (my - smy) * Math.min(1, dt * 3);
     frameCam();
     const moving = Math.abs(thetaV) + Math.abs(target - theta) + pans.reduce((a, p) => a + Math.abs(p.phiV) + Math.abs(p.phi), 0) > 0.002
-      || ps !== pTarget || (autoOn && tProg < 1) || Math.abs(red.intensity - imb * 10) > 0.05 || Math.abs(camX - focus) > 0.003 || Math.abs(smx - mx) + Math.abs(smy - my) > 0.003;
+      || ps !== pTarget || (autoOn && tProg < 1) || Math.abs(red.intensity - imb * 8) > 0.05 || Math.abs(smx - mx) + Math.abs(smy - my) > 0.003;
     idle = moving ? 0 : idle + dt;
   }
 
-  let fit = 10, prev = 0;
+  let fit = 10, prev = 0, narrow = false;
   function frameCam() {
-    const k = narrow ? 0 : 1;
-    camera.position.set(0.1 + camX * k + smx * 0.35, 2.7 + smy * 0.2, fit);
-    camera.lookAt(0.1 + camX * k * 0.85, 1.75, 0);
+    camera.position.set(smx * 0.45, 3.2 + smy * 0.25, fit);
+    camera.lookAt(0, 2.45, 0);
   }
   function frame(t) {
     const dt = Math.min(0.05, (t - (prev || t)) / 1000); prev = t;
@@ -305,12 +302,12 @@ async function boot() {
   }
   function wake() { idle = 0; if (!running && visible) { running = true; requestAnimationFrame(frame); } }
 
-  let narrow = false;
   const view = stage.querySelector('.sc-view');
   function resize() {
     const w = view.clientWidth, h = view.clientHeight; if (!w || !h) return;
     renderer.setSize(w, h, false); camera.aspect = w / h; narrow = w < 560;
-    const need = narrow ? 6.5 : 6.9; fit = Math.max(10.2, need / (2 * Math.tan(THREE.MathUtils.degToRad(15)) * camera.aspect));
+    const tan = 2 * Math.tan(THREE.MathUtils.degToRad(15));
+    fit = Math.max(4.9 / tan, (narrow ? 7.0 : 6.6) / (tan * camera.aspect));
     camera.updateProjectionMatrix(); frameCam(); renderer.render(scene, camera); progress();
   }
   new ResizeObserver(resize).observe(view);
@@ -320,7 +317,6 @@ async function boot() {
   });
   view.addEventListener('pointerleave', () => { mx = my = 0; wake(); });
   new IntersectionObserver((e) => { visible = e[e.length - 1].isIntersecting; if (visible) { progress(); wake(); } }, { threshold: 0 }).observe(stage);
-  // автозапуск: как только сцена почти целиком на экране
   new IntersectionObserver((e) => { if (e[e.length - 1].isIntersecting && !autoOn) { autoOn = true; wake(); } }, { threshold: 0.6 }).observe(view);
 
   pans.forEach((p) => hang(p.s, p.g.position));
