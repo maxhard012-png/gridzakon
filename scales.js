@@ -3,8 +3,13 @@
 const stage = document.getElementById('scales');
 if (stage) {
   const io = new IntersectionObserver((e) => {
-    if (e.some((x) => x.isIntersecting)) { io.disconnect(); boot().catch(() => { stage.hidden = true; }); }
-  }, { rootMargin: '300px 0px' });
+    if (!e.some((x) => x.isIntersecting)) return;
+    io.disconnect();
+    // 3D запускаем только после загрузки страницы и в свободную минуту, чтобы не тормозить первый экран
+    const idle = (f) => (window.requestIdleCallback ? requestIdleCallback(f, { timeout: 1500 }) : setTimeout(f, 200));
+    const go = () => idle(() => boot().catch(() => { stage.hidden = true; }));
+    if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
+  }, { rootMargin: '150px 0px' });
   io.observe(stage);
 }
 
@@ -99,7 +104,7 @@ async function boot() {
   const polished = new THREE.MeshStandardMaterial({ color: 0xd4d8de, metalness: 1, roughness: 0.14 });
   const lacquer = new THREE.MeshPhysicalMaterial({ color: 0x0a0a0c, metalness: 0.1, roughness: 0.42, clearcoat: 1, clearcoatRoughness: 0.08,
     roughnessMap: tex(grain, false, [2, 4]) });
-  const mTex = marble(1024, 512);
+  const mTex = marble(512, 256);
   const stone = new THREE.MeshPhysicalMaterial({ map: tex(mTex, true), roughness: 0.32, clearcoat: 0.7, clearcoatRoughness: 0.12,
     normalMap: tex(normalFrom(mTex, 2)), normalScale: new THREE.Vector2(0.25, 0.25) });
   const redLac = new THREE.MeshPhysicalMaterial({ color: 0xd8242b, roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.1 });
@@ -160,17 +165,17 @@ async function boot() {
 
   // ---------- эмоции: окрашенные бруски с зерном краски и выдавленной надписью ----------
   function label(text, w, h, ink) {
-    const W = 1024, Hh = Math.round(W * h / w), c = cv(W, Hh), x = c.getContext('2d');
-    x.letterSpacing = '6px'; let fs = Math.round(Hh * 0.56);
+    const W = 768, Hh = Math.round(W * h / w), c = cv(W, Hh), x = c.getContext('2d');
+    x.letterSpacing = '5px'; let fs = Math.round(Hh * 0.56);
     do { x.font = `400 ${fs}px Oswald, "Arial Narrow", sans-serif`; } while (x.measureText(text).width > W * 0.86 && --fs > 12);
     x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = ink; x.fillText(text, W / 2, Hh * 0.54);
     // потёртости краски
     x.globalCompositeOperation = 'destination-out';
-    for (let i = 0; i < 900; i++) { x.globalAlpha = Math.random() * 0.5; x.beginPath(); x.arc(Math.random() * W, Math.random() * Hh, Math.random() * 2.2, 0, 7); x.fill(); }
+    for (let i = 0; i < 600; i++) { x.globalAlpha = Math.random() * 0.5; x.beginPath(); x.arc(Math.random() * W, Math.random() * Hh, Math.random() * 2.2, 0, 7); x.fill(); }
     x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
     // карта высот: буквы вдавлены в краску
     const hgt = cv(W, Hh), hx = hgt.getContext('2d'); hx.fillStyle = '#fff'; hx.fillRect(0, 0, W, Hh); hx.filter = 'blur(1.5px)';
-    hx.letterSpacing = '6px'; hx.font = x.font; hx.textAlign = 'center'; hx.textBaseline = 'middle'; hx.fillStyle = '#000'; hx.fillText(text, W / 2, Hh * 0.54);
+    hx.letterSpacing = '5px'; hx.font = x.font; hx.textAlign = 'center'; hx.textBaseline = 'middle'; hx.fillStyle = '#000'; hx.fillText(text, W / 2, Hh * 0.54);
     return { map: tex(c, true), normal: tex(normalFrom(hgt, 4)) };
   }
   function paint(hex) {
