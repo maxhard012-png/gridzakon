@@ -20,6 +20,7 @@ async function boot() {
   const THREE = await import('three');
   const { RoundedBoxGeometry } = await import('three/addons/geometries/RoundedBoxGeometry.js');
   const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
+  const { RGBELoader } = await import('three/addons/loaders/RGBELoader.js');
   // кириллица у Google Fonts — отдельный файл: просим шрифт сразу с русскими буквами
   try { await Promise.race([Promise.all([document.fonts.load('400 40px Oswald', 'НЕПОНИМАНИЕ СТРАХ ЁЙ'), document.fonts.load('600 40px "Golos Text"', 'Консультация Договор Суд')]), new Promise((r) => setTimeout(r, 2500))]); } catch (e) {}
 
@@ -37,17 +38,12 @@ async function boot() {
   const pmrem = new THREE.PMREMGenerator(renderer);
   // своя студия для отражений: тёмная комната, софтбокс сверху, световые полосы по бокам и сзади —
   // на тёмном металле они дают чёткие длинные блики вместо ровной серой заливки
-  const studio = new THREE.Scene(); studio.background = new THREE.Color(0x040405);
-  const panel = (w, h, k, x, y, z, look) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(k, k, k), side: THREE.DoubleSide }));
-    m.position.set(x, y, z); m.lookAt(...look); studio.add(m); };
-  panel(7, 5, 2.6, 0, 9, 1, [0, 0, 0]);          // софтбокс сверху
-  panel(1.1, 9, 4.0, -8, 2, 2, [0, 2, 0]);       // полоса слева
-  panel(0.7, 9, 2.4, 8, 2, -1, [0, 2, 0]);       // полоса справа
-  panel(10, 0.8, 2.2, 0, 4, -8, [0, 2, 0]);      // контровая полоса сзади
-  panel(8, 3, 0.18, 0, 2, 9, [0, 2, 0]);         // слабый фронтальный отсвет
-  panel(30, 30, 0.03, 0, -4, 0, [0, 0, 0]);      // пол
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; // мягкий рассеянный свет для матовых деталей
-  scene.environmentIntensity = 0.85;
+  // окружение — фотостудия ferndale_studio_11 (Poly Haven, CC0): софтбоксы и световые трубки дают чистые блики
+  try {
+    const hdr = await new RGBELoader().loadAsync('assets/3d/studio.hdr');
+    scene.environment = pmrem.fromEquirectangular(hdr).texture; hdr.dispose();
+  } catch (e) { scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; }
+  scene.environmentIntensity = 0.75;
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
 
   // свет студийный: ключ сверху-спереди-слева, заполняющий справа, два контровых сзади — металл читается по краям
@@ -91,13 +87,47 @@ async function boot() {
   const tex = (c, color, rep = [1, 1]) => { const t = new THREE.CanvasTexture(c); if (color) t.colorSpace = THREE.SRGBColorSpace;
     t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); t.anisotropy = ANISO; return t; };
 
+  // ---------- материалы ----------
+  const loadTex = (url, color) => { const t = new THREE.TextureLoader().load(url, () => wake()); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = ANISO; if (color) t.colorSpace = THREE.SRGBColorSpace; return t; };
+  // матовый чёрный пластик с фактурой (ambientCG Plastic012A, CC0)
+  const PL = { map: loadTex('assets/3d/plastic_color.jpg', true), rough: loadTex('assets/3d/plastic_rough.jpg'), normal: loadTex('assets/3d/plastic_normal.jpg') };
+  function triplanar(mat, { map, rough, normal }, scale, nStrength = 1, tint = null) {
+    mat.onBeforeCompile = (sh) => {
+      Object.assign(sh.uniforms, { triMap: { value: map || null }, triRough: { value: rough }, triNormal: { value: normal }, triScale: { value: scale }, triNS: { value: nStrength },
+        triTint: { value: tint ? new THREE.Color(tint) : new THREE.Color(1, 1, 1) }, triUseMap: { value: map ? 1 : 0 } });
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vTriP; varying vec3 vTriN; varying vec3 vNM0; varying vec3 vNM1; varying vec3 vNM2;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvTriP = position; vTriN = normal; vNM0 = normalMatrix[0]; vNM1 = normalMatrix[1]; vNM2 = normalMatrix[2];');
+      sh.fragmentShader = sh.fragmentShader
+        .replace('#include <common>', `#include <common>
+uniform sampler2D triMap; uniform sampler2D triRough; uniform sampler2D triNormal; uniform float triScale; uniform float triNS; uniform vec3 triTint; uniform int triUseMap;
+varying vec3 vTriP; varying vec3 vTriN; varying vec3 vNM0; varying vec3 vNM1; varying vec3 vNM2;
+vec3 triW() { vec3 w = pow(abs(normalize(vTriN)), vec3(4.0)); return w / (w.x + w.y + w.z); }
+vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D(t, p.zy) * w.x + texture2D(t, p.xz) * w.y + texture2D(t, p.xy) * w.z; }`)
+        .replace('#include <map_fragment>', '#include <map_fragment>\nif (triUseMap == 1) diffuseColor.rgb *= triS(triMap).rgb * triTint;')
+        .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = roughness * triS(triRough).g;')
+        .replace('#include <normal_fragment_maps>', `{
+  vec3 n0 = normalize(vTriN), w = triW(), p = vTriP * triScale;
+  vec3 tx = texture2D(triNormal, p.zy).xyz * 2.0 - 1.0, ty = texture2D(triNormal, p.xz).xyz * 2.0 - 1.0, tz = texture2D(triNormal, p.xy).xyz * 2.0 - 1.0;
+  tx.xy *= triNS; ty.xy *= triNS; tz.xy *= triNS;
+  tx = vec3(tx.xy + n0.zy, abs(tx.z) * n0.x); ty = vec3(ty.xy + n0.xz, abs(ty.z) * n0.y); tz = vec3(tz.xy + n0.xy, abs(tz.z) * n0.z);
+  vec3 on = normalize(tx.zyx * w.x + ty.xzy * w.y + tz.xyz * w.z);
+  normal = normalize(mat3(vNM0, vNM1, vNM2) * on);
+  #ifdef DOUBLE_SIDED
+    normal *= faceDirection;
+  #endif
+}`);
+    };
+    mat.customProgramCacheKey = () => 'tri' + scale + nStrength + (map ? 1 : 0);
+    return mat;
+  }
   // ---------- материалы: три и только три ----------
   const brush = brushed(512, 512);
   const smudge = (() => { const c = cv(512, 512), x = c.getContext('2d'); x.drawImage(brush, 0, 0); x.globalCompositeOperation = 'overlay'; x.globalAlpha = 0.6;
     x.drawImage(noise(512, 512, 6, 4), 0, 0); return c; })();
-  const blued = new THREE.MeshStandardMaterial({ color: 0x1a1b1e, metalness: 0.35, roughness: 0.45, roughnessMap: tex(smudge, false, [2, 2]) }); // чёрный, как фон сайта
-  const bluedTurned = blued.clone(); bluedTurned.roughnessMap = tex(smudge, false, [1, 3]); bluedTurned.roughness = 0.6;      // токарные детали: кольцевые риски
-  const polished = new THREE.MeshStandardMaterial({ color: 0x2b2d31, metalness: 0.55, roughness: 0.35 }); // фурнитура в тон
+  const blued = triplanar(new THREE.MeshStandardMaterial({ color: 0x6a6a6a, metalness: 0, roughness: 1 }), PL, 5, 1); // матовый пластик с фактурой
+  const bluedTurned = blued;      // токарные детали: кольцевые риски
+  const polished = new THREE.MeshStandardMaterial({ color: 0x8b9097, metalness: 1, roughness: 0.22 }); // гладкая сталь фурнитуры
   const enamel = new THREE.MeshPhysicalMaterial({ color: 0xd8242b, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.04 }); // эмаль
   const RED = new THREE.Color(0xd8242b), GREEN = new THREE.Color(0x21b45f);
 
@@ -190,7 +220,7 @@ async function boot() {
   const FLOOR = -BAIL_H + 0.025, BH = 0.26;
   // пирамидой: широкий снизу, узкий сверху — бруски помещаются внутри треугольника цепей
   const PROBLEMS = [['НЕОПРЕДЕЛЁННОСТЬ', 1.16, 0.02, -0.04], ['НЕПОНИМАНИЕ', 0.9, -0.02, 0.05], ['СТРАХ', 0.6, 0.01, 0.07]];
-  const redMat = new THREE.MeshStandardMaterial({ color: 0xe3262d, roughness: 0.5, metalness: 0 });
+  const redMat = triplanar(new THREE.MeshStandardMaterial({ color: 0xe3262d, roughness: 0.75, metalness: 0 }), { rough: PL.rough, normal: PL.normal }, 5, 0.45);
   const problems = PROBLEMS.map(([t, w, dx, rot], i) => {
     const d = 0.3, m = new THREE.Group();
     m.add(new THREE.Mesh(new RoundedBoxGeometry(w, BH, d, 4, 0.03), redMat));
@@ -203,7 +233,7 @@ async function boot() {
 
   // ---------- гири: объёмные белые кнопки сайта — главный акцент, пирамидой внутри цепей ----------
   const WH = 0.28, WD = 0.24;
-  const whiteMat = new THREE.MeshStandardMaterial({ color: 0xd8d7d2, roughness: 0.42, metalness: 0 }); // под светом даёт белый с мягкой тенью, без пересвета
+  const whiteMat = triplanar(new THREE.MeshStandardMaterial({ color: 0xdedcd7, roughness: 0.6, metalness: 0 }), { rough: PL.rough, normal: PL.normal }, 5, 0.3);
   const weights = [['Консультация', 1.24, 0.0, -0.03], ['Договор', 0.94, 0.02, 0.04], ['Суд', 0.68, -0.01, -0.04]].map(([t, w, dx, rot], i) => {
     const m = new THREE.Group();
     // пилюля: плоский фасад (как у кнопки), скруглённые торцы, мягкая фаска по контуру
