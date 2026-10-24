@@ -1,4 +1,4 @@
-// Сцена «Весы» в блоке «Мой принцип работы»: проблемы падают на левую чашу,
+// Сцена «Весы» в блоке «Мой принцип работы»: история по прокрутке — эмоции падают на левую чашу,
 // гири (консультация, договор, суд) выравнивают весы. Three.js грузится, только когда блок рядом.
 const stage = document.getElementById('scales');
 if (stage) {
@@ -22,9 +22,6 @@ async function boot() {
 
   const canvas = stage.querySelector('canvas');
   const chip = stage.querySelector('.sc-state');
-  const fact = stage.querySelector('.sc-fact');
-  const btns = [...stage.querySelectorAll('[data-w]')];
-  const again = stage.querySelector('.sc-again');
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -199,145 +196,143 @@ async function boot() {
     return { m, off: new THREE.Vector3(off[0], off[1] - CHAIN, off[2]), rot, state: 'wait' };
   });
 
-  // ---------- гири: шлифованная сталь, полированная головка ----------
+  // ---------- гири: шлифованная сталь, полированная головка, выгравированное название ----------
+  const WS = 0.95;
   const wGeo = new THREE.LatheGeometry([[0, 0], [0.27, 0], [0.29, 0.02], [0.29, 0.24], [0.27, 0.27], [0.2, 0.29], [0.1, 0.31], [0.085, 0.36],
-    [0.11, 0.39], [0.12, 0.43], [0.1, 0.46], [0.05, 0.48], [0, 0.48]].map(([x, y]) => new THREE.Vector2(x * 0.82, y * 0.82)), 64);
-  const SHELF = [new THREE.Vector3(1.6, 0, 1.35), new THREE.Vector3(2.12, 0, 1.25), new THREE.Vector3(2.64, 0, 1.15)];
+    [0.11, 0.39], [0.12, 0.43], [0.1, 0.46], [0.05, 0.48], [0, 0.48]].map(([x, y]) => new THREE.Vector2(x * WS, y * WS)), 64);
+  function band(text) {
+    const W = 1024, H = 128, c = cv(W, H), x = c.getContext('2d');
+    let fs = 78; x.letterSpacing = '4px';
+    do { x.font = `400 ${fs}px Oswald, "Arial Narrow", sans-serif`; } while (x.measureText(text).width > W * 0.42 && --fs > 20);
+    x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = 'rgba(20,21,24,.92)'; x.fillText(text, W / 2, H * 0.54);
+    const hgt = cv(W, H), hx = hgt.getContext('2d'); hx.fillStyle = '#fff'; hx.fillRect(0, 0, W, H); hx.filter = 'blur(1px)';
+    hx.letterSpacing = '4px'; hx.font = x.font; hx.textAlign = 'center'; hx.textBaseline = 'middle'; hx.fillStyle = '#000'; hx.fillText(text, W / 2, H * 0.54);
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(0.29 * WS + 0.002, 0.29 * WS + 0.002, 0.15, 64, 1, true),
+      new THREE.MeshStandardMaterial({ map: tex(c, true), normalMap: tex(normalFrom(hgt, 3)), transparent: true, metalness: 0.6, roughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2 }));
+    m.position.y = 0.13 * WS; m.rotation.y = Math.PI; return m;
+  }
+  const W_NAMES = ['КОНСУЛЬТАЦИЯ', 'ДОГОВОР', 'СУД'];
+  const SHELF = [new THREE.Vector3(1.3, 0, 1.45), new THREE.Vector3(1.88, 0, 1.35), new THREE.Vector3(2.46, 0, 1.25)];
   const SLOT = [[-0.27, 0.14], [0.27, 0.14], [0, -0.18]];
   const weights = SHELF.map((p, i) => {
-    const m = new THREE.Mesh(wGeo, steelH); m.position.copy(p); m.rotation.y = i * 1.7; scene.add(m);
-    const sh = shadow(0.75, 0.5, 0.75); sh.position.set(p.x, 0.003, p.z);
-    return { m, i, state: 'shelf', home: p.clone(), sh };
+    const m = new THREE.Group(); m.add(new THREE.Mesh(wGeo, steelH)); m.add(band(W_NAMES[i])); m.position.copy(p); m.rotation.y = -0.25 + i * 0.12; scene.add(m);
+    const sh = shadow(0.8, 0.55, 0.75); sh.position.set(p.x, 0.003, p.z);
+    return { m, i, home: p.clone(), sh, off: new THREE.Vector3(SLOT[i][0], -CHAIN + 0.03, SLOT[i][1]), landed: false };
   });
+  problems.forEach((p) => { p.spin = new THREE.Euler(Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6, Math.random() * 1.2 - 0.6); p.landed = false; });
 
-  // физика коромысла
-  const MASS = 1, K = 0.095, MAX = 0.3;
-  let theta = 0, thetaV = 0, lastV = 0, running = false, visible = true, idle = 0, done = false;
-  const onL = () => problems.filter((p) => p.state === 'rest').length * MASS;
-  const onR = () => weights.filter((w) => w.state === 'rest').length * MASS;
-  const tmp = new THREE.Vector3();
+  // ---------- сценарий по прокрутке: эмоции падают, гири выравнивают ----------
+  const BR = [[0.06, 0.17], [0.17, 0.28], [0.28, 0.39]], WG = [[0.5, 0.62], [0.62, 0.74], [0.74, 0.86]];
+  const STAGES = [
+    [0, '', 'Как я работаю', 'Листай — покажу на весах.', ''],
+    [0.06, '01', 'Непонимание', 'Что происходит и что теперь делать — непонятно.', 'tilt'],
+    [0.17, '02', 'Неопределённость', 'Чем всё закончится, никто не говорит.', 'tilt'],
+    [0.28, '03', 'Страх', 'Страшно сделать хуже. Чаша уходит вниз.', 'tilt'],
+    [0.44, '→', 'Здесь подключаюсь я', 'На другую чашу кладу то, что работает.', 'tilt'],
+    [0.5, '+', 'Консультация', 'Разбираю ситуацию и объясняю простыми словами, что делать.', 'tilt'],
+    [0.62, '+', 'Договор', 'Составляю и проверяю документы, фиксирую условия.', 'tilt'],
+    [0.74, '+', 'Суд', 'Представляю в суде и до суда — до результата.', 'tilt'],
+    [0.88, '✓', 'Проблема решена', 'Непонимание, неопределённость и страх больше не тянут вниз.', 'level']];
+  const capEl = stage.querySelector('.sc-cap'), cIdx = capEl.querySelector('.sc-idx'), cTitle = capEl.querySelector('.sc-title'), cText = capEl.querySelector('.sc-text');
+  const bar = stage.querySelector('.sc-bar i');
+  let shown = -1;
+  function caption(ps) {
+    let k = 0; STAGES.forEach((s, i) => { if (ps >= s[0]) k = i; });
+    if (k === shown) return; shown = k; const s = STAGES[k];
+    capEl.classList.remove('in'); void capEl.offsetWidth;
+    cIdx.textContent = s[1]; cTitle.textContent = s[2]; cText.textContent = s[3]; capEl.classList.add('in');
+    chip.textContent = s[4] === 'level' ? 'Проблема решена' : k >= 1 ? 'Перевес' : 'Весы';
+    stage.classList.toggle('is-level', s[4] === 'level'); stage.classList.toggle('is-tilt', s[4] === 'tilt');
+  }
+
+  const clamp01 = (v) => Math.min(1, Math.max(0, v));
+  const bounce = (t) => { const n = 7.5625, d = 2.75; if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75; if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375; return n * (t -= 2.625 / d) * t + 0.984375; };
+  const inOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const MAX = 0.3, K = 0.1;
+  let theta = 0, thetaV = 0, lastV = 0, running = false, visible = true, idle = 0;
+  let pTarget = still ? 1 : 0, ps = pTarget, camX = 0, mx = 0, my = 0, smx = 0, smy = 0;
+  const Z = new THREE.Vector3(0, 0, 1), tmp = new THREE.Vector3(), tmp2 = new THREE.Vector3();
   function hang(s, out) { return out.set(s * HALF * Math.cos(theta), PIVOT_Y + s * HALF * Math.sin(theta), 0); }
-  function panWorld(pan, local, out) { return out.copy(local).applyAxisAngle(new THREE.Vector3(0, 0, 1), pan.phi).add(hang(pan.s, tmp.set(0, 0, 0)).clone()); }
+  function panWorld(pan, local, out) { return out.copy(local).applyAxisAngle(Z, pan.phi).add(hang(pan.s, tmp)); }
 
-  function setUI() {
-    const l = onL(), r = onR(), level = l > 0 && r >= l;
-    chip.textContent = l === 0 ? 'Весы' : level ? 'Проблема решена' : 'Перевес';
-    stage.classList.toggle('is-level', level); stage.classList.toggle('is-tilt', l > 0 && !level);
-    fact.textContent = l === 0 ? 'Проблема приходит без предупреждения'
-      : level ? 'Непонимание, неопределённость и страх больше не тянут вниз'
-      : r === 0 ? 'Непонимание, неопределённость и страх тянут чашу вниз. Положи гирю' : 'Ещё ' + (l - r) + ' — и весы выровняются';
-    btns.forEach((b, i) => { b.disabled = weights[i].state !== 'shelf' || l === 0; });
-    again.hidden = !level;
-  }
-
-  const ease = (t) => { const n = 7.5625, d = 2.75; if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75; if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375; return n * (t -= 2.625 / d) * t + 0.984375; };
-  function land(obj, pan, extraKick) {
-    obj.state = 'rest';
-    pan.g.attach(obj.m);
-    thetaV += extraKick; pan.phiV += (Math.random() - 0.5) * 0.9;
-    setUI(); wake();
-  }
-  function drop(p, instant) {
-    p.m.visible = true;
-    p.from = new THREE.Vector3(p.off.x - 0.3, PIVOT_Y + 3.2, 0.6); p.t = 0; p.state = 'fall';
-    p.m.rotation.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
-    if (instant) { p.t = 1; }
+  function progress() {
+    const r = stage.getBoundingClientRect(), pin = stage.querySelector('.sc-pin').offsetHeight, run = r.height - pin;
+    pTarget = still ? 1 : clamp01((parseFloat(getComputedStyle(stage.querySelector('.sc-pin')).top) - r.top) / Math.max(1, run));
     wake();
-  }
-  function place(w) {
-    if (w.state !== 'shelf' || onL() === 0) return;
-    const slot = SLOT[weights.filter((x) => x.state !== 'shelf').length];
-    w.state = 'fly'; w.t = still ? 1 : 0; w.from = w.m.position.clone();
-    w.off = new THREE.Vector3(slot[0], -CHAIN + 0.03, slot[1]);
-    setUI(); wake();
-  }
-  function reset() {
-    done = false;
-    weights.forEach((w) => { scene.attach(w.m); w.m.position.copy(w.home); w.m.rotation.set(0, 0, 0); w.state = 'shelf'; });
-    problems.forEach((p) => { scene.attach(p.m); p.m.visible = false; p.state = 'wait'; });
-    setUI(); start();
-  }
-  function start() {
-    problems.forEach((p, i) => setTimeout(() => drop(p, still), still ? 0 : 250 + i * 420));
   }
 
   function step(dt) {
-    // проблемы падают в левую чашу с отскоком
-    problems.forEach((p) => {
-      if (p.state !== 'fall') return;
-      p.t = Math.min(1, p.t + dt / 0.85);
-      const target = panWorld(pans[0], p.off, new THREE.Vector3());
-      p.m.position.lerpVectors(p.from, target, ease(p.t));
-      p.m.rotation.x *= 0.9; p.m.rotation.y += (p.rot - p.m.rotation.y) * 0.12; p.m.rotation.z *= 0.9;
-      if (p.t >= 1) { p.m.position.copy(target); p.m.rotation.set(0, p.rot, 0); land(p, pans[0], 0.5); }
+    ps += (pTarget - ps) * Math.min(1, dt * 7);
+    if (Math.abs(pTarget - ps) < 0.0004) ps = pTarget;
+    caption(ps); bar.style.transform = `scaleX(${ps})`;
+    let L = 0, R = 0;
+    problems.forEach((p, i) => {
+      const t = clamp01((ps - BR[i][0]) / (BR[i][1] - BR[i][0])), land = panWorld(pans[0], p.off, tmp2);
+      p.m.visible = t > 0;
+      p.m.position.copy(land); p.m.position.y += (1 - bounce(t)) * 2.6;
+      const k = 1 - inOut(t); p.m.rotation.set(p.spin.x * k, p.rot + p.spin.y * k, p.spin.z * k + pans[0].phi);
+      const now = t >= 1; if (now && !p.landed) { thetaV += 0.55; pans[0].phiV += (Math.random() - 0.5) * 0.8; } p.landed = now; if (now) L++;
     });
-    // гири летят дугой в правую чашу
-    weights.forEach((w) => {
-      if (w.state !== 'fly') return;
-      w.t = Math.min(1, w.t + dt / 0.62);
-      const target = panWorld(pans[1], w.off, new THREE.Vector3()), e = 1 - Math.pow(1 - w.t, 3);
-      w.m.position.lerpVectors(w.from, target, e); w.m.position.y += Math.sin(Math.PI * w.t) * 1.1;
-      if (w.t >= 1) { w.m.position.copy(target); land(w, pans[1], -0.45); }
+    weights.forEach((w, i) => {
+      const t = clamp01((ps - WG[i][0]) / (WG[i][1] - WG[i][0])), land = panWorld(pans[1], w.off, tmp2), e = inOut(t);
+      w.m.position.lerpVectors(w.home, land, e); w.m.position.y += Math.sin(Math.PI * t) * 1.3; w.m.rotation.z = pans[1].phi * e;
+      w.sh.visible = t === 0;
+      const now = t >= 1; if (now && !w.landed) { thetaV -= 0.5; pans[1].phiV += (Math.random() - 0.5) * 0.7; } w.landed = now; if (now) R++;
     });
-    // коромысло — затухающая пружина к положению по массам
-    const target = THREE.MathUtils.clamp(K * (onL() - onR()), -MAX, MAX);
+    const target = THREE.MathUtils.clamp(K * (L - R), -MAX, MAX);
     thetaV += ((target - theta) * 26 - thetaV * 4.2) * dt; theta += thetaV * dt;
+    if (still) { theta = target; thetaV = 0; }
     const acc = (thetaV - lastV) / Math.max(dt, 1e-3); lastV = thetaV;
     beam.rotation.z = theta;
     pans.forEach((p) => {
-      p.phiV += (-p.phi * 22 - p.phiV * 2.6 - acc * 0.02 * p.s) * dt; p.phi += p.phiV * dt;
+      p.phiV += (-p.phi * 22 - p.phiV * 2.6 - acc * 0.02 * p.s) * dt; p.phi += p.phiV * dt; if (still) p.phi = p.phiV = 0;
       hang(p.s, p.g.position); p.g.rotation.z = p.phi;
       const hy = p.g.position.y - CHAIN; p.sh.position.x = p.g.position.x; p.sh.material.opacity = THREE.MathUtils.clamp(0.75 - hy * 0.38, 0.12, 0.6); p.sh.scale.setScalar(0.8 + hy * 0.25);
     });
-    weights.forEach((w) => { w.sh.visible = w.state === 'shelf'; });
-    const imb = Math.max(0, onL() - onR()) / 3;
-    red.intensity += (imb * 9 - red.intensity) * Math.min(1, dt * 4);
+    // свет: тревожный при перевесе, ровный и яркий в конце
+    const imb = Math.max(0, L - R) / 3, lv = clamp01((ps - 0.86) / 0.08);
+    red.intensity += (imb * 10 - red.intensity) * Math.min(1, dt * 4);
+    spot.intensity = 52 + 38 * lv;
+    // камера ведёт к чаше, где происходит действие, и чуть следует за курсором
+    const focus = ps < 0.45 ? -0.5 * clamp01(ps / 0.08) : ps < 0.88 ? 0.5 : 0.5 * (1 - lv);
+    camX += (focus - camX) * Math.min(1, dt * 2.5); smx += (mx - smx) * Math.min(1, dt * 3); smy += (my - smy) * Math.min(1, dt * 3);
+    frameCam();
     const moving = Math.abs(thetaV) + Math.abs(target - theta) + pans.reduce((a, p) => a + Math.abs(p.phiV) + Math.abs(p.phi), 0) > 0.002
-      || problems.some((p) => p.state === 'fall') || weights.some((w) => w.state === 'fly') || Math.abs(red.intensity - imb * 9) > 0.05;
+      || ps !== pTarget || Math.abs(red.intensity - imb * 10) > 0.05 || Math.abs(camX - focus) > 0.003 || Math.abs(smx - mx) + Math.abs(smy - my) > 0.003;
     idle = moving ? 0 : idle + dt;
   }
 
-  let prev = 0;
+  let fit = 10, prev = 0;
+  function frameCam() {
+    const k = narrow ? 0 : 1;
+    camera.position.set(0.1 + camX * k + smx * 0.35, 2.7 + smy * 0.2, fit);
+    camera.lookAt(0.1 + camX * k * 0.85, 1.75, 0);
+  }
   function frame(t) {
     const dt = Math.min(0.05, (t - (prev || t)) / 1000); prev = t;
     step(dt);
-    if (still) { theta = THREE.MathUtils.clamp(K * (onL() - onR()), -MAX, MAX); thetaV = 0; beam.rotation.z = theta; pans.forEach((p) => { p.phi = p.phiV = 0; p.g.rotation.z = 0; hang(p.s, p.g.position); }); }
     renderer.render(scene, camera);
     if (visible && idle < 0.6) requestAnimationFrame(frame); else { running = false; prev = 0; }
   }
   function wake() { idle = 0; if (!running && visible) { running = true; requestAnimationFrame(frame); } }
 
+  let narrow = false;
+  const view = stage.querySelector('.sc-view');
   function resize() {
-    const w = stage.querySelector('.sc-view').clientWidth, h = stage.querySelector('.sc-view').clientHeight;
-    renderer.setSize(w, h, false); camera.aspect = w / h;
-    const need = 6.7, fit = Math.max(10.2, need / (2 * Math.tan(THREE.MathUtils.degToRad(15)) * camera.aspect));
-    camera.position.set(0.1, 2.7, fit); camera.lookAt(0.1, 1.75, 0); camera.updateProjectionMatrix();
-    renderer.render(scene, camera);
+    const w = view.clientWidth, h = view.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h; narrow = w < 560;
+    const need = narrow ? 6.5 : 6.9; fit = Math.max(10.2, need / (2 * Math.tan(THREE.MathUtils.degToRad(15)) * camera.aspect));
+    camera.updateProjectionMatrix(); frameCam(); renderer.render(scene, camera); progress();
   }
-  new ResizeObserver(resize).observe(stage);
-
-  // тап по гире прямо в сцене
-  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
-  canvas.addEventListener('pointerdown', (e) => {
-    const r = canvas.getBoundingClientRect(); ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
-    ray.setFromCamera(ndc, camera);
-    const hit = ray.intersectObjects(weights.filter((w) => w.state === 'shelf').map((w) => w.m))[0];
-    if (hit) place(weights.find((w) => w.m === hit.object));
+  new ResizeObserver(resize).observe(view);
+  addEventListener('scroll', progress, { passive: true });
+  if (matchMedia('(hover: hover)').matches) view.addEventListener('pointermove', (e) => {
+    const r = view.getBoundingClientRect(); mx = ((e.clientX - r.left) / r.width - 0.5) * 2; my = ((e.clientY - r.top) / r.height - 0.5) * 2; wake();
   });
-  canvas.addEventListener('pointermove', (e) => {
-    const r = canvas.getBoundingClientRect(); ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
-    ray.setFromCamera(ndc, camera);
-    canvas.style.cursor = onL() && ray.intersectObjects(weights.filter((w) => w.state === 'shelf').map((w) => w.m)).length ? 'pointer' : '';
-  });
-  btns.forEach((b, i) => b.addEventListener('click', () => place(weights[i])));
-  again.addEventListener('click', reset);
-
-  new IntersectionObserver((e) => { visible = e[e.length - 1].isIntersecting; if (visible) wake(); }, { threshold: 0 }).observe(stage);
-  // проблемы падают, когда сцена показалась на экране
-  const startIO = new IntersectionObserver((e) => { if (e[e.length - 1].isIntersecting) { startIO.disconnect(); visible = true; start(); } }, { threshold: 0.45 });
-  startIO.observe(stage);
+  view.addEventListener('pointerleave', () => { mx = my = 0; wake(); });
+  new IntersectionObserver((e) => { visible = e[e.length - 1].isIntersecting; if (visible) { progress(); wake(); } }, { threshold: 0 }).observe(stage);
 
   pans.forEach((p) => hang(p.s, p.g.position));
   stage.classList.add('is-ready');
-  setUI(); resize(); wake();
+  resize(); progress(); caption(ps); wake();
 }
