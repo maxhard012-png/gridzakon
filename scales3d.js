@@ -150,32 +150,34 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
   const poly = (pts) => { const s = new THREE.Shape(); s.moveTo(...pts[0]); pts.slice(1).forEach((p) => s.lineTo(...p)); s.closePath(); return s; };
 
   // ---------- подвес и вилка (неподвижны): всё круглое ----------
-  const PIVOT_Y = 3.15, HALF = 1.6, BAIL_H = 1.6, PR = 0.85, HANG = 0.21;
+  const PIVOT_Y = 3.15, HALF = 1.6, BAIL_H = 1.6, PR = 0.85, HANG = 0.22;
   const top = new THREE.Group(); top.position.y = PIVOT_Y; scene.add(top);
   const ring = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.042, 24, 64), blued); ring.position.y = 0.86; top.add(ring);
   const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.042, 0.4, 32), bluedTurned); stem.position.y = 0.52; top.add(stem);
   const knob = new THREE.Mesh(new THREE.SphereGeometry(0.065, 32, 20), polished); knob.position.y = 0.33; top.add(knob);
-  // скоба-дуга над коромыслом и две круглые щеки, между ними ось
-  const yoke = new THREE.Mesh(new THREE.TorusGeometry(0.135, 0.032, 16, 40, Math.PI), blued); yoke.rotation.y = Math.PI / 2; yoke.position.y = 0.17; top.add(yoke);
+  // тонкая скоба-дуга над коромыслом, её концы держат ось
+  const yoke = new THREE.Mesh(new THREE.TorusGeometry(0.135, 0.022, 16, 40, Math.PI), blued); yoke.rotation.y = Math.PI / 2; yoke.position.y = 0.17; top.add(yoke);
   [-1, 1].forEach((z) => {
-    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.032, 0.17, 20), blued); arm.position.set(0, 0.085, z * 0.135); top.add(arm);
-    const cheek = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.04, 48), blued); cheek.rotation.x = Math.PI / 2; cheek.position.z = z * 0.135; top.add(cheek);
-    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.06, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2), polished); cap.rotation.x = z * Math.PI / 2; cap.position.z = z * 0.155; top.add(cap);
+    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.17, 20), blued); arm.position.set(0, 0.085, z * 0.135); top.add(arm);
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.04, 24, 16), polished); cap.position.z = z * 0.15; top.add(cap); // концы оси в скобе
   });
-  const axle = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.3, 32), polished); axle.rotation.x = Math.PI / 2; top.add(axle);
+  const axle = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.028, 0.3, 24), polished); axle.rotation.x = Math.PI / 2; top.add(axle);
 
-  // ---------- коромысло: прямая планка-капсула, как ползунок в интерфейсе, круглые набалдашники на концах ----------
+  // ---------- коромысло-лук: плавная дуга от центра к концам, кончики чуть загнуты вверх; толще у оси, тоньше к краям ----------
   const beam = new THREE.Group(); beam.position.y = PIVOT_Y; scene.add(beam);
-  const rail = new THREE.Mesh(new THREE.CapsuleGeometry(0.055, HALF * 2, 12, 32), blued); rail.rotation.z = Math.PI / 2; beam.add(rail);
-  [-1, 1].forEach((s) => { const k = new THREE.Mesh(new THREE.SphereGeometry(0.1, 40, 24), bluedTurned); k.position.x = s * HALF; beam.add(k); });
-  const hub = new THREE.Mesh(new THREE.SphereGeometry(0.095, 40, 24), bluedTurned); beam.add(hub);
-  // медальон-указатель на шейке под осью: стальной обод и эмаль
-  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.2, 16), blued); neck.position.y = -0.2; beam.add(neck);
-  const medal = new THREE.Mesh(new THREE.CylinderGeometry(0.135, 0.135, 0.05, 64), polished); medal.rotation.x = Math.PI / 2; medal.position.y = -0.4; beam.add(medal);
-  const rim = new THREE.Mesh(new THREE.TorusGeometry(0.135, 0.022, 16, 64), polished); rim.position.y = -0.4; beam.add(rim);
-  const inset = new THREE.Mesh(new THREE.CylinderGeometry(0.104, 0.104, 0.02, 64), enamel); inset.rotation.x = Math.PI / 2; inset.position.set(0, -0.4, 0.028); beam.add(inset);
+  const bow = [[0, 0.06], [0.45, 0.045], [0.9, 0.0], [1.3, -0.06], [1.6, -0.08], [1.74, -0.04], [1.82, 0.04]];
+  const path = [...bow.slice(1).reverse().map(([x, y]) => [-x, y]), ...bow].map(([x, y]) => new THREE.Vector3(x, y, 0));
+  const rod = new THREE.CatmullRomCurve3(path, false, 'centripetal');
+  const SEG = 400, RAD = 24, beamGeo = new THREE.TubeGeometry(rod, SEG, 1, RAD, false), pos = beamGeo.attributes.position, cen = new THREE.Vector3(), v = new THREE.Vector3();
+  const thick = (t) => 0.072 - 0.042 * Math.pow(Math.abs(t - 0.5) * 2, 1.2);
+  for (let i = 0; i <= SEG; i++) { const t = i / SEG; rod.getPointAt(t, cen); const r = thick(t);
+    for (let j = 0; j <= RAD; j++) { const k = i * (RAD + 1) + j; v.fromBufferAttribute(pos, k).sub(cen).multiplyScalar(r).add(cen); pos.setXYZ(k, v.x, v.y, v.z); } }
+  pos.needsUpdate = true; beamGeo.computeVertexNormals();
+  beam.add(new THREE.Mesh(beamGeo, blued));
+  [path[0], path[path.length - 1]].forEach((p) => { const b = new THREE.Mesh(new THREE.SphereGeometry(thick(0) * 1.15, 20, 14), polished); b.position.copy(p); beam.add(b); });
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.062, 0.062, 0.2, 32), bluedTurned); hub.rotation.x = Math.PI / 2; hub.position.y = 0.055; beam.add(hub);
   // проушины на концах: кольцо продето вокруг прутка
-  [-1, 1].forEach((s) => { const eye = new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.02, 16, 40), polished); eye.rotation.y = Math.PI / 2; eye.position.set(s * HALF, -0.135, 0); beam.add(eye); });
+  [-1, 1].forEach((s) => { const eye = new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.02, 16, 40), polished); eye.rotation.y = Math.PI / 2; eye.position.set(s * HALF, -0.145, 0); beam.add(eye); });
 
   // ---------- чаши на цепях: две по бокам и одна сзади, сходятся к кольцу под проушиной ----------
   const panGeo = new THREE.LatheGeometry([[0, 0.025], [0.62, 0.025], [0.78, 0.065], [0.845, 0.12], [0.865, 0.16], [0.85, 0.17], [0.83, 0.14], [0.77, 0.045], [0.6, 0], [0, 0]]
