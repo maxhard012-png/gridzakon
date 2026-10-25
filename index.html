@@ -935,6 +935,8 @@ dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16
 
 .sc-view::before,.sc-view::after {inset:-4% -2%}
 
+/* анимация идёт по времени и повторяется — блок больше не закрепляется при прокрутке */
+.scales{height:auto!important}.sc-pin{position:relative!important;top:auto!important;height:auto!important}
 /* контурное слово за весами — как у заголовков разделов */
 .sc-gword {position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);z-index:0;pointer-events:none;white-space:nowrap;
   font:400 clamp(96px,17vw,180px)/1 var(--f-disp);text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(241,241,238,.1);transition:-webkit-text-stroke-color .6s}
@@ -942,7 +944,6 @@ dialog#gallery.wide #galleryStage video {width:100%;min-height:0;aspect-ratio:16
 .scales.is-level .sc-gword {-webkit-text-stroke-color:rgba(33,180,95,.4)}
 .sc-view canvas {z-index:1}
 </style>
-<script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js","three/addons/":"./vendor/three/addons/"}}</script>
 <style>
 #boot{position:fixed;inset:0;z-index:999;background:#0c0d0f;display:grid;place-content:center;justify-items:center;gap:18px;transition:opacity .5s ease,visibility .5s}
 #boot b{font:400 34px/1 Oswald,"Arial Narrow",sans-serif;letter-spacing:.03em;color:#f1f1ee}#boot b span{color:#e3262d}
@@ -1558,8 +1559,8 @@ html.ready #boot{opacity:0;visibility:hidden}
 
 <dialog id="gallery" aria-labelledby="galleryTitle"><div class="gallery-shell"><div class="gallery-top"><div><span id="galleryCount" class="label" aria-live="polite"></span><h2 id="galleryTitle"></h2></div><button id="galleryClose" type="button" aria-label="Закрыть просмотр">×</button></div><div id="galleryStage"></div><div class="gallery-bottom"><button id="galleryPrev" type="button" aria-label="Предыдущий материал"><svg class="ar-l" aria-hidden="true"><use href="#i-arr"/></svg></button><a id="galleryOriginal" target="_blank" rel="noopener">Открыть оригинал ↗</a><button id="galleryNext" type="button" aria-label="Следующий материал"><svg class="ar-r" aria-hidden="true"><use href="#i-arr"/></svg></button></div></div></dialog>
 <script id="galleryData" type="application/json">{"case-0": [{"src": "assets/cases/case-debt.jpg", "label": "Долг вернули с процентами: отзыв клиента"}], "case-1": [{"src": "assets/cases/case-rent.jpg", "label": "Возврат за аварийную квартиру: история клиентки"}], "case-2": [{"src": "assets/cases/case-2-refund.jpg", "label": "Возврат денег за обучение: отзыв клиента"}], "case-3": [{"src": "assets/videos/case-3.mp4", "poster": "assets/cases/case-3-poster.jpg", "label": "Клиентка о досудебной претензии", "video": true}], "reviews": [{"src": "assets/videos/client-review.mp4", "poster": "assets/reviews/s/video-review.jpg", "label": "Видеоотзыв клиента", "video": true}, {"src": "assets/reviews/s/review-01.jpg", "label": "Отзыв клиента — скриншот 1"}, {"src": "assets/reviews/s/review-02.jpg", "label": "Отзыв клиента — скриншот 2"}, {"src": "assets/reviews/s/review-03.jpg", "label": "Отзыв клиента — скриншот 3"}, {"src": "assets/reviews/s/review-04.jpg", "label": "Отзыв клиента — скриншот 4"}, {"src": "assets/reviews/s/review-05.jpg", "label": "Отзыв клиента — скриншот 5"}, {"src": "assets/reviews/s/review-06.jpg", "label": "Отзыв клиента — скриншот 6"}, {"src": "assets/reviews/s/review-07.jpg", "label": "Отзыв клиента — скриншот 7"}, {"src": "assets/reviews/s/review-08.jpg", "label": "Отзыв клиента — скриншот 8"}, {"src": "assets/reviews/s/review-09.jpg", "label": "Отзыв клиента — скриншот 9"}, {"src": "assets/reviews/s/review-10.jpg", "label": "Отзыв клиента — скриншот 10"}, {"src": "assets/reviews/s/review-11.jpg", "label": "Отзыв клиента — скриншот 11"}, {"src": "assets/reviews/s/review-12.jpg", "label": "Отзыв клиента — скриншот 12"}, {"src": "assets/reviews/s/review-13.jpg", "label": "Отзыв клиента — скриншот 13"}, {"src": "assets/reviews/s/review-14.jpg", "label": "Отзыв клиента — скриншот 14"}, {"src": "assets/reviews/s/review-15.jpg", "label": "Отзыв клиента — скриншот 15"}, {"src": "assets/reviews/s/review-16.jpg", "label": "Отзыв клиента — скриншот 16"}, {"src": "assets/reviews/s/review-17.jpg", "label": "Отзыв клиента — скриншот 17"}, {"src": "assets/reviews/s/review-18.jpg", "label": "Отзыв клиента — скриншот 18"}, {"src": "assets/reviews/s/review-19.jpg", "label": "Отзыв клиента — скриншот 19"}], "press": [{"src": "assets/press/press-1.mp4", "poster": "assets/press/press-1.webp", "video": true, "href": "https://smotrim.ru/brand/5403#playing_video=6074096", "label": "Вести — Москва, 09.09.2026"}, {"src": "assets/press/press-2.mp4", "poster": "assets/press/press-2.webp", "video": true, "href": "https://smotrim.ru/video/6051419", "label": "Вести — Москва, 27.07.2026"}, {"src": "assets/press/press-3.mp4", "poster": "assets/press/press-3.webp", "video": true, "href": "https://smotrim.ru/brand/5403#playing_video=6046737", "label": "Вести — Москва, 16.07.2026"}]}</script>
-<script defer src="documents.js?v=202610251525"></script>
-<script defer src="site.js?v=202610251525"></script>
-<script type="module" src="scales3d.js?v=202610251525"></script>
+<script defer src="documents.js?v=202610251618"></script>
+<script defer src="site.js?v=202610251618"></script>
+<script type="module" src="scales3d.js?v=202610251618"></script>
 </body>
 </html>

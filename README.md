@@ -54,3 +54,17 @@ window.GRIDZAKON_DOCUMENTS = [
 - Оба видео запускались в браузере. Рилсы и СМИ ведут на внешние площадки; их доступность зависит от этих сервисов.
 - Удалены прежние цены, демонстрационные кейсы, телефон-заглушка, WhatsApp и ВК.
 - Это локальная версия. Сайт опубликован на GitHub Pages. На физическом iPhone и Safari не проверялось; полевые Core Web Vitals не измерялись.
+
+## Весы (3D)
+
+- `scales3d.js` — маленький загрузчик: подгружает сцену, когда блок рядом.
+- `src/scene.js` — исходник сцены; `scene.min.js` — собранный файл (Three.js внутри, только нужные части).
+- Пересборка после правок `src/scene.js` (нужен Node.js):
+
+```sh
+npm i three@0.160.0 esbuild@0.21.5
+npx esbuild src/scene.js --bundle --minify --format=esm --outfile=scene.min.js
+```
+
+Затем поменять `?v=` у `scene.min.js` в `scales3d.js` и у `scales3d.js` в `index.html`.
+- Материалы: HDRI `assets/3d/studio.hdr` (Poly Haven, ferndale_studio_11, CC0, уменьшен до 512 px), пластик `assets/3d/plastic_*` (ambientCG Plastic012A, CC0).
