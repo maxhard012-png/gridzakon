@@ -30,7 +30,8 @@ async function boot() {
   stage.classList.add('v-a');
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+  const SMALL = innerWidth < 700;
+  renderer.setPixelRatio(Math.min(SMALL ? 1.5 : 2, devicePixelRatio || 1));
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; renderer.shadowMap.autoUpdate = false;
   renderer.toneMapping = THREE.NoToneMapping; // фирменные цвета без киношной обработки: красный остаётся #e3262d
   const ANISO = Math.min(8, renderer.capabilities.getMaxAnisotropy());
@@ -48,7 +49,7 @@ async function boot() {
   // свет студийный: ключ сверху-спереди-слева, заполняющий справа, два контровых сзади — металл читается по краям
   scene.add(new THREE.HemisphereLight(0xffffff, 0x101114, 0.9));
   const key = new THREE.SpotLight(0xffffff, 55, 20, 0.6, 0.9, 1.5); key.position.set(-2.5, 8, 5); key.target.position.set(0, 2.4, 0);
-  key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.camera.near = 4; key.shadow.camera.far = 16; key.shadow.bias = -0.0004; key.shadow.normalBias = 0.02; key.shadow.radius = 5; key.shadow.blurSamples = 16; scene.add(key, key.target);
+  key.castShadow = true; key.shadow.mapSize.set(SMALL ? 1024 : 2048, SMALL ? 1024 : 2048); key.shadow.camera.near = 4; key.shadow.camera.far = 16; key.shadow.bias = -0.0004; key.shadow.normalBias = 0.02; key.shadow.radius = 5; key.shadow.blurSamples = 16; scene.add(key, key.target);
   const fill = new THREE.DirectionalLight(0xffffff, 0.7); fill.position.set(5, 2, 4); scene.add(fill);
   const rimL = new THREE.DirectionalLight(0xffffff, 3.2); rimL.position.set(-4, 5, -6); scene.add(rimL);
   const rimR = new THREE.DirectionalLight(0xffffff, 2.6); rimR.position.set(5, 4, -5); scene.add(rimR);
@@ -56,34 +57,6 @@ async function boot() {
 
   // ---------- процедурные карты ----------
   const cv = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
-  function noise(w, h, cells, oct, base = 128) {
-    const c = cv(w, h), x = c.getContext('2d'); x.fillStyle = `rgb(${base},${base},${base})`; x.fillRect(0, 0, w, h);
-    x.imageSmoothingQuality = 'high';
-    for (let o = 0; o < oct; o++) {
-      const n = cells << o, m = Math.max(1, Math.round(n * h / w)), s = cv(n, m), sx = s.getContext('2d'), d = sx.createImageData(n, m);
-      for (let i = 0; i < d.data.length; i += 4) { const v = Math.random() * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; }
-      sx.putImageData(d, 0, 0); x.globalAlpha = 0.55 / (o + 1); x.drawImage(s, 0, 0, w, h);
-    }
-    x.globalAlpha = 1; return c;
-  }
-  // тонкая шлифовка одного направления — одна карта на весь корпус, чтобы металл был единым
-  function brushed(w, h) {
-    const c = cv(w, h), x = c.getContext('2d'); x.fillStyle = '#808080'; x.fillRect(0, 0, w, h);
-    for (let i = 0; i < 3200; i++) {
-      const v = 100 + Math.random() * 70 | 0; x.strokeStyle = `rgba(${v},${v},${v},${0.06 + Math.random() * 0.12})`; x.lineWidth = Math.random() * 1.2 + 0.3;
-      const p = Math.random() * h, l = Math.random() * w * 0.6, x0 = Math.random() * w; x.beginPath(); x.moveTo(x0, p); x.lineTo(x0 + l, p); x.stroke();
-    }
-    return c;
-  }
-  function normalFrom(src, strength) {
-    const w = src.width, h = src.height, s = src.getContext('2d').getImageData(0, 0, w, h).data, c = cv(w, h), x = c.getContext('2d'), img = x.createImageData(w, h), d = img.data;
-    const H = (i, j) => s[(((j + h) % h) * w + ((i + w) % w)) * 4] / 255;
-    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
-      const dx = (H(i + 1, j) - H(i - 1, j)) * strength, dy = (H(i, j + 1) - H(i, j - 1)) * strength, l = Math.hypot(dx, dy, 1), k = (j * w + i) * 4;
-      d[k] = (-dx / l * 0.5 + 0.5) * 255; d[k + 1] = (dy / l * 0.5 + 0.5) * 255; d[k + 2] = (1 / l * 0.5 + 0.5) * 255; d[k + 3] = 255;
-    }
-    x.putImageData(img, 0, 0); return c;
-  }
   const tex = (c, color, rep = [1, 1]) => { const t = new THREE.CanvasTexture(c); if (color) t.colorSpace = THREE.SRGBColorSpace;
     t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); t.anisotropy = ANISO; return t; };
 
@@ -122,14 +95,9 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
     return mat;
   }
   // ---------- материалы: три и только три ----------
-  const brush = brushed(512, 512);
-  const smudge = (() => { const c = cv(512, 512), x = c.getContext('2d'); x.drawImage(brush, 0, 0); x.globalCompositeOperation = 'overlay'; x.globalAlpha = 0.6;
-    x.drawImage(noise(512, 512, 6, 4), 0, 0); return c; })();
   const blued = triplanar(new THREE.MeshStandardMaterial({ color: 0x6a6a6a, metalness: 0, roughness: 1 }), PL, 5, 1); // матовый пластик с фактурой
   const bluedTurned = blued;      // токарные детали: кольцевые риски
   const polished = new THREE.MeshStandardMaterial({ color: 0x8b9097, metalness: 1, roughness: 0.22 }); // гладкая сталь фурнитуры
-  const enamel = new THREE.MeshPhysicalMaterial({ color: 0xd8242b, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.04 }); // эмаль
-  const RED = new THREE.Color(0xd8242b), GREEN = new THREE.Color(0x21b45f);
 
   // контур из ломаной заданной толщины (стыки срезаны по биссектрисе) → выдавливание с фаской
   function strip(pts, t) {
@@ -298,12 +266,13 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
     const t = clamp01((ps - ranges[i][0]) / (ranges[i][1] - ranges[i][0])), land = panWorld(pan, o.off, tmp2);
     o.m.visible = t > 0;
     // груз заносится спереди, под дугой подвеса, и ложится в чашу с отскоком — сквозь дугу ничего не проходит
-    const zf = Math.pow(1 - Math.min(1, t * 1.25), 2);
+    const zf = Math.pow(1 - Math.min(1, t * 2.75), 2); // к первому касанию предмет уже точно над чашей
     o.m.position.copy(land); o.m.position.y += (1 - bounce(t)) * 1.1 + zf * 0.5; o.m.position.z += zf * 2.2;
     const k = 1 - inOut(t);
     if (upright) o.m.rotation.z = pan.phi; else o.m.rotation.set(o.spin.x * k, o.rot + o.spin.y * k, o.spin.z * k + pan.phi);
-    o.cs.material.opacity = 0.88 * clamp01((t - 0.85) / 0.15);
-    const now = t >= 1; if (now && !o.landed) { thetaV += kick; pan.phiV += (Math.random() - 0.5) * 0.8; } o.landed = now; return now ? 1 : 0;
+    const touch = t >= 1 / 2.75; // момент первого касания чаши в кривой отскока
+    o.cs.material.opacity = touch ? 0.88 * clamp01((t - 0.36) / 0.3) : 0;
+    if (touch && !o.landed) { thetaV += kick; pan.phiV += (Math.random() - 0.5) * 0.8; } o.landed = touch; return touch ? 1 : 0;
   }
 
   function step(dt) {
@@ -316,7 +285,7 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
     weights.forEach((w, i) => { R += drop(w, i, WG, -0.45, pans[1], true); });
     // коромысло на оси: момент от разницы грузов, демпфирование в подшипнике
     const target = THREE.MathUtils.clamp(K * (L - R), -MAX, MAX);
-    thetaV += ((target - theta) * 26 - thetaV * 4.2) * dt; theta += thetaV * dt;
+    thetaV += ((target - theta) * 46 - thetaV * 6.8) * dt; theta += thetaV * dt;
     if (still) { theta = target; thetaV = 0; }
     const acc = (thetaV - lastV) / Math.max(dt, 1e-3); lastV = thetaV;
     beam.rotation.z = theta;
@@ -327,7 +296,6 @@ vec4 triS(sampler2D t) { vec3 p = vTriP * triScale, w = triW(); return texture2D
     });
     const imb = Math.max(0, L - R) / 3, lv = clamp01((ps - 0.58) / 0.08);
     red.intensity += (imb * 3 - red.intensity) * Math.min(1, dt * 4);
-    enamel.color.lerpColors(RED, GREEN, lv);
     key.intensity = 70 + 25 * lv;
     smx += (mx - smx) * Math.min(1, dt * 3); smy += (my - smy) * Math.min(1, dt * 3);
     frameCam();
